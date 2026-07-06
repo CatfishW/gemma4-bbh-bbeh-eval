@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.DS_Store
+datasets/
+runs/
+results/*.jsonl
+results/*.json
+!.gitkeep
+!results/smoke-summary.json
+!results/smoke-predictions.jsonl
+!results/sample10-summary.json
+!results/sample10-predictions.jsonl

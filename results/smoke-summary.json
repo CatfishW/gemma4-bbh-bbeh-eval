@@ -1,0 +1,390 @@
+{
+  "started_at": "2026-07-06T06:36:03.672461+00:00",
+  "finished_at": "2026-07-06T06:36:10.531471+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_mode": "answer_only",
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": 1,
+  "parallel": 1,
+  "max_tokens": 64,
+  "temperature": 0.0,
+  "benchmarks": [
+    {
+      "benchmark": "bbeh",
+      "correct": 3,
+      "total": 23,
+      "micro_accuracy": 0.13043478260869565,
+      "macro_accuracy": 0.13043478260869565,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 23
+    },
+    {
+      "benchmark": "bbh",
+      "correct": 18,
+      "total": 27,
+      "micro_accuracy": 0.6666666666666666,
+      "macro_accuracy": 0.6666666666666666,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 27
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boardgame_qa",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boolean_expressions",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_buggy_tables",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_causal_understanding",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_disambiguation_qa",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_dyck_languages",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_geometric_shapes",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_hyperbaton",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_linguini",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_movie_recommendation",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_multistep_arithmetic",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_nycc",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_counting",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_properties",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sarc_triples",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_shuffled_objects",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_spatial_reasoning",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sportqa",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_temporal_sequence",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_time_arithmetic",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_web_of_lies",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_word_sorting",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_zebra_puzzles",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "boolean_expressions",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "causal_judgement",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "date_understanding",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "disambiguation_qa",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "dyck_languages",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "formal_fallacies",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "geometric_shapes",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "hyperbaton",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_five_objects",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_seven_objects",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_three_objects",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "movie_recommendation",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "multistep_arithmetic_two",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "navigate",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "object_counting",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "penguins_in_a_table",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "reasoning_about_colored_objects",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "ruin_names",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "salient_translation_error_detection",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "snarks",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "sports_understanding",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "temporal_sequences",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_five_objects",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_seven_objects",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_three_objects",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "web_of_lies",
+      "correct": 0,
+      "total": 1,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "word_sorting",
+      "correct": 1,
+      "total": 1,
+      "accuracy": 1.0
+    }
+  ]
+}
