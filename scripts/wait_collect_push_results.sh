@@ -16,7 +16,7 @@ LOG_FILE="$LOG_ROOT/$RUN_NAME.log"
 mkdir -p "$LOG_ROOT"
 
 log() {
-  printf '[%s] %s\n' "$(date -Is)" "$*" | tee -a "$LOG_FILE"
+  printf '[%s] %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*" | tee -a "$LOG_FILE"
 }
 
 remote_quote() {
