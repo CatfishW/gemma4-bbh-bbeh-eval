@@ -124,6 +124,16 @@ tail -f "$RUNS_ROOT/direct_answer/stdout.log"
 
 After completion, `aggregate_summary.json` contains a compact summary across all strategies.
 
+To automatically upload a completed matrix run back to GitHub:
+
+```bash
+REMOTE_RUN_ROOT=/data/benwulab/gemma4-eval/runs/full-strategy-matrix-YYYYMMDD_HHMMSS \
+REMOTE_PID=<pid> \
+./scripts/wait_collect_push_results.sh
+```
+
+The uploader waits for `aggregate_summary.json`, rsyncs the completed remote run into `results/`, compresses `predictions.jsonl` files, writes `upload_manifest.json`, commits, and pushes to `main`.
+
 ## Public HTTPS Route
 
 The Gemma service runs on `benwulab-remote:8888`. A reverse SSH tunnel from `benwulab-remote` to `tang-server-org` exposes it at `127.0.0.1:25570` on Tang.
