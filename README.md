@@ -86,11 +86,46 @@ python3 eval_benchmarks.py \
   --output-dir /data/benwulab/gemma4-eval/runs/full
 ```
 
-Use `--prompt-mode raw` if you want to send the dataset input exactly as stored. The default `answer_only` mode appends a user-level instruction asking the model to output only the final answer.
+Use `--prompt-strategy raw` if you want to send the dataset input exactly as stored. The default `direct_answer` strategy appends a user-level instruction asking the model to output only the final answer. `--prompt-mode raw` and `--prompt-mode answer_only` remain as backward-compatible aliases.
+
+Available prompt strategies:
+
+- `direct_answer`: final answer only baseline.
+- `strict_json`: JSON object with one `answer` field.
+- `concise_cot`: concise reasoning with a final-answer delimiter.
+- `chain_of_draft`: terse scratch notes with a final-answer delimiter.
+- `plan_and_solve`: short plan, solve, final-answer delimiter.
+- `step_back`: identify the general principle, then solve.
+- `premise_conclusion`: explicit premise-to-conclusion template.
+- `symbolic_proof`: compact symbolic translation or proof sketch, then solve.
+- `raw`: dataset input only.
+
+Self-consistency is enabled with `--self-consistency-k`. The evaluator records every generation and chooses the majority normalized final answer. It still sends no system message.
+
+## Prompt Strategy Matrix
+
+The full strategy runner executes the prompt strategies from the prompt-strategy table that are meaningful for BBH/BBEH without external tools or custom verifiers. It records one folder per strategy with `run_config.json`, `command.txt`, `stdout.log`, `stderr.log`, `predictions.jsonl`, and `summary.json`.
+
+```bash
+cd /data/benwulab/gemma4-eval/repo
+RUNS_ROOT=/data/benwulab/gemma4-eval/runs/full-strategy-matrix-$(date +%Y%m%d_%H%M%S) \
+PARALLEL=2 \
+BASE_URL=http://127.0.0.1:8888/v1 \
+MODEL=SubTokenLLM \
+./scripts/start_full_strategy_matrix.sh
+```
+
+Monitor the active run:
+
+```bash
+tail -f "$RUNS_ROOT/matrix.log"
+tail -f "$RUNS_ROOT/direct_answer/stdout.log"
+```
+
+After completion, `aggregate_summary.json` contains a compact summary across all strategies.
 
 ## Public HTTPS Route
 
 The Gemma service runs on `benwulab-remote:8888`. A reverse SSH tunnel from `benwulab-remote` to `tang-server-org` exposes it at `127.0.0.1:25570` on Tang.
 
 Install `ops/nginx_llm_agaii_org.conf` on Tang in the active BT-panel Nginx vhost tree, then reload Nginx. The Nginx route only rewrites `/llm/v1/*` to `/v1/*` and does not alter request bodies or inject prompts.
-

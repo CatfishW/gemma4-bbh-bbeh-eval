@@ -6,10 +6,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
-import math
 import os
 from pathlib import Path
-import re
+import subprocess
 import statistics
 import time
 from typing import Iterable
@@ -25,6 +24,96 @@ class Example:
     target: str
 
 
+@dataclass(frozen=True)
+class PromptStrategy:
+    name: str
+    description: str
+    template: str
+
+
+PROMPT_STRATEGIES: dict[str, PromptStrategy] = {
+    "raw": PromptStrategy(
+        name="raw",
+        description="Dataset input exactly as stored.",
+        template="{input}",
+    ),
+    "direct_answer": PromptStrategy(
+        name="direct_answer",
+        description="Direct answer baseline; final answer only.",
+        template=(
+            "{input}\n\n"
+            "Return only the final answer. Do not include reasoning, explanation, or extra text."
+        ),
+    ),
+    "strict_json": PromptStrategy(
+        name="strict_json",
+        description="Strict JSON answer object.",
+        template=(
+            "{input}\n\n"
+            "Return a valid JSON object only, exactly matching this schema: "
+            '{{"answer": "<final answer>"}}'
+        ),
+    ),
+    "concise_cot": PromptStrategy(
+        name="concise_cot",
+        description="Concise chain-of-thought with final answer delimiter.",
+        template=(
+            "{input}\n\n"
+            "Think briefly and solve the problem. Keep the reasoning concise.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "chain_of_draft": PromptStrategy(
+        name="chain_of_draft",
+        description="Chain-of-Draft: very short scratch reasoning before final answer.",
+        template=(
+            "{input}\n\n"
+            "Use Chain-of-Draft: write only terse intermediate notes, no full sentences, "
+            "then give the answer.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "plan_and_solve": PromptStrategy(
+        name="plan_and_solve",
+        description="Plan-and-Solve with final answer delimiter.",
+        template=(
+            "{input}\n\n"
+            "First write a short plan. Then solve according to the plan.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "step_back": PromptStrategy(
+        name="step_back",
+        description="Step-back prompting: identify the general rule/principle, then answer.",
+        template=(
+            "{input}\n\n"
+            "Step back and identify the general rule, pattern, or principle needed. "
+            "Then apply it to this specific problem.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "premise_conclusion": PromptStrategy(
+        name="premise_conclusion",
+        description="Explicit premise-to-conclusion reasoning template.",
+        template=(
+            "{input}\n\n"
+            "List the key premises briefly, derive the conclusion, and avoid irrelevant text.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "symbolic_proof": PromptStrategy(
+        name="symbolic_proof",
+        description="Symbolic translation or proof sketch before final answer.",
+        template=(
+            "{input}\n\n"
+            "Translate the problem into compact symbols, equations, constraints, or a proof sketch "
+            "when useful. Then solve.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+}
+
+
 def strip_latex(response: str) -> str:
     if response.startswith("$") and response.endswith("$"):
         response = response[1:-1]
@@ -38,6 +127,9 @@ def strip_latex(response: str) -> str:
 
 
 def extract_answer(sample: str) -> str:
+    json_answer = extract_json_answer(sample)
+    if json_answer is not None:
+        return json_answer
     answer_prefixes = [
         "The answer is:",
         "The final answer is ",
@@ -54,6 +146,28 @@ def extract_answer(sample: str) -> str:
     if answer.endswith("."):
         answer = answer[:-1]
     return strip_latex(answer)
+
+
+def extract_json_answer(sample: str) -> str | None:
+    candidate = sample.strip()
+    if candidate.startswith("```"):
+        lines = candidate.splitlines()
+        if lines and lines[0].strip().startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].strip().startswith("```"):
+            lines = lines[:-1]
+        candidate = "\n".join(lines).strip()
+    try:
+        payload = json.loads(candidate)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    for key in ("answer", "final_answer", "final"):
+        value = payload.get(key)
+        if value is not None:
+            return str(value).strip()
+    return None
 
 
 def preprocess_prediction(sample: str) -> str:
@@ -146,15 +260,12 @@ def load_bbeh(root: Path, limit_per_task: int | None) -> list[Example]:
     return examples
 
 
-def build_prompt(example_input: str, mode: str) -> str:
-    if mode == "raw":
-        return example_input
-    if mode == "answer_only":
-        return (
-            f"{example_input}\n\n"
-            "Return only the final answer. Do not include reasoning, explanation, or extra text."
-        )
-    raise ValueError(f"unknown prompt mode: {mode}")
+def build_prompt(example_input: str, strategy_name: str) -> str:
+    try:
+        strategy = PROMPT_STRATEGIES[strategy_name]
+    except KeyError as exc:
+        raise ValueError(f"unknown prompt strategy: {strategy_name}") from exc
+    return strategy.template.format(input=example_input)
 
 
 def post_chat_completion(
@@ -190,27 +301,42 @@ def post_chat_completion(
 
 
 def run_one(args: argparse.Namespace, example: Example) -> dict:
-    prompt = build_prompt(example.input, args.prompt_mode)
+    prompt = build_prompt(example.input, args.prompt_strategy)
     started = time.time()
+    generations = []
     try:
-        response = post_chat_completion(
-            base_url=args.base_url,
-            model=args.model,
-            prompt=prompt,
-            max_tokens=args.max_tokens,
-            temperature=args.temperature,
-            timeout=args.timeout,
-            retries=args.retries,
+        for sample_index in range(args.self_consistency_k):
+            response = post_chat_completion(
+                base_url=args.base_url,
+                model=args.model,
+                prompt=prompt,
+                max_tokens=args.max_tokens,
+                temperature=args.temperature,
+                timeout=args.timeout,
+                retries=args.retries,
+            )
+            sample_content = response["choices"][0]["message"].get("content") or ""
+            generations.append(
+                {
+                    "sample_index": sample_index,
+                    "prediction": sample_content,
+                    "normalized_prediction": preprocess_prediction(sample_content),
+                    "usage": response.get("usage", {}),
+                }
+            )
+        chosen_normalized = majority_vote(generations)
+        chosen = next(
+            item["prediction"]
+            for item in generations
+            if item["normalized_prediction"] == chosen_normalized
         )
-        content = response["choices"][0]["message"].get("content") or ""
+        content = chosen
         correct = evaluate_correctness(content, example.target)
         error_text = None
-        usage = response.get("usage", {})
     except Exception as exc:  # Keep long runs moving; errors are scored incorrect.
         content = ""
         correct = False
         error_text = str(exc)
-        usage = {}
     elapsed = time.time() - started
     return {
         "benchmark": example.benchmark,
@@ -222,9 +348,30 @@ def run_one(args: argparse.Namespace, example: Example) -> dict:
         "normalized_target": preprocess_reference(example.target),
         "correct": correct,
         "elapsed_seconds": elapsed,
-        "usage": usage,
+        "self_consistency_k": args.self_consistency_k,
+        "generations": generations,
+        "usage": combine_usage([item.get("usage", {}) for item in generations]),
         "error": error_text,
     }
+
+
+def majority_vote(generations: list[dict]) -> str:
+    counts: dict[str, int] = {}
+    first_seen: dict[str, int] = {}
+    for index, item in enumerate(generations):
+        key = str(item["normalized_prediction"])
+        counts[key] = counts.get(key, 0) + 1
+        first_seen.setdefault(key, index)
+    return sorted(counts, key=lambda key: (-counts[key], first_seen[key]))[0]
+
+
+def combine_usage(usages: list[dict]) -> dict:
+    combined: dict[str, int] = {}
+    for usage in usages:
+        for key, value in usage.items():
+            if isinstance(value, int):
+                combined[key] = combined.get(key, 0) + value
+    return combined
 
 
 def summarize(records: list[dict]) -> dict:
@@ -282,9 +429,75 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--retries", type=int, default=2)
-    parser.add_argument("--prompt-mode", choices=["answer_only", "raw"], default="answer_only")
+    parser.add_argument(
+        "--prompt-strategy",
+        choices=sorted(PROMPT_STRATEGIES),
+        default="direct_answer",
+    )
+    parser.add_argument(
+        "--prompt-mode",
+        choices=["answer_only", "raw"],
+        help="Backward-compatible alias for --prompt-strategy.",
+    )
+    parser.add_argument("--self-consistency-k", type=int, default=1)
     parser.add_argument("--output-dir", type=Path, required=True)
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.prompt_mode == "answer_only":
+        args.prompt_strategy = "direct_answer"
+    elif args.prompt_mode == "raw":
+        args.prompt_strategy = "raw"
+    if args.self_consistency_k < 1:
+        raise SystemExit("--self-consistency-k must be >= 1")
+    return args
+
+
+def git_revision(path: Path) -> str | None:
+    try:
+        return subprocess.check_output(
+            ["git", "-C", str(path), "rev-parse", "HEAD"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def write_run_config(args: argparse.Namespace, examples: list[Example]) -> None:
+    strategy = PROMPT_STRATEGIES[args.prompt_strategy]
+    by_benchmark: dict[str, int] = {}
+    by_task: dict[str, int] = {}
+    for example in examples:
+        by_benchmark[example.benchmark] = by_benchmark.get(example.benchmark, 0) + 1
+        key = f"{example.benchmark}/{example.task}"
+        by_task[key] = by_task.get(key, 0) + 1
+    config = {
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "base_url": args.base_url,
+        "model": args.model,
+        "benchmarks": args.benchmarks,
+        "limit_per_task": args.limit_per_task,
+        "parallel": args.parallel,
+        "max_tokens": args.max_tokens,
+        "temperature": args.temperature,
+        "timeout": args.timeout,
+        "retries": args.retries,
+        "prompt_strategy": strategy.name,
+        "prompt_strategy_description": strategy.description,
+        "prompt_template": strategy.template,
+        "self_consistency_k": args.self_consistency_k,
+        "system_messages_sent": 0,
+        "request_message_shape": [{"role": "user", "content": "<rendered prompt>"}],
+        "example_count": len(examples),
+        "examples_by_benchmark": by_benchmark,
+        "examples_by_task": by_task,
+        "dataset_revisions": {
+            "bbh": git_revision(args.datasets_root / "BIG-Bench-Hard"),
+            "bbeh": git_revision(args.datasets_root / "bbeh"),
+        },
+    }
+    (args.output_dir / "run_config.json").write_text(
+        json.dumps(config, indent=2, ensure_ascii=False) + "\n"
+    )
 
 
 def main() -> int:
@@ -299,6 +512,7 @@ def main() -> int:
         raise SystemExit("no examples loaded")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    write_run_config(args, examples)
     started_at = datetime.now(timezone.utc).isoformat()
     records_path = args.output_dir / "predictions.jsonl"
     summary_path = args.output_dir / "summary.json"
@@ -321,7 +535,10 @@ def main() -> int:
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "base_url": args.base_url,
         "model": args.model,
-        "prompt_mode": args.prompt_mode,
+        "prompt_strategy": args.prompt_strategy,
+        "prompt_strategy_description": PROMPT_STRATEGIES[args.prompt_strategy].description,
+        "prompt_template": PROMPT_STRATEGIES[args.prompt_strategy].template,
+        "self_consistency_k": args.self_consistency_k,
         "system_messages_sent": 0,
         "request_message_shape": [{"role": "user", "content": "<benchmark prompt>"}],
         "limit_per_task": args.limit_per_task,
@@ -337,4 +554,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
