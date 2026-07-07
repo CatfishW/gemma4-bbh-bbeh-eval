@@ -17,6 +17,12 @@ else
   git -C bbeh pull --ff-only
 fi
 
+if [ ! -d unpuzzles_and_simple_reasoning/.git ]; then
+  git clone --depth 1 https://github.com/google-deepmind/unpuzzles_and_simple_reasoning.git
+else
+  git -C unpuzzles_and_simple_reasoning pull --ff-only
+fi
+
 echo "BBH  $(git -C BIG-Bench-Hard rev-parse HEAD)"
 echo "BBEH $(git -C bbeh rev-parse HEAD)"
-
+echo "USR  $(git -C unpuzzles_and_simple_reasoning rev-parse HEAD)"

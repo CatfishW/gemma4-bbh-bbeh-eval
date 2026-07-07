@@ -4,6 +4,7 @@ Small, auditable harness for evaluating the `SubTokenLLM` Gemma 4 E4B deployment
 
 - BBH from `suzgunmirac/BIG-Bench-Hard`
 - BBEH from `google-deepmind/bbeh`
+- USR from `google-deepmind/unpuzzles_and_simple_reasoning`
 
 The evaluator uses the OpenAI-compatible chat completions API and intentionally sends no system message. Each request contains exactly one `user` message.
 
@@ -58,6 +59,27 @@ Known downloaded revisions for the first run:
 
 - BBH: `9ee07bd481feebf959a6b59d61ea57bdcf30964d`
 - BBEH: `80d12ca916b7158f22293fcf3144f4d3d854d4be`
+
+## Unpuzzles And Simple Reasoning
+
+The `usr` benchmark name loads all auto-scorable examples from `google-deepmind/unpuzzles_and_simple_reasoning`:
+
+- `simple_reasoning/*` from `simple_reasoning.json`
+- non-empty `unpuzzles/original` and `unpuzzles/unpuzzle` examples from `unpuzzles.json`
+- non-empty `shifted_unpuzzles/original`, `shifted_unpuzzles/unpuzzle`, and `shifted_unpuzzles/shifted` examples from `shifted_unpuzzles.json`
+
+You can also run only `simple_reasoning`, `unpuzzles`, or `shifted_unpuzzles`.
+
+```bash
+python3 eval_benchmarks.py \
+  --datasets-root /data/benwulab/gemma4-eval/datasets \
+  --base-url http://127.0.0.1:8888/v1 \
+  --model SubTokenLLM \
+  --benchmarks usr \
+  --prompt-strategy direct_answer \
+  --parallel 2 \
+  --output-dir /data/benwulab/gemma4-eval/runs/usr-direct
+```
 
 ## Run Eval
 

@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import statistics
 import time
@@ -117,8 +118,9 @@ PROMPT_STRATEGIES: dict[str, PromptStrategy] = {
 def strip_latex(response: str) -> str:
     if response.startswith("$") and response.endswith("$"):
         response = response[1:-1]
-    if "boxed{" in response and response.endswith("}"):
-        response = response[0:-1].split("boxed{")[-1]
+    boxed = re.findall(r"boxed\{([^}]*)\}", response)
+    if boxed:
+        response = boxed[-1]
     if "text{" in response and response.endswith("}"):
         response = response[0:-1].split("text{")[-1]
     if "texttt{" in response and response.endswith("}"):
@@ -130,6 +132,9 @@ def extract_answer(sample: str) -> str:
     json_answer = extract_json_answer(sample)
     if json_answer is not None:
         return json_answer
+    xml_answer = extract_xml_answer(sample)
+    if xml_answer is not None:
+        return xml_answer
     answer_prefixes = [
         "The answer is:",
         "The final answer is ",
@@ -145,7 +150,28 @@ def extract_answer(sample: str) -> str:
     answer = answer.strip().strip("`").strip()
     if answer.endswith("."):
         answer = answer[:-1]
+    count_answer = extract_count_answer(answer)
+    if count_answer is not None:
+        return count_answer
     return strip_latex(answer)
+
+
+def extract_xml_answer(sample: str) -> str | None:
+    match = re.search(
+        r"<answer>\s*(.*?)\s*</answer>",
+        sample,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
+def extract_count_answer(sample: str) -> str | None:
+    match = re.search(r"\bappear(?:s)?\s+(-?\d+)\s+time", sample, flags=re.IGNORECASE)
+    if not match:
+        return None
+    return match.group(1).strip()
 
 
 def extract_json_answer(sample: str) -> str | None:
@@ -255,6 +281,103 @@ def load_bbeh(root: Path, limit_per_task: int | None) -> list[Example]:
                     index=index,
                     input=str(row["input"]),
                     target=str(row["target"]),
+                )
+            )
+    return examples
+
+
+def unpuzzles_repo_root(root: Path) -> Path:
+    candidates = [
+        root / "unpuzzles_and_simple_reasoning",
+        root,
+    ]
+    for candidate in candidates:
+        if (candidate / "datasets" / "simple_reasoning.json").exists():
+            return candidate
+    raise FileNotFoundError(
+        "could not find unpuzzles_and_simple_reasoning/datasets under "
+        f"{root}"
+    )
+
+
+def load_unpuzzles_simple_reasoning(root: Path, limit_per_task: int | None) -> list[Example]:
+    repo = unpuzzles_repo_root(root)
+    examples: list[Example] = []
+    examples.extend(load_simple_reasoning(repo, limit_per_task))
+    examples.extend(load_unpuzzles(repo, limit_per_task))
+    examples.extend(load_shifted_unpuzzles(repo, limit_per_task))
+    return examples
+
+
+def load_simple_reasoning(repo: Path, limit_per_task: int | None) -> list[Example]:
+    rows = json.loads((repo / "datasets" / "simple_reasoning.json").read_text())
+    examples: list[Example] = []
+    per_task_counts: dict[str, int] = {}
+    for row in rows:
+        source_task = str(row["task"])
+        count = per_task_counts.get(source_task, 0)
+        if limit_per_task is not None and count >= limit_per_task:
+            continue
+        per_task_counts[source_task] = count + 1
+        examples.append(
+            Example(
+                benchmark="usr",
+                task=f"simple_reasoning/{source_task}",
+                index=count,
+                input=str(row["input"]),
+                target=str(row.get("text_target", row["target"])),
+            )
+        )
+    return examples
+
+
+def load_unpuzzles(repo: Path, limit_per_task: int | None) -> list[Example]:
+    rows = json.loads((repo / "datasets" / "unpuzzles.json").read_text())
+    specs = [
+        ("unpuzzles/original", "original_puzzle", "original_answer"),
+        ("unpuzzles/unpuzzle", "unpuzzle", "unpuzzle_answer"),
+    ]
+    return load_unpuzzle_variants(rows, specs, limit_per_task)
+
+
+def load_shifted_unpuzzles(repo: Path, limit_per_task: int | None) -> list[Example]:
+    rows = json.loads((repo / "datasets" / "shifted_unpuzzles.json").read_text())
+    specs = [
+        ("shifted_unpuzzles/original", "original_puzzle", "original_answer"),
+        ("shifted_unpuzzles/unpuzzle", "unpuzzle", "unpuzzle_answer"),
+        ("shifted_unpuzzles/shifted", "shifted_unpuzzle", "shifted_unpuzzle_answer"),
+    ]
+    return load_unpuzzle_variants(rows, specs, limit_per_task)
+
+
+def load_unpuzzle_variants(
+    rows: list[dict],
+    specs: list[tuple[str, str, str]],
+    limit_per_task: int | None,
+) -> list[Example]:
+    examples: list[Example] = []
+    per_task_counts: dict[str, int] = {}
+    for row in rows:
+        name = str(row.get("puzzle_name", "")).strip()
+        for task, question_key, answer_key in specs:
+            target = str(row.get(answer_key, "")).strip()
+            question = str(row.get(question_key, "")).strip()
+            if not target or not question:
+                continue
+            count = per_task_counts.get(task, 0)
+            if limit_per_task is not None and count >= limit_per_task:
+                continue
+            per_task_counts[task] = count + 1
+            prompt = question
+            if name:
+                prompt = f"Puzzle: {name}\n\n{question}"
+            examples.append(
+                Example(
+                    benchmark="usr",
+                    task=task,
+                    index=count,
+                    input=prompt,
+                    target=target,
                 )
             )
     return examples
@@ -493,6 +616,7 @@ def write_run_config(args: argparse.Namespace, examples: list[Example]) -> None:
         "dataset_revisions": {
             "bbh": git_revision(args.datasets_root / "BIG-Bench-Hard"),
             "bbeh": git_revision(args.datasets_root / "bbeh"),
+            "usr": git_revision(args.datasets_root / "unpuzzles_and_simple_reasoning"),
         },
     }
     (args.output_dir / "run_config.json").write_text(
@@ -508,6 +632,17 @@ def main() -> int:
         examples.extend(load_bbh(args.datasets_root, args.limit_per_task))
     if "bbeh" in selected:
         examples.extend(load_bbeh(args.datasets_root, args.limit_per_task))
+    if selected & {"usr", "unpuzzles_and_simple_reasoning"}:
+        examples.extend(load_unpuzzles_simple_reasoning(args.datasets_root, args.limit_per_task))
+    if "simple_reasoning" in selected:
+        repo = unpuzzles_repo_root(args.datasets_root)
+        examples.extend(load_simple_reasoning(repo, args.limit_per_task))
+    if "unpuzzles" in selected:
+        repo = unpuzzles_repo_root(args.datasets_root)
+        examples.extend(load_unpuzzles(repo, args.limit_per_task))
+    if "shifted_unpuzzles" in selected:
+        repo = unpuzzles_repo_root(args.datasets_root)
+        examples.extend(load_shifted_unpuzzles(repo, args.limit_per_task))
     if not examples:
         raise SystemExit("no examples loaded")
 
