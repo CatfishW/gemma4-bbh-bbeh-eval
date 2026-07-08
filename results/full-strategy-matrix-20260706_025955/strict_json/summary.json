@@ -1,0 +1,393 @@
+{
+  "started_at": "2026-07-06T07:19:43.194678+00:00",
+  "finished_at": "2026-07-06T09:18:21.490946+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "strict_json",
+  "prompt_strategy_description": "Strict JSON answer object.",
+  "prompt_template": "{input}\n\nReturn a valid JSON object only, exactly matching this schema: {{\"answer\": \"<final answer>\"}}",
+  "self_consistency_k": 1,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 96,
+  "temperature": 0.0,
+  "benchmarks": [
+    {
+      "benchmark": "bbeh",
+      "correct": 292,
+      "total": 4520,
+      "micro_accuracy": 0.06460176991150443,
+      "macro_accuracy": 0.06623188405797101,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 23
+    },
+    {
+      "benchmark": "bbh",
+      "correct": 1245,
+      "total": 6511,
+      "micro_accuracy": 0.19121486714790356,
+      "macro_accuracy": 0.19833234694026552,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 27
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boardgame_qa",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boolean_expressions",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_buggy_tables",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_causal_understanding",
+      "correct": 87,
+      "total": 200,
+      "accuracy": 0.435
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_disambiguation_qa",
+      "correct": 19,
+      "total": 120,
+      "accuracy": 0.15833333333333333
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_dyck_languages",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_geometric_shapes",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_hyperbaton",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_linguini",
+      "correct": 4,
+      "total": 200,
+      "accuracy": 0.02
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_movie_recommendation",
+      "correct": 71,
+      "total": 200,
+      "accuracy": 0.355
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_multistep_arithmetic",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_nycc",
+      "correct": 24,
+      "total": 200,
+      "accuracy": 0.12
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_counting",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_properties",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sarc_triples",
+      "correct": 49,
+      "total": 200,
+      "accuracy": 0.245
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_shuffled_objects",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_spatial_reasoning",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sportqa",
+      "correct": 34,
+      "total": 200,
+      "accuracy": 0.17
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_temporal_sequence",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_time_arithmetic",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_web_of_lies",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_word_sorting",
+      "correct": 4,
+      "total": 200,
+      "accuracy": 0.02
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_zebra_puzzles",
+      "correct": 0,
+      "total": 200,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "boolean_expressions",
+      "correct": 133,
+      "total": 250,
+      "accuracy": 0.532
+    },
+    {
+      "benchmark": "bbh",
+      "task": "causal_judgement",
+      "correct": 114,
+      "total": 187,
+      "accuracy": 0.6096256684491979
+    },
+    {
+      "benchmark": "bbh",
+      "task": "date_understanding",
+      "correct": 13,
+      "total": 250,
+      "accuracy": 0.052
+    },
+    {
+      "benchmark": "bbh",
+      "task": "disambiguation_qa",
+      "correct": 106,
+      "total": 250,
+      "accuracy": 0.424
+    },
+    {
+      "benchmark": "bbh",
+      "task": "dyck_languages",
+      "correct": 3,
+      "total": 250,
+      "accuracy": 0.012
+    },
+    {
+      "benchmark": "bbh",
+      "task": "formal_fallacies",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "geometric_shapes",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "hyperbaton",
+      "correct": 202,
+      "total": 250,
+      "accuracy": 0.808
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_five_objects",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_seven_objects",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_three_objects",
+      "correct": 8,
+      "total": 250,
+      "accuracy": 0.032
+    },
+    {
+      "benchmark": "bbh",
+      "task": "movie_recommendation",
+      "correct": 12,
+      "total": 250,
+      "accuracy": 0.048
+    },
+    {
+      "benchmark": "bbh",
+      "task": "multistep_arithmetic_two",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "navigate",
+      "correct": 34,
+      "total": 250,
+      "accuracy": 0.136
+    },
+    {
+      "benchmark": "bbh",
+      "task": "object_counting",
+      "correct": 149,
+      "total": 250,
+      "accuracy": 0.596
+    },
+    {
+      "benchmark": "bbh",
+      "task": "penguins_in_a_table",
+      "correct": 5,
+      "total": 146,
+      "accuracy": 0.03424657534246575
+    },
+    {
+      "benchmark": "bbh",
+      "task": "reasoning_about_colored_objects",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "ruin_names",
+      "correct": 159,
+      "total": 250,
+      "accuracy": 0.636
+    },
+    {
+      "benchmark": "bbh",
+      "task": "salient_translation_error_detection",
+      "correct": 7,
+      "total": 250,
+      "accuracy": 0.028
+    },
+    {
+      "benchmark": "bbh",
+      "task": "snarks",
+      "correct": 128,
+      "total": 178,
+      "accuracy": 0.7191011235955056
+    },
+    {
+      "benchmark": "bbh",
+      "task": "sports_understanding",
+      "correct": 111,
+      "total": 250,
+      "accuracy": 0.444
+    },
+    {
+      "benchmark": "bbh",
+      "task": "temporal_sequences",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_five_objects",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_seven_objects",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_three_objects",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "web_of_lies",
+      "correct": 0,
+      "total": 250,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "word_sorting",
+      "correct": 61,
+      "total": 250,
+      "accuracy": 0.244
+    }
+  ]
+}

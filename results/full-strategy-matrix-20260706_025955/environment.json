@@ -1,0 +1,13 @@
+{
+  "created_at": "2026-07-06T02:59:55-04:00",
+  "hostname": "benwulab-Lambda-Vector",
+  "repo_dir": "/data/benwulab/gemma4-eval/repo",
+  "repo_revision": "51be4966ac3a3a0e29d121bd31207bd43be5604c",
+  "datasets_root": "/data/benwulab/gemma4-eval/datasets",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "benchmarks": "bbh,bbeh",
+  "parallel": "2",
+  "timeout": "300",
+  "retries": "2"
+}

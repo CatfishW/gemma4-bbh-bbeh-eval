@@ -1,0 +1,266 @@
+{
+  "runs_root": "/data/benwulab/gemma4-eval/runs/full-strategy-matrix-20260706_025955",
+  "strategies": [
+    {
+      "strategy_dir": "chain_of_draft",
+      "prompt_strategy": "chain_of_draft",
+      "self_consistency_k": 1,
+      "max_tokens": 192,
+      "temperature": 0.0,
+      "started_at": "2026-07-06T15:01:14.029307+00:00",
+      "finished_at": "2026-07-06T19:02:58.854822+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 141,
+          "total": 4520,
+          "micro_accuracy": 0.031194690265486727,
+          "macro_accuracy": 0.03297101449275362,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3560,
+          "total": 6511,
+          "micro_accuracy": 0.5467670096759331,
+          "macro_accuracy": 0.5524899257706979,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "concise_cot",
+      "prompt_strategy": "concise_cot",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-06T09:18:21.689139+00:00",
+      "finished_at": "2026-07-06T15:01:13.824918+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 126,
+          "total": 4520,
+          "micro_accuracy": 0.027876106194690265,
+          "macro_accuracy": 0.02927536231884058,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3014,
+          "total": 6511,
+          "micro_accuracy": 0.4629089233604669,
+          "macro_accuracy": 0.47191207923165657,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "concise_cot_sc_k3",
+      "prompt_strategy": "concise_cot",
+      "self_consistency_k": 3,
+      "max_tokens": 256,
+      "temperature": 0.7,
+      "started_at": "2026-07-07T20:43:43.868515+00:00",
+      "finished_at": "2026-07-08T14:08:13.104722+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 132,
+          "total": 4520,
+          "micro_accuracy": 0.02920353982300885,
+          "macro_accuracy": 0.03072463768115942,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3097,
+          "total": 6511,
+          "micro_accuracy": 0.47565658117032716,
+          "macro_accuracy": 0.4847990149055799,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "direct_answer",
+      "prompt_strategy": "direct_answer",
+      "self_consistency_k": 1,
+      "max_tokens": 64,
+      "temperature": 0.0,
+      "started_at": "2026-07-06T06:59:55.556765+00:00",
+      "finished_at": "2026-07-06T07:19:43.003365+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 647,
+          "total": 4520,
+          "micro_accuracy": 0.14314159292035397,
+          "macro_accuracy": 0.1476086956521739,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3198,
+          "total": 6511,
+          "micro_accuracy": 0.49116879127630164,
+          "macro_accuracy": 0.4916944531859289,
+          "harmonic_task_accuracy": 0.2227987120514798,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "plan_and_solve",
+      "prompt_strategy": "plan_and_solve",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-06T19:02:59.054273+00:00",
+      "finished_at": "2026-07-07T01:38:29.903501+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 5,
+          "total": 4520,
+          "micro_accuracy": 0.0011061946902654867,
+          "macro_accuracy": 0.0016666666666666666,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 839,
+          "total": 6511,
+          "micro_accuracy": 0.1288588542466595,
+          "macro_accuracy": 0.13035208992202718,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "premise_conclusion",
+      "prompt_strategy": "premise_conclusion",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-07T08:10:20.278691+00:00",
+      "finished_at": "2026-07-07T14:00:55.838630+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 88,
+          "total": 4520,
+          "micro_accuracy": 0.019469026548672566,
+          "macro_accuracy": 0.02246376811594203,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3050,
+          "total": 6511,
+          "micro_accuracy": 0.46843802795269546,
+          "macro_accuracy": 0.4777311857114119,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "step_back",
+      "prompt_strategy": "step_back",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-07T01:38:30.100943+00:00",
+      "finished_at": "2026-07-07T08:10:20.079730+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 15,
+          "total": 4520,
+          "micro_accuracy": 0.00331858407079646,
+          "macro_accuracy": 0.003985507246376811,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 1083,
+          "total": 6511,
+          "micro_accuracy": 0.16633389648287514,
+          "macro_accuracy": 0.17034264064408294,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "strict_json",
+      "prompt_strategy": "strict_json",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-06T07:19:43.194678+00:00",
+      "finished_at": "2026-07-06T09:18:21.490946+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 292,
+          "total": 4520,
+          "micro_accuracy": 0.06460176991150443,
+          "macro_accuracy": 0.06623188405797101,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 1245,
+          "total": 6511,
+          "micro_accuracy": 0.19121486714790356,
+          "macro_accuracy": 0.19833234694026552,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    },
+    {
+      "strategy_dir": "symbolic_proof",
+      "prompt_strategy": "symbolic_proof",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-07T14:00:56.033967+00:00",
+      "finished_at": "2026-07-07T20:43:43.668093+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 1,
+          "total": 4520,
+          "micro_accuracy": 0.00022123893805309734,
+          "macro_accuracy": 0.0002173913043478261,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 279,
+          "total": 6511,
+          "micro_accuracy": 0.04285056058977116,
+          "macro_accuracy": 0.04406491251062048,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        }
+      ]
+    }
+  ]
+}
