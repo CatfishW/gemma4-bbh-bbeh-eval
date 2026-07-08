@@ -10,7 +10,7 @@ The evaluator uses the OpenAI-compatible chat completions API and intentionally 
 
 ## Access
 
-Once the Tang Nginx route is installed, use:
+Use:
 
 ```bash
 curl https://llm.agaii.org/llm/v1/models
