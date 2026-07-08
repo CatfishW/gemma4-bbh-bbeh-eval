@@ -1,0 +1,104 @@
+{
+  "started_at": "2026-07-08T20:42:26.251405+00:00",
+  "finished_at": "2026-07-08T23:34:00.306074+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "concise_cot",
+  "prompt_strategy_description": "Concise chain-of-thought with final answer delimiter.",
+  "prompt_template": "{input}\n\nThink briefly and solve the problem. Keep the reasoning concise.\nEnd with exactly one line in this format: The final answer is: <answer>",
+  "self_consistency_k": 3,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 256,
+  "temperature": 0.7,
+  "benchmarks": [
+    {
+      "benchmark": "usr",
+      "correct": 86,
+      "total": 1509,
+      "micro_accuracy": 0.05699138502319417,
+      "macro_accuracy": 0.08785941972417383,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 5,
+      "total": 61,
+      "accuracy": 0.08196721311475409
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 12,
+      "total": 64,
+      "accuracy": 0.1875
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 8,
+      "total": 64,
+      "accuracy": 0.125
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 11,
+      "total": 360,
+      "accuracy": 0.030555555555555555
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 0,
+      "total": 360,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 8,
+      "total": 280,
+      "accuracy": 0.02857142857142857
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 24,
+      "total": 120,
+      "accuracy": 0.2
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 8,
+      "total": 80,
+      "accuracy": 0.1
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 10,
+      "total": 80,
+      "accuracy": 0.125
+    }
+  ]
+}

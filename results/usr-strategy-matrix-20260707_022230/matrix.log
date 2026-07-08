@@ -1,0 +1,19 @@
+[2026-07-08T10:12:36-04:00] START direct_answer
+[2026-07-08T10:25:38-04:00] DONE direct_answer
+[2026-07-08T10:25:38-04:00] START strict_json
+[2026-07-08T10:52:18-04:00] DONE strict_json
+[2026-07-08T10:52:18-04:00] START concise_cot
+[2026-07-08T11:51:56-04:00] DONE concise_cot
+[2026-07-08T11:51:56-04:00] START chain_of_draft
+[2026-07-08T12:37:02-04:00] DONE chain_of_draft
+[2026-07-08T12:37:02-04:00] START plan_and_solve
+[2026-07-08T13:38:47-04:00] DONE plan_and_solve
+[2026-07-08T13:38:47-04:00] START step_back
+[2026-07-08T14:40:11-04:00] DONE step_back
+[2026-07-08T14:40:11-04:00] START premise_conclusion
+[2026-07-08T15:40:48-04:00] DONE premise_conclusion
+[2026-07-08T15:40:48-04:00] START symbolic_proof
+[2026-07-08T16:42:26-04:00] DONE symbolic_proof
+[2026-07-08T16:42:26-04:00] START concise_cot_sc_k3
+[2026-07-08T19:34:00-04:00] DONE concise_cot_sc_k3
+[2026-07-08T19:34:00-04:00] all strategies complete: /data/benwulab/gemma4-eval/runs/usr-strategy-matrix-20260707_022230

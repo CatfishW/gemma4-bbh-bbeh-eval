@@ -1,0 +1,13 @@
+python3 eval_benchmarks.py \
+  --datasets-root "/data/benwulab/gemma4-eval/datasets" \
+  --base-url "http://127.0.0.1:8888/v1" \
+  --model "SubTokenLLM" \
+  --benchmarks "usr" \
+  --prompt-strategy "symbolic_proof" \
+  --self-consistency-k "1" \
+  --temperature "0.0" \
+  --max-tokens "256" \
+  --parallel "2" \
+  --timeout "300" \
+  --retries "2" \
+  --output-dir "/data/benwulab/gemma4-eval/runs/usr-strategy-matrix-20260707_022230/symbolic_proof"

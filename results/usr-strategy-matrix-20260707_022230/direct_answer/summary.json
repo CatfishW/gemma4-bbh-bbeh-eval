@@ -1,0 +1,104 @@
+{
+  "started_at": "2026-07-08T14:12:36.864349+00:00",
+  "finished_at": "2026-07-08T14:25:38.913003+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "direct_answer",
+  "prompt_strategy_description": "Direct answer baseline; final answer only.",
+  "prompt_template": "{input}\n\nReturn only the final answer. Do not include reasoning, explanation, or extra text.",
+  "self_consistency_k": 1,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 64,
+  "temperature": 0.0,
+  "benchmarks": [
+    {
+      "benchmark": "usr",
+      "correct": 254,
+      "total": 1509,
+      "micro_accuracy": 0.16832339297548046,
+      "macro_accuracy": 0.21980573445225085,
+      "harmonic_task_accuracy": 0.06609568273773717,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 20,
+      "total": 61,
+      "accuracy": 0.32786885245901637
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 23,
+      "total": 64,
+      "accuracy": 0.359375
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 22,
+      "total": 64,
+      "accuracy": 0.34375
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 1,
+      "total": 40,
+      "accuracy": 0.025
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 90,
+      "total": 360,
+      "accuracy": 0.25
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 22,
+      "total": 360,
+      "accuracy": 0.06111111111111111
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 4,
+      "total": 280,
+      "accuracy": 0.014285714285714285
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 20,
+      "total": 120,
+      "accuracy": 0.16666666666666666
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 24,
+      "total": 80,
+      "accuracy": 0.3
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 28,
+      "total": 80,
+      "accuracy": 0.35
+    }
+  ]
+}

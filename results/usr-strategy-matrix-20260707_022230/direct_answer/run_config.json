@@ -1,0 +1,44 @@
+{
+  "created_at": "2026-07-08T14:12:36.858505+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "benchmarks": "usr",
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 64,
+  "temperature": 0.0,
+  "timeout": 300,
+  "retries": 2,
+  "prompt_strategy": "direct_answer",
+  "prompt_strategy_description": "Direct answer baseline; final answer only.",
+  "prompt_template": "{input}\n\nReturn only the final answer. Do not include reasoning, explanation, or extra text.",
+  "self_consistency_k": 1,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<rendered prompt>"
+    }
+  ],
+  "example_count": 1509,
+  "examples_by_benchmark": {
+    "usr": 1509
+  },
+  "examples_by_task": {
+    "usr/simple_reasoning/char_ct": 40,
+    "usr/simple_reasoning/word_ct": 120,
+    "usr/simple_reasoning/logic_ev": 360,
+    "usr/simple_reasoning/logic_neg": 360,
+    "usr/simple_reasoning/mathgap": 280,
+    "usr/unpuzzles/original": 80,
+    "usr/unpuzzles/unpuzzle": 80,
+    "usr/shifted_unpuzzles/original": 61,
+    "usr/shifted_unpuzzles/unpuzzle": 64,
+    "usr/shifted_unpuzzles/shifted": 64
+  },
+  "dataset_revisions": {
+    "bbh": "9ee07bd481feebf959a6b59d61ea57bdcf30964d",
+    "bbeh": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+    "usr": "39bc520a2f4c243eb04ce1cc27f28c7c61d12e42"
+  }
+}

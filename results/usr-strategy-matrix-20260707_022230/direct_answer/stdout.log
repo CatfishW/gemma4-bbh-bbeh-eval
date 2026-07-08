@@ -1,0 +1,165 @@
+25/1509 correct=0 acc=0.000
+50/1509 correct=8 acc=0.160
+75/1509 correct=19 acc=0.253
+100/1509 correct=21 acc=0.210
+125/1509 correct=21 acc=0.168
+150/1509 correct=21 acc=0.140
+175/1509 correct=27 acc=0.154
+200/1509 correct=38 acc=0.190
+225/1509 correct=42 acc=0.187
+250/1509 correct=49 acc=0.196
+275/1509 correct=55 acc=0.200
+300/1509 correct=61 acc=0.203
+325/1509 correct=65 acc=0.200
+350/1509 correct=68 acc=0.194
+375/1509 correct=77 acc=0.205
+400/1509 correct=81 acc=0.203
+425/1509 correct=88 acc=0.207
+450/1509 correct=93 acc=0.207
+475/1509 correct=101 acc=0.213
+500/1509 correct=109 acc=0.218
+525/1509 correct=112 acc=0.213
+550/1509 correct=116 acc=0.211
+575/1509 correct=118 acc=0.205
+600/1509 correct=119 acc=0.198
+625/1509 correct=123 acc=0.197
+650/1509 correct=128 acc=0.197
+675/1509 correct=129 acc=0.191
+700/1509 correct=129 acc=0.184
+725/1509 correct=130 acc=0.179
+750/1509 correct=130 acc=0.173
+775/1509 correct=131 acc=0.169
+800/1509 correct=132 acc=0.165
+825/1509 correct=132 acc=0.160
+850/1509 correct=133 acc=0.156
+875/1509 correct=133 acc=0.152
+900/1509 correct=134 acc=0.149
+925/1509 correct=136 acc=0.147
+950/1509 correct=136 acc=0.143
+975/1509 correct=137 acc=0.141
+1000/1509 correct=137 acc=0.137
+1025/1509 correct=137 acc=0.134
+1050/1509 correct=137 acc=0.130
+1075/1509 correct=137 acc=0.127
+1100/1509 correct=137 acc=0.125
+1125/1509 correct=137 acc=0.122
+1150/1509 correct=137 acc=0.119
+1175/1509 correct=141 acc=0.120
+1200/1509 correct=151 acc=0.126
+1225/1509 correct=159 acc=0.130
+1250/1509 correct=166 acc=0.133
+1275/1509 correct=172 acc=0.135
+1300/1509 correct=183 acc=0.141
+1325/1509 correct=190 acc=0.143
+1350/1509 correct=199 acc=0.147
+1375/1509 correct=205 acc=0.149
+1400/1509 correct=211 acc=0.151
+1425/1509 correct=221 acc=0.155
+1450/1509 correct=230 acc=0.159
+1475/1509 correct=239 acc=0.162
+1500/1509 correct=249 acc=0.166
+1509/1509 correct=254 acc=0.168
+{
+  "started_at": "2026-07-08T14:12:36.864349+00:00",
+  "finished_at": "2026-07-08T14:25:38.913003+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "direct_answer",
+  "prompt_strategy_description": "Direct answer baseline; final answer only.",
+  "prompt_template": "{input}\n\nReturn only the final answer. Do not include reasoning, explanation, or extra text.",
+  "self_consistency_k": 1,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 64,
+  "temperature": 0.0,
+  "benchmarks": [
+    {
+      "benchmark": "usr",
+      "correct": 254,
+      "total": 1509,
+      "micro_accuracy": 0.16832339297548046,
+      "macro_accuracy": 0.21980573445225085,
+      "harmonic_task_accuracy": 0.06609568273773717,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 20,
+      "total": 61,
+      "accuracy": 0.32786885245901637
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 23,
+      "total": 64,
+      "accuracy": 0.359375
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 22,
+      "total": 64,
+      "accuracy": 0.34375
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 1,
+      "total": 40,
+      "accuracy": 0.025
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 90,
+      "total": 360,
+      "accuracy": 0.25
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 22,
+      "total": 360,
+      "accuracy": 0.06111111111111111
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 4,
+      "total": 280,
+      "accuracy": 0.014285714285714285
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 20,
+      "total": 120,
+      "accuracy": 0.16666666666666666
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 24,
+      "total": 80,
+      "accuracy": 0.3
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 28,
+      "total": 80,
+      "accuracy": 0.35
+    }
+  ]
+}

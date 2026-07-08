@@ -1,0 +1,185 @@
+{
+  "runs_root": "/data/benwulab/gemma4-eval/runs/usr-strategy-matrix-20260707_022230",
+  "strategies": [
+    {
+      "strategy_dir": "chain_of_draft",
+      "prompt_strategy": "chain_of_draft",
+      "self_consistency_k": 1,
+      "max_tokens": 192,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T15:51:56.348314+00:00",
+      "finished_at": "2026-07-08T16:37:02.737015+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 130,
+          "total": 1509,
+          "micro_accuracy": 0.08614976805831677,
+          "macro_accuracy": 0.12745999219359874,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "concise_cot",
+      "prompt_strategy": "concise_cot",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T14:52:18.718398+00:00",
+      "finished_at": "2026-07-08T15:51:56.197920+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 86,
+          "total": 1509,
+          "micro_accuracy": 0.05699138502319417,
+          "macro_accuracy": 0.08856622430392923,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "concise_cot_sc_k3",
+      "prompt_strategy": "concise_cot",
+      "self_consistency_k": 3,
+      "max_tokens": 256,
+      "temperature": 0.7,
+      "started_at": "2026-07-08T20:42:26.251405+00:00",
+      "finished_at": "2026-07-08T23:34:00.306074+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 86,
+          "total": 1509,
+          "micro_accuracy": 0.05699138502319417,
+          "macro_accuracy": 0.08785941972417383,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "direct_answer",
+      "prompt_strategy": "direct_answer",
+      "self_consistency_k": 1,
+      "max_tokens": 64,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T14:12:36.864349+00:00",
+      "finished_at": "2026-07-08T14:25:38.913003+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 254,
+          "total": 1509,
+          "micro_accuracy": 0.16832339297548046,
+          "macro_accuracy": 0.21980573445225085,
+          "harmonic_task_accuracy": 0.06609568273773717,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "plan_and_solve",
+      "prompt_strategy": "plan_and_solve",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T16:37:02.891955+00:00",
+      "finished_at": "2026-07-08T17:38:47.691671+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 18,
+          "total": 1509,
+          "micro_accuracy": 0.011928429423459244,
+          "macro_accuracy": 0.020895296643247463,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "premise_conclusion",
+      "prompt_strategy": "premise_conclusion",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T18:40:11.458904+00:00",
+      "finished_at": "2026-07-08T19:40:48.715395+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 79,
+          "total": 1509,
+          "micro_accuracy": 0.052352551358515576,
+          "macro_accuracy": 0.08735850897736144,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "step_back",
+      "prompt_strategy": "step_back",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T17:38:47.848540+00:00",
+      "finished_at": "2026-07-08T18:40:11.304114+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 17,
+          "total": 1509,
+          "micro_accuracy": 0.01126573889993373,
+          "macro_accuracy": 0.02199648711943794,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "strict_json",
+      "prompt_strategy": "strict_json",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T14:25:39.064365+00:00",
+      "finished_at": "2026-07-08T14:52:18.562995+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 27,
+          "total": 1509,
+          "micro_accuracy": 0.017892644135188866,
+          "macro_accuracy": 0.03936987704918033,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "symbolic_proof",
+      "prompt_strategy": "symbolic_proof",
+      "self_consistency_k": 1,
+      "max_tokens": 256,
+      "temperature": 0.0,
+      "started_at": "2026-07-08T19:40:48.867356+00:00",
+      "finished_at": "2026-07-08T20:42:26.094925+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "usr",
+          "correct": 9,
+          "total": 1509,
+          "micro_accuracy": 0.005964214711729622,
+          "macro_accuracy": 0.009375,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+25/1509 correct=0 acc=0.000
+50/1509 correct=3 acc=0.060
+75/1509 correct=6 acc=0.080
+100/1509 correct=6 acc=0.060
+125/1509 correct=6 acc=0.048
+150/1509 correct=6 acc=0.040
+175/1509 correct=7 acc=0.040
+200/1509 correct=8 acc=0.040
+225/1509 correct=8 acc=0.036
+250/1509 correct=9 acc=0.036
+275/1509 correct=10 acc=0.036
+300/1509 correct=11 acc=0.037
+325/1509 correct=12 acc=0.037
+350/1509 correct=12 acc=0.034
+375/1509 correct=13 acc=0.035
+400/1509 correct=14 acc=0.035
+425/1509 correct=16 acc=0.038
+450/1509 correct=16 acc=0.036
+475/1509 correct=16 acc=0.034
+500/1509 correct=17 acc=0.034
+525/1509 correct=18 acc=0.034
+550/1509 correct=18 acc=0.033
+575/1509 correct=18 acc=0.031
+600/1509 correct=18 acc=0.030
+625/1509 correct=18 acc=0.029
+650/1509 correct=18 acc=0.028
+675/1509 correct=18 acc=0.027
+700/1509 correct=18 acc=0.026
+725/1509 correct=18 acc=0.025
+750/1509 correct=18 acc=0.024
+775/1509 correct=18 acc=0.023
+800/1509 correct=18 acc=0.022
+825/1509 correct=18 acc=0.022
+850/1509 correct=18 acc=0.021
+875/1509 correct=18 acc=0.021
+900/1509 correct=22 acc=0.024
+925/1509 correct=23 acc=0.025
+950/1509 correct=24 acc=0.025
+975/1509 correct=26 acc=0.027
+1000/1509 correct=26 acc=0.026
+1025/1509 correct=26 acc=0.025
+1050/1509 correct=26 acc=0.025
+1075/1509 correct=26 acc=0.024
+1100/1509 correct=26 acc=0.024
+1125/1509 correct=26 acc=0.023
+1150/1509 correct=26 acc=0.023
+1175/1509 correct=28 acc=0.024
+1200/1509 correct=33 acc=0.028
+1225/1509 correct=37 acc=0.030
+1250/1509 correct=41 acc=0.033
+1275/1509 correct=45 acc=0.035
+1300/1509 correct=47 acc=0.036
+1325/1509 correct=49 acc=0.037
+1350/1509 correct=52 acc=0.039
+1375/1509 correct=57 acc=0.041
+1400/1509 correct=63 acc=0.045
+1425/1509 correct=67 acc=0.047
+1450/1509 correct=72 acc=0.050
+1475/1509 correct=73 acc=0.049
+1500/1509 correct=78 acc=0.052
+1509/1509 correct=79 acc=0.052
+{
+  "started_at": "2026-07-08T18:40:11.458904+00:00",
+  "finished_at": "2026-07-08T19:40:48.715395+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "premise_conclusion",
+  "prompt_strategy_description": "Explicit premise-to-conclusion reasoning template.",
+  "prompt_template": "{input}\n\nList the key premises briefly, derive the conclusion, and avoid irrelevant text.\nEnd with exactly one line in this format: The final answer is: <answer>",
+  "self_consistency_k": 1,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 256,
+  "temperature": 0.0,
+  "benchmarks": [
+    {
+      "benchmark": "usr",
+      "correct": 79,
+      "total": 1509,
+      "micro_accuracy": 0.052352551358515576,
+      "macro_accuracy": 0.08735850897736144,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 3,
+      "total": 61,
+      "accuracy": 0.04918032786885246
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 15,
+      "total": 64,
+      "accuracy": 0.234375
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 13,
+      "total": 64,
+      "accuracy": 0.203125
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 12,
+      "total": 360,
+      "accuracy": 0.03333333333333333
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 0,
+      "total": 360,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 8,
+      "total": 280,
+      "accuracy": 0.02857142857142857
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 6,
+      "total": 120,
+      "accuracy": 0.05
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 6,
+      "total": 80,
+      "accuracy": 0.075
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 16,
+      "total": 80,
+      "accuracy": 0.2
+    }
+  ]
+}

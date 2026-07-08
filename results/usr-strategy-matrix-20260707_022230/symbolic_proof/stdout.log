@@ -1,0 +1,165 @@
+25/1509 correct=0 acc=0.000
+50/1509 correct=2 acc=0.040
+75/1509 correct=6 acc=0.080
+100/1509 correct=6 acc=0.060
+125/1509 correct=6 acc=0.048
+150/1509 correct=6 acc=0.040
+175/1509 correct=6 acc=0.034
+200/1509 correct=6 acc=0.030
+225/1509 correct=6 acc=0.027
+250/1509 correct=6 acc=0.024
+275/1509 correct=6 acc=0.022
+300/1509 correct=6 acc=0.020
+325/1509 correct=6 acc=0.018
+350/1509 correct=6 acc=0.017
+375/1509 correct=6 acc=0.016
+400/1509 correct=6 acc=0.015
+425/1509 correct=6 acc=0.014
+450/1509 correct=6 acc=0.013
+475/1509 correct=6 acc=0.013
+500/1509 correct=6 acc=0.012
+525/1509 correct=6 acc=0.011
+550/1509 correct=6 acc=0.011
+575/1509 correct=6 acc=0.010
+600/1509 correct=6 acc=0.010
+625/1509 correct=6 acc=0.010
+650/1509 correct=6 acc=0.009
+675/1509 correct=6 acc=0.009
+700/1509 correct=6 acc=0.009
+725/1509 correct=6 acc=0.008
+750/1509 correct=6 acc=0.008
+775/1509 correct=6 acc=0.008
+800/1509 correct=6 acc=0.007
+825/1509 correct=6 acc=0.007
+850/1509 correct=6 acc=0.007
+875/1509 correct=6 acc=0.007
+900/1509 correct=6 acc=0.007
+925/1509 correct=6 acc=0.006
+950/1509 correct=6 acc=0.006
+975/1509 correct=6 acc=0.006
+1000/1509 correct=6 acc=0.006
+1025/1509 correct=6 acc=0.006
+1050/1509 correct=6 acc=0.006
+1075/1509 correct=6 acc=0.006
+1100/1509 correct=6 acc=0.005
+1125/1509 correct=6 acc=0.005
+1150/1509 correct=6 acc=0.005
+1175/1509 correct=6 acc=0.005
+1200/1509 correct=7 acc=0.006
+1225/1509 correct=7 acc=0.006
+1250/1509 correct=7 acc=0.006
+1275/1509 correct=7 acc=0.005
+1300/1509 correct=7 acc=0.005
+1325/1509 correct=7 acc=0.005
+1350/1509 correct=7 acc=0.005
+1375/1509 correct=8 acc=0.006
+1400/1509 correct=8 acc=0.006
+1425/1509 correct=9 acc=0.006
+1450/1509 correct=9 acc=0.006
+1475/1509 correct=9 acc=0.006
+1500/1509 correct=9 acc=0.006
+1509/1509 correct=9 acc=0.006
+{
+  "started_at": "2026-07-08T19:40:48.867356+00:00",
+  "finished_at": "2026-07-08T20:42:26.094925+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "symbolic_proof",
+  "prompt_strategy_description": "Symbolic translation or proof sketch before final answer.",
+  "prompt_template": "{input}\n\nTranslate the problem into compact symbols, equations, constraints, or a proof sketch when useful. Then solve.\nEnd with exactly one line in this format: The final answer is: <answer>",
+  "self_consistency_k": 1,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "parallel": 2,
+  "max_tokens": 256,
+  "temperature": 0.0,
+  "benchmarks": [
+    {
+      "benchmark": "usr",
+      "correct": 9,
+      "total": 1509,
+      "micro_accuracy": 0.005964214711729622,
+      "macro_accuracy": 0.009375,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 0,
+      "total": 61,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 1,
+      "total": 64,
+      "accuracy": 0.015625
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 1,
+      "total": 64,
+      "accuracy": 0.015625
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 0,
+      "total": 360,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 0,
+      "total": 360,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 0,
+      "total": 280,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 6,
+      "total": 120,
+      "accuracy": 0.05
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 0,
+      "total": 80,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 1,
+      "total": 80,
+      "accuracy": 0.0125
+    }
+  ]
+}
