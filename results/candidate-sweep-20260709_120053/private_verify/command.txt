@@ -1,0 +1,14 @@
+python3 eval_benchmarks.py \
+  --datasets-root "/data/benwulab/gemma4-eval/datasets" \
+  --base-url "http://127.0.0.1:8888/v1" \
+  --model "SubTokenLLM" \
+  --benchmarks "bbh,bbeh,usr" \
+  --limit-per-task "25" \
+  --prompt-strategy "private_verify" \
+  --self-consistency-k "1" \
+  --temperature "0.0" \
+  --max-tokens "96" \
+  --parallel "2" \
+  --timeout "300" \
+  --retries "2" \
+  --output-dir "/data/benwulab/gemma4-eval/runs/candidate-sweep-20260709_120053/private_verify"

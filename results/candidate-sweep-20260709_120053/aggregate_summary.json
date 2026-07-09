@@ -1,0 +1,271 @@
+{
+  "runs_root": "/data/benwulab/gemma4-eval/runs/candidate-sweep-20260709_120053",
+  "strategies": [
+    {
+      "strategy_dir": "answer_type_router",
+      "prompt_strategy": "answer_type_router",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:23:40.497518+00:00",
+      "finished_at": "2026-07-09T16:26:57.364856+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 63,
+          "total": 575,
+          "micro_accuracy": 0.10956521739130434,
+          "macro_accuracy": 0.10956521739130436,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 304,
+          "total": 675,
+          "micro_accuracy": 0.45037037037037037,
+          "macro_accuracy": 0.45037037037037037,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 30,
+          "total": 250,
+          "micro_accuracy": 0.12,
+          "macro_accuracy": 0.12000000000000001,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "canonical_short",
+      "prompt_strategy": "canonical_short",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:10:22.558586+00:00",
+      "finished_at": "2026-07-09T16:14:53.976026+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 64,
+          "total": 575,
+          "micro_accuracy": 0.11130434782608696,
+          "macro_accuracy": 0.11130434782608696,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 354,
+          "total": 675,
+          "micro_accuracy": 0.5244444444444445,
+          "macro_accuracy": 0.5244444444444445,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 56,
+          "total": 250,
+          "micro_accuracy": 0.224,
+          "macro_accuracy": 0.224,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "careful_direct",
+      "prompt_strategy": "careful_direct",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:26:57.539479+00:00",
+      "finished_at": "2026-07-09T16:31:14.376987+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 64,
+          "total": 575,
+          "micro_accuracy": 0.11130434782608696,
+          "macro_accuracy": 0.11130434782608696,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 347,
+          "total": 675,
+          "micro_accuracy": 0.5140740740740741,
+          "macro_accuracy": 0.5140740740740741,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 48,
+          "total": 250,
+          "micro_accuracy": 0.192,
+          "macro_accuracy": 0.192,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "direct_answer",
+      "prompt_strategy": "direct_answer",
+      "self_consistency_k": 1,
+      "max_tokens": 64,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:00:53.708969+00:00",
+      "finished_at": "2026-07-09T16:03:47.273167+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 71,
+          "total": 575,
+          "micro_accuracy": 0.12347826086956522,
+          "macro_accuracy": 0.12347826086956522,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 326,
+          "total": 675,
+          "micro_accuracy": 0.482962962962963,
+          "macro_accuracy": 0.482962962962963,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 70,
+          "total": 250,
+          "micro_accuracy": 0.28,
+          "macro_accuracy": 0.28,
+          "harmonic_task_accuracy": 0.12356451532019458,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "native_format",
+      "prompt_strategy": "native_format",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:03:47.455293+00:00",
+      "finished_at": "2026-07-09T16:10:22.381522+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 60,
+          "total": 575,
+          "micro_accuracy": 0.10434782608695652,
+          "macro_accuracy": 0.10434782608695652,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 320,
+          "total": 675,
+          "micro_accuracy": 0.4740740740740741,
+          "macro_accuracy": 0.4740740740740741,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 61,
+          "total": 250,
+          "micro_accuracy": 0.244,
+          "macro_accuracy": 0.244,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "option_elimination",
+      "prompt_strategy": "option_elimination",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:17:56.007326+00:00",
+      "finished_at": "2026-07-09T16:23:40.316776+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 52,
+          "total": 575,
+          "micro_accuracy": 0.09043478260869565,
+          "macro_accuracy": 0.09043478260869565,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 337,
+          "total": 675,
+          "micro_accuracy": 0.49925925925925924,
+          "macro_accuracy": 0.49925925925925924,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 46,
+          "total": 250,
+          "micro_accuracy": 0.184,
+          "macro_accuracy": 0.184,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "private_verify",
+      "prompt_strategy": "private_verify",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:14:54.156436+00:00",
+      "finished_at": "2026-07-09T16:17:55.827289+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 63,
+          "total": 575,
+          "micro_accuracy": 0.10956521739130434,
+          "macro_accuracy": 0.10956521739130434,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 356,
+          "total": 675,
+          "micro_accuracy": 0.5274074074074074,
+          "macro_accuracy": 0.5274074074074074,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 64,
+          "total": 250,
+          "micro_accuracy": 0.256,
+          "macro_accuracy": 0.256,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    }
+  ]
+}

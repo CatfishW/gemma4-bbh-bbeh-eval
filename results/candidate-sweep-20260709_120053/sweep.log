@@ -1,0 +1,15 @@
+[2026-07-09T12:00:53-04:00] START direct_answer
+[2026-07-09T12:03:47-04:00] DONE direct_answer
+[2026-07-09T12:03:47-04:00] START native_format
+[2026-07-09T12:10:22-04:00] DONE native_format
+[2026-07-09T12:10:22-04:00] START canonical_short
+[2026-07-09T12:14:53-04:00] DONE canonical_short
+[2026-07-09T12:14:54-04:00] START private_verify
+[2026-07-09T12:17:55-04:00] DONE private_verify
+[2026-07-09T12:17:55-04:00] START option_elimination
+[2026-07-09T12:23:40-04:00] DONE option_elimination
+[2026-07-09T12:23:40-04:00] START answer_type_router
+[2026-07-09T12:26:57-04:00] DONE answer_type_router
+[2026-07-09T12:26:57-04:00] START careful_direct
+[2026-07-09T12:31:14-04:00] DONE careful_direct
+[2026-07-09T12:31:14-04:00] candidate sweep complete: /data/benwulab/gemma4-eval/runs/candidate-sweep-20260709_120053
