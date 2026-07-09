@@ -114,6 +114,15 @@ Available prompt strategies:
 
 - `direct_answer`: final answer only baseline.
 - `strict_json`: JSON object with one `answer` field.
+- `native_format`: preserve the answer format requested by each item.
+- `canonical_short`: normalize labels, booleans, numbers, and lists.
+- `private_verify`: solve and check once privately, then answer only.
+- `selective_verify`: revise only when a targeted check finds a concrete contradiction.
+- `compare_then_commit`: compare the two strongest candidates privately.
+- `fast_slow_gate`: verify once only when the direct answer is uncertain.
+- `constraint_guard`: replay the decisive constraints before committing.
+- `negation_label_guard`: protect negations, quantifiers, and option-label mapping.
+- `draft_verify`: use a terse private draft followed by one check.
 - `concise_cot`: concise reasoning with a final-answer delimiter.
 - `chain_of_draft`: terse scratch notes with a final-answer delimiter.
 - `plan_and_solve`: short plan, solve, final-answer delimiter.
@@ -123,6 +132,29 @@ Available prompt strategies:
 - `raw`: dataset input only.
 
 Self-consistency is enabled with `--self-consistency-k`. The evaluator records every generation and chooses the majority normalized final answer. It still sends no system message.
+
+## Reward-Routed Prompt Policy
+
+`scripts/calibrate_prompt_policy.py` treats each prompt strategy as a Beta-Bernoulli bandit arm. It selects one fixed arm per benchmark task from the first 25 examples, preserves `direct_answer` on ties, and scores only examples with index 25 or greater. The resulting `policy.json` can be passed directly to the evaluator with `--prompt-policy`; every prediction records the arm that produced it.
+
+```bash
+python3 scripts/calibrate_prompt_policy.py \
+  --runs-root /data/benwulab/gemma4-eval/runs/full-strategy-matrix-20260706_025955 \
+  --runs-root /data/benwulab/gemma4-eval/runs/usr-strategy-matrix-20260707_022230 \
+  --runs-root /data/benwulab/gemma4-eval/runs/full-challenger-winners-20260709_120053 \
+  --strategies direct_answer,strict_json,concise_cot,chain_of_draft,plan_and_solve,step_back,premise_conclusion,symbolic_proof,canonical_short,private_verify \
+  --calibration-size 25 \
+  --datasets-root /data/benwulab/gemma4-eval/datasets \
+  --output-dir /data/benwulab/gemma4-eval/runs/reward-routed-policy/offline
+```
+
+Run the complete calibration and online held-out confirmation with:
+
+```bash
+./scripts/run_reward_routed_policy.sh
+```
+
+The archived offline replay scores `4,738/11,040` (42.92%) on the held-out suffix, compared with `3,632/11,040` (32.90%) for direct answer. See [docs/PROMPT_OPTIMIZATION_RESEARCH.md](docs/PROMPT_OPTIMIZATION_RESEARCH.md) for the protocol, research basis, and RL decision.
 
 ## Prompt Strategy Matrix
 

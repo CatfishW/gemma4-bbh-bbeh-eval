@@ -88,6 +88,67 @@ PROMPT_STRATEGIES: dict[str, PromptStrategy] = {
             "only the final answer. Do not show reasoning, notes, or verification."
         ),
     ),
+    "selective_verify": PromptStrategy(
+        name="selective_verify",
+        description="Verify only concrete failure modes and otherwise preserve the first answer.",
+        template=(
+            "{input}\n\n"
+            "Solve directly. Before answering, look for one concrete contradiction caused by a "
+            "missed negation, ignored constraint, arithmetic or sign error, or option-label mismatch. "
+            "Keep the first answer unless that check finds a specific error. Output only the final "
+            "answer, with no reasoning or extra text."
+        ),
+    ),
+    "compare_then_commit": PromptStrategy(
+        name="compare_then_commit",
+        description="Contrast the two strongest candidates privately before committing.",
+        template=(
+            "{input}\n\n"
+            "Privately identify the two most plausible answers. Compare both against the exact "
+            "question and its constraints, reject the weaker candidate, and commit to one answer. "
+            "Output only the final answer, with no reasoning or extra text."
+        ),
+    ),
+    "fast_slow_gate": PromptStrategy(
+        name="fast_slow_gate",
+        description="Use a direct answer unless uncertainty warrants one verification pass.",
+        template=(
+            "{input}\n\n"
+            "Solve once directly. If the answer is clear, keep it. Only if two answers remain "
+            "plausible or a condition may have been missed, take one brief private verification "
+            "pass and then commit. Output only the final answer."
+        ),
+    ),
+    "constraint_guard": PromptStrategy(
+        name="constraint_guard",
+        description="Check the candidate against the decisive constraints before answering.",
+        template=(
+            "{input}\n\n"
+            "Privately identify the decisive constraints, derive a candidate, and test that "
+            "candidate against each decisive constraint once. Then output only the final answer. "
+            "Do not include the constraint list or any explanation."
+        ),
+    ),
+    "negation_label_guard": PromptStrategy(
+        name="negation_label_guard",
+        description="Protect negations, quantifiers, and answer-choice label mapping.",
+        template=(
+            "{input}\n\n"
+            "Pay special attention to NOT, EXCEPT, all, none, and other negations or quantifiers. "
+            "For multiple choice, decide the answer content first and then map it to the exact "
+            "option label. Output only that label; otherwise output only the shortest final answer."
+        ),
+    ),
+    "draft_verify": PromptStrategy(
+        name="draft_verify",
+        description="Use a terse private draft followed by one targeted check.",
+        template=(
+            "{input}\n\n"
+            "Make a very short private scratch draft using keywords, symbols, or equations rather "
+            "than prose. Check the resulting answer once against the exact question, then output "
+            "only the final answer. Do not show the draft or verification."
+        ),
+    ),
     "option_elimination": PromptStrategy(
         name="option_elimination",
         description="Multiple-choice elimination done privately with answer-only output.",
@@ -453,6 +514,43 @@ def build_prompt(example_input: str, strategy_name: str) -> str:
     return strategy.template.format(input=example_input)
 
 
+def example_task_key(example: Example) -> str:
+    return f"{example.benchmark}/{example.task}"
+
+
+def resolve_prompt_strategy(args: argparse.Namespace, example: Example) -> str:
+    policy = getattr(args, "prompt_policy_map", {})
+    default_strategy = getattr(args, "prompt_policy_default", args.prompt_strategy)
+    return policy.get(example_task_key(example), default_strategy)
+
+
+def prompt_run_metadata(args: argparse.Namespace) -> dict:
+    policy = getattr(args, "prompt_policy_payload", None)
+    if policy is not None:
+        name = str(policy.get("name") or args.prompt_policy.stem)
+        description = str(
+            policy.get("description")
+            or "Task-conditioned prompt strategy selected from calibration rewards."
+        )
+        selected = sorted(set(args.prompt_policy_map.values()) | {args.prompt_policy_default})
+        return {
+            "prompt_strategy": f"policy:{name}",
+            "prompt_strategy_description": description,
+            "prompt_template": None,
+            "prompt_policy_path": str(args.prompt_policy),
+            "prompt_policy_name": name,
+            "prompt_policy_default": args.prompt_policy_default,
+            "prompt_policy_selected_strategies": selected,
+            "prompt_policy": policy,
+        }
+    strategy = PROMPT_STRATEGIES[args.prompt_strategy]
+    return {
+        "prompt_strategy": strategy.name,
+        "prompt_strategy_description": strategy.description,
+        "prompt_template": strategy.template,
+    }
+
+
 def post_chat_completion(
     base_url: str,
     model: str,
@@ -486,7 +584,8 @@ def post_chat_completion(
 
 
 def run_one(args: argparse.Namespace, example: Example) -> dict:
-    prompt = build_prompt(example.input, args.prompt_strategy)
+    strategy_name = resolve_prompt_strategy(args, example)
+    prompt = build_prompt(example.input, strategy_name)
     started = time.time()
     generations = []
     try:
@@ -533,6 +632,7 @@ def run_one(args: argparse.Namespace, example: Example) -> dict:
         "normalized_target": preprocess_reference(example.target),
         "correct": correct,
         "elapsed_seconds": elapsed,
+        "prompt_strategy": strategy_name,
         "self_consistency_k": args.self_consistency_k,
         "generations": generations,
         "usage": combine_usage([item.get("usage", {}) for item in generations]),
@@ -624,6 +724,20 @@ def parse_args() -> argparse.Namespace:
         choices=["answer_only", "raw"],
         help="Backward-compatible alias for --prompt-strategy.",
     )
+    parser.add_argument(
+        "--prompt-policy",
+        type=Path,
+        help=(
+            "JSON policy with task_strategies mapping benchmark/task keys to prompt strategy "
+            "names. Missing tasks use default_strategy or --prompt-strategy."
+        ),
+    )
+    parser.add_argument(
+        "--skip-per-task",
+        type=int,
+        default=0,
+        help="Skip the first N indexed examples of every task, for held-out evaluation.",
+    )
     parser.add_argument("--self-consistency-k", type=int, default=1)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
@@ -633,6 +747,31 @@ def parse_args() -> argparse.Namespace:
         args.prompt_strategy = "raw"
     if args.self_consistency_k < 1:
         raise SystemExit("--self-consistency-k must be >= 1")
+    if args.skip_per_task < 0:
+        raise SystemExit("--skip-per-task must be >= 0")
+    args.prompt_policy_payload = None
+    args.prompt_policy_map = {}
+    args.prompt_policy_default = args.prompt_strategy
+    if args.prompt_policy is not None:
+        payload = json.loads(args.prompt_policy.read_text())
+        task_strategies = payload.get("task_strategies")
+        if not isinstance(task_strategies, dict):
+            raise SystemExit("--prompt-policy must contain a task_strategies object")
+        default_strategy = str(payload.get("default_strategy", args.prompt_strategy))
+        unknown = sorted(
+            {
+                str(strategy)
+                for strategy in [default_strategy, *task_strategies.values()]
+                if str(strategy) not in PROMPT_STRATEGIES
+            }
+        )
+        if unknown:
+            raise SystemExit(f"--prompt-policy contains unknown strategies: {', '.join(unknown)}")
+        args.prompt_policy_payload = payload
+        args.prompt_policy_map = {
+            str(task): str(strategy) for task, strategy in task_strategies.items()
+        }
+        args.prompt_policy_default = default_strategy
     return args
 
 
@@ -648,13 +787,15 @@ def git_revision(path: Path) -> str | None:
 
 
 def write_run_config(args: argparse.Namespace, examples: list[Example]) -> None:
-    strategy = PROMPT_STRATEGIES[args.prompt_strategy]
     by_benchmark: dict[str, int] = {}
     by_task: dict[str, int] = {}
+    by_prompt_strategy: dict[str, int] = {}
     for example in examples:
         by_benchmark[example.benchmark] = by_benchmark.get(example.benchmark, 0) + 1
-        key = f"{example.benchmark}/{example.task}"
+        key = example_task_key(example)
         by_task[key] = by_task.get(key, 0) + 1
+        strategy_name = resolve_prompt_strategy(args, example)
+        by_prompt_strategy[strategy_name] = by_prompt_strategy.get(strategy_name, 0) + 1
     config = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "base_url": args.base_url,
@@ -666,15 +807,15 @@ def write_run_config(args: argparse.Namespace, examples: list[Example]) -> None:
         "temperature": args.temperature,
         "timeout": args.timeout,
         "retries": args.retries,
-        "prompt_strategy": strategy.name,
-        "prompt_strategy_description": strategy.description,
-        "prompt_template": strategy.template,
+        **prompt_run_metadata(args),
         "self_consistency_k": args.self_consistency_k,
+        "skip_per_task": args.skip_per_task,
         "system_messages_sent": 0,
         "request_message_shape": [{"role": "user", "content": "<rendered prompt>"}],
         "example_count": len(examples),
         "examples_by_benchmark": by_benchmark,
         "examples_by_task": by_task,
+        "examples_by_prompt_strategy": by_prompt_strategy,
         "dataset_revisions": {
             "bbh": git_revision(args.datasets_root / "BIG-Bench-Hard"),
             "bbeh": git_revision(args.datasets_root / "bbeh"),
@@ -705,6 +846,8 @@ def main() -> int:
     if "shifted_unpuzzles" in selected:
         repo = unpuzzles_repo_root(args.datasets_root)
         examples.extend(load_shifted_unpuzzles(repo, args.limit_per_task))
+    if args.skip_per_task:
+        examples = [example for example in examples if example.index >= args.skip_per_task]
     if not examples:
         raise SystemExit("no examples loaded")
 
@@ -732,13 +875,12 @@ def main() -> int:
         "finished_at": datetime.now(timezone.utc).isoformat(),
         "base_url": args.base_url,
         "model": args.model,
-        "prompt_strategy": args.prompt_strategy,
-        "prompt_strategy_description": PROMPT_STRATEGIES[args.prompt_strategy].description,
-        "prompt_template": PROMPT_STRATEGIES[args.prompt_strategy].template,
+        **prompt_run_metadata(args),
         "self_consistency_k": args.self_consistency_k,
         "system_messages_sent": 0,
         "request_message_shape": [{"role": "user", "content": "<benchmark prompt>"}],
         "limit_per_task": args.limit_per_task,
+        "skip_per_task": args.skip_per_task,
         "parallel": args.parallel,
         "max_tokens": args.max_tokens,
         "temperature": args.temperature,
