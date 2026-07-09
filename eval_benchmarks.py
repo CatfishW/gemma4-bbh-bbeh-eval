@@ -55,6 +55,68 @@ PROMPT_STRATEGIES: dict[str, PromptStrategy] = {
             '{{"answer": "<final answer>"}}'
         ),
     ),
+    "native_format": PromptStrategy(
+        name="native_format",
+        description="Direct answer while preserving the format requested by the benchmark item.",
+        template=(
+            "{input}\n\n"
+            "Answer in exactly the format requested by the question. If the question asks for "
+            "<answer> tags, use those tags. If it asks for a sentence such as 'The word appears "
+            "# times.', use that sentence. If it gives options, output only the option label. "
+            "Do not include reasoning or extra text."
+        ),
+    ),
+    "canonical_short": PromptStrategy(
+        name="canonical_short",
+        description="Canonical shortest answer with explicit normalization rules.",
+        template=(
+            "{input}\n\n"
+            "Output only the canonical final answer.\n"
+            "- For multiple choice, output exactly one option label such as (A) or A.\n"
+            "- For yes/no questions, output exactly Yes or No.\n"
+            "- For numeric answers, output digits only unless units are required.\n"
+            "- For lists, output the list only.\n"
+            "No explanation."
+        ),
+    ),
+    "private_verify": PromptStrategy(
+        name="private_verify",
+        description="Solve and verify privately, then emit only the final answer.",
+        template=(
+            "{input}\n\n"
+            "Solve the problem privately, check the answer once for mistakes, and then output "
+            "only the final answer. Do not show reasoning, notes, or verification."
+        ),
+    ),
+    "option_elimination": PromptStrategy(
+        name="option_elimination",
+        description="Multiple-choice elimination done privately with answer-only output.",
+        template=(
+            "{input}\n\n"
+            "If answer choices are provided, compare the choices privately and eliminate wrong "
+            "ones before deciding. Output only the final option label. If there are no choices, "
+            "output only the shortest final answer. No explanation."
+        ),
+    ),
+    "answer_type_router": PromptStrategy(
+        name="answer_type_router",
+        description="Route to answer type, then output the shortest parseable answer.",
+        template=(
+            "{input}\n\n"
+            "First identify the required answer type privately: option label, boolean, number, "
+            "word/phrase, tuple/list, or requested tag format. Then output only that answer in "
+            "the most parseable form. Do not include reasoning."
+        ),
+    ),
+    "careful_direct": PromptStrategy(
+        name="careful_direct",
+        description="Direct answer with a careful-read instruction and no visible reasoning.",
+        template=(
+            "{input}\n\n"
+            "Read the problem carefully, including every condition and answer-choice label. "
+            "Compute or infer the answer, then return only the final answer. No explanation."
+        ),
+    ),
     "concise_cot": PromptStrategy(
         name="concise_cot",
         description="Concise chain-of-thought with final answer delimiter.",
