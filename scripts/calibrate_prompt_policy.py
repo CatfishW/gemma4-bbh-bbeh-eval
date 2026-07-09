@@ -40,6 +40,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--policy-name", default="reward_routed_v1")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--datasets-root", type=Path)
+    parser.add_argument(
+        "--calibration-only",
+        action="store_true",
+        help="Fit and write policy.json without requiring held-out predictions in the run root.",
+    )
     args = parser.parse_args()
     args.strategies = [item.strip() for item in args.strategies.split(",") if item.strip()]
     if args.baseline not in args.strategies:
@@ -267,6 +272,15 @@ def main() -> int:
         json.dumps(calibration_summary, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+
+    if args.calibration_only:
+        print(json.dumps(calibration_summary, indent=2, ensure_ascii=False))
+        return 0
+    if not heldout_keys:
+        raise SystemExit(
+            "no held-out predictions remain; use --calibration-only to fit a policy from a "
+            "calibration-only sweep"
+        )
 
     selected_rows = []
     for key in heldout_keys:
