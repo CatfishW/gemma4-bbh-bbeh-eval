@@ -12,6 +12,7 @@ RUN_NAME="$(basename "$REMOTE_RUN_ROOT")"
 LOCAL_RESULT_DIR="$REPO_DIR/results/$RUN_NAME"
 LOG_ROOT="$REPO_DIR/runs/result-uploaders"
 LOG_FILE="$LOG_ROOT/$RUN_NAME.log"
+DONE_MARKER="$LOG_ROOT/$RUN_NAME.done"
 
 mkdir -p "$LOG_ROOT"
 
@@ -28,6 +29,11 @@ PY
 }
 
 remote_run_root_quoted="$(remote_quote "$REMOTE_RUN_ROOT")"
+
+if [[ -f "$DONE_MARKER" ]]; then
+  log "upload already marked complete; exiting"
+  exit 0
+fi
 
 log "watching $REMOTE_HOST:$REMOTE_RUN_ROOT"
 log "local result dir: $LOCAL_RESULT_DIR"
@@ -81,7 +87,6 @@ PY
 
 log "writing upload manifest"
 python3 - "$LOCAL_RESULT_DIR" "$REMOTE_HOST" "$REMOTE_RUN_ROOT" <<'PY'
-from datetime import datetime, timezone
 from pathlib import Path
 import hashlib
 import json
@@ -92,12 +97,13 @@ remote_host = sys.argv[2]
 remote_run_root = sys.argv[3]
 files = []
 for path in sorted(item for item in root.rglob("*") if item.is_file()):
+    if path.name == "upload_manifest.json":
+        continue
     rel = path.relative_to(root).as_posix()
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     files.append({"path": rel, "bytes": path.stat().st_size, "sha256": digest})
 
 manifest = {
-    "created_at": datetime.now(timezone.utc).isoformat(),
     "remote_host": remote_host,
     "remote_run_root": remote_run_root,
     "files": files,
@@ -112,6 +118,7 @@ git add "$LOCAL_RESULT_DIR"
 
 if git diff --cached --quiet; then
   log "no result changes to commit"
+  touch "$DONE_MARKER"
   exit 0
 fi
 
@@ -121,4 +128,5 @@ git commit -m "Add full strategy matrix results $RUN_NAME"
 log "pushing results to GitHub"
 git push origin main
 
+touch "$DONE_MARKER"
 log "upload complete"
