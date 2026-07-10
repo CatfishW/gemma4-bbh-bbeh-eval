@@ -1,6 +1,6 @@
-# Gemma 4 E4B BBH/BBEH Evaluation
+# Gemma 4 E2B/E4B Reasoning Evaluation
 
-Small, auditable harness for evaluating the `SubTokenLLM` Gemma 4 E4B deployment against:
+Small, auditable harness for evaluating the Gemma 4 E2B and E4B deployments against:
 
 - BBH from `suzgunmirac/BIG-Bench-Hard`
 - BBEH from `google-deepmind/bbeh`
@@ -27,7 +27,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="SubTokenLLM",
+    model="SubTokenLLM-E2B",  # Use SubTokenLLM for E4B.
     messages=[{"role": "user", "content": "Reply with exactly: online"}],
     max_completion_tokens=16,
     temperature=0,
@@ -35,13 +35,20 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-Current direct remote endpoint during setup:
+Available public model IDs:
+
+- `SubTokenLLM`: Gemma 4 E4B.
+- `SubTokenLLM-E2B`: Gemma 4 E2B.
+
+The gateway dispatches by `model` while forwarding the original request body unchanged.
+It does not inject a system prompt. Direct remote endpoints:
 
 ```bash
 curl http://127.0.0.1:8888/v1/models
+curl http://127.0.0.1:8889/v1/models
 ```
 
-Tang tunnel endpoint after `ops/tunnel_tang_25570.sh` is running on `benwulab-remote`:
+Tang tunnel endpoint after the shared model router and `ops/tunnel_tang_25570.sh` are running:
 
 ```bash
 curl http://127.0.0.1:25570/v1/models
@@ -129,6 +136,11 @@ Available prompt strategies:
 - `step_back`: identify the general principle, then solve.
 - `premise_conclusion`: explicit premise-to-conclusion template.
 - `symbolic_proof`: compact symbolic translation or proof sketch, then solve.
+- `plan_and_solve_plus`: detailed plan, variable extraction, solve, and verification.
+- `least_to_most`: solve dependency-ordered subproblems from simplest to hardest.
+- `condition_reconstruction`: reconstruct the decisive condition before correction.
+- `counterexample_guard`: try one targeted counterexample before committing.
+- `rank_two_paths`: privately compare two distinct compact solution paths.
 - `raw`: dataset input only.
 
 Self-consistency is enabled with `--self-consistency-k`. The evaluator records every generation and chooses the majority normalized final answer. It still sends no system message.
@@ -197,6 +209,6 @@ The uploader waits for `aggregate_summary.json`, rsyncs the completed remote run
 
 ## Public HTTPS Route
 
-The Gemma service runs on `benwulab-remote:8888`. A reverse SSH tunnel from `benwulab-remote` to `tang-server-org` exposes it at `127.0.0.1:25570` on Tang.
+E4B and E2B run on `benwulab-remote:8888` and `:8889`. The body-preserving router on `:8890` dispatches by model ID. A reverse SSH tunnel exposes the router at `127.0.0.1:25570` on Tang.
 
 Install `ops/nginx_llm_agaii_org.conf` on Tang in the active BT-panel Nginx vhost tree, then reload Nginx. The Nginx route only rewrites `/llm/v1/*` to `/v1/*` and does not alter request bodies or inject prompts.
