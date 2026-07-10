@@ -1,0 +1,5 @@
+{
+  "updated_at": "2026-07-10T16:25:48.816148+00:00",
+  "state": "complete",
+  "detail": "all registered inference complete; analysis rerun over frozen predictions after stable exact McNemar fix"
+}

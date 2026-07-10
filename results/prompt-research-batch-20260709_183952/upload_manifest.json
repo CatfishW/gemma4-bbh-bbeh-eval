@@ -1,0 +1,31 @@
+{
+  "remote_host": "benwulab-remote via tang-server",
+  "remote_run_root": "/data/benwulab/gemma4-eval/runs/prompt-research-batch-20260709_183952",
+  "files": [
+    {
+      "path": "batch_manifest.json",
+      "bytes": 451,
+      "sha256": "66dd877f0e552f0c15027ce1a3dc9856427720c8dd41f65a92b054a45a099140"
+    },
+    {
+      "path": "batch_status.json",
+      "bytes": 298,
+      "sha256": "5db1fc78976981aeaf7d2ba56c253eb3f975fe57c908be65fdffced24413f033"
+    },
+    {
+      "path": "batch_summary.json",
+      "bytes": 12074,
+      "sha256": "d643fccd2d6da13f3db21de999bd824e52cf3b8bce0f16484fa49d3e3e31df48"
+    },
+    {
+      "path": "launcher.log",
+      "bytes": 196,
+      "sha256": "4b05458e3961e7953ad1f3e7cebb7e1340a6f490763f9eebf4e9318f0dea39e9"
+    },
+    {
+      "path": "sweep_launcher.log",
+      "bytes": 1024,
+      "sha256": "6e507b0817dfb2de7d8d8a96760fedb36d7804870a94aa8544114daf3320feba"
+    }
+  ]
+}

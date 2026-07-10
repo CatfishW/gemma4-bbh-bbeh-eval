@@ -1,0 +1,6 @@
+[33mWarning: 21 local file(s) do not exist on the remote repo. Use --fail-on-extra-files for details.[0m
+[32m✓ Verified 9 file(s) for model 'google/gemma-4-E2B-it'. All checksums match.[0m
+  repo_id: google/gemma-4-E2B-it
+  repo_type: model
+  checked: 9
+  path: /data/models/gemma-4-E2B-it

@@ -1,0 +1,81 @@
+{
+  "runs_root": "/data/benwulab/gemma4-eval/runs/full-challenger-winners-20260709_120053",
+  "strategies": [
+    {
+      "strategy_dir": "canonical_short",
+      "prompt_strategy": "canonical_short",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T16:32:58.228048+00:00",
+      "finished_at": "2026-07-09T17:20:51.220904+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 620,
+          "total": 4520,
+          "micro_accuracy": 0.13716814159292035,
+          "macro_accuracy": 0.1418840579710145,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3511,
+          "total": 6511,
+          "micro_accuracy": 0.5392412839809553,
+          "macro_accuracy": 0.5429903939393025,
+          "harmonic_task_accuracy": 0.19537916182135306,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 133,
+          "total": 1509,
+          "micro_accuracy": 0.08813783962889331,
+          "macro_accuracy": 0.1764946818891491,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    },
+    {
+      "strategy_dir": "private_verify",
+      "prompt_strategy": "private_verify",
+      "self_consistency_k": 1,
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "started_at": "2026-07-09T17:20:51.437022+00:00",
+      "finished_at": "2026-07-09T17:55:56.309460+00:00",
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 621,
+          "total": 4520,
+          "micro_accuracy": 0.13738938053097347,
+          "macro_accuracy": 0.14195652173913043,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3516,
+          "total": 6511,
+          "micro_accuracy": 0.5400092151743204,
+          "macro_accuracy": 0.5431879213079224,
+          "harmonic_task_accuracy": 0.2247889842419111,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 214,
+          "total": 1509,
+          "micro_accuracy": 0.1418157720344599,
+          "macro_accuracy": 0.1989128773093937,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 10
+        }
+      ]
+    }
+  ]
+}

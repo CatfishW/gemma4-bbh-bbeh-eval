@@ -1,0 +1,106 @@
+{
+  "baseline": {
+    "name": "direct_answer",
+    "prompt_strategy": "direct_answer",
+    "max_tokens": 64,
+    "temperature": 0.0,
+    "self_consistency_k": 1,
+    "correct": 467,
+    "total": 1500,
+    "accuracy": 0.31133333333333335
+  },
+  "selected": [
+    {
+      "name": "canonical_short",
+      "prompt_strategy": "canonical_short",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 474,
+      "total": 1500,
+      "accuracy": 0.316
+    },
+    {
+      "name": "private_verify",
+      "prompt_strategy": "private_verify",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 483,
+      "total": 1500,
+      "accuracy": 0.322
+    }
+  ],
+  "all": [
+    {
+      "name": "private_verify",
+      "prompt_strategy": "private_verify",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 483,
+      "total": 1500,
+      "accuracy": 0.322
+    },
+    {
+      "name": "canonical_short",
+      "prompt_strategy": "canonical_short",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 474,
+      "total": 1500,
+      "accuracy": 0.316
+    },
+    {
+      "name": "direct_answer",
+      "prompt_strategy": "direct_answer",
+      "max_tokens": 64,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 467,
+      "total": 1500,
+      "accuracy": 0.31133333333333335
+    },
+    {
+      "name": "careful_direct",
+      "prompt_strategy": "careful_direct",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 459,
+      "total": 1500,
+      "accuracy": 0.306
+    },
+    {
+      "name": "native_format",
+      "prompt_strategy": "native_format",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 441,
+      "total": 1500,
+      "accuracy": 0.294
+    },
+    {
+      "name": "option_elimination",
+      "prompt_strategy": "option_elimination",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 435,
+      "total": 1500,
+      "accuracy": 0.29
+    },
+    {
+      "name": "answer_type_router",
+      "prompt_strategy": "answer_type_router",
+      "max_tokens": 96,
+      "temperature": 0.0,
+      "self_consistency_k": 1,
+      "correct": 397,
+      "total": 1500,
+      "accuracy": 0.26466666666666666
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+eed9b1b79d4ef6e8b232bf282af3171fc5323d4e2f8bb41b5a23a9b34c3cdc9d  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/analysis-first-attempt.stderr.log
+55209e2ffff6a085b1032c0f5b37208f48866ec5aada5e66997d6058f0336d0b  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/analysis-fix.txt
+1be1570724c633cbb91cc19854affeeafe7c9fba10e84304c9855e3ba75dea17  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/e2b-launch-command.txt
+1e98e0a3fb72fff8850942cb6ce4efb0f6963f1c8a0e939113b08314163b3ec7  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/e2b-models-end.json
+3c03a215032d4f0641672b88d3835eb5b0b9107d2e9d8c3a4aee95d4a7e03a9a  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/e4b-models-end.json
+2531b9e8aaa511c20cb8e4f75ca31d234325d24ad992c9b270e4c0c06a7a89ab  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/gpu-end-snapshot.csv
+bcbfbb247d9fd77e02e7ed948b30dc6a46c755e41dbeca42e64dca3663c60196  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/gpu-snapshot.csv
+51f74c6832690899d74360593aa324d89740c505c735e3d1687b3b828cde8556  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/hf-cache-verify.log
+b2c845aeff4f9cb592ea06dfeb5c90438f2e4ae1e737ed5e2ef956c80a9edcde  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/model-weight.sha256
+5702b3c7e0e1bdc7875d270d357201c33f3b09bf57e19cb78212e036b0bbb9d7  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/process-end-snapshot.txt
+5c3139593b3b16b3e9edebd01961d294e8106d34fe42b6f04cf1d5be7dfec752  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/process-snapshot.txt
+19734a3be1ca7daa3ca29aed948590c19e64403cc9eee9deb81f59320a78fc81  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/public-models-end.json
+e4f606b089675d7390a9ace51f00a45b87358862713e695d6133e0105946b88a  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/public-models.json
+157807fa2711ec53d1288680d0d4b36540d5a6c22752af541c1e2b28b119b111  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/router-health.json
+f776286cd43953b107b718da6966ade329da76f7433b03f932ae6e938bad09e4  /data/benwulab/gemma4-eval/runs/e2b-confirmatory-20260709_231405/provenance/router-launch-command.txt

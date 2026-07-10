@@ -1,0 +1,21 @@
+[Unit]
+Description=Gemma 4 E2B/E4B body-preserving API router
+Wants=network-online.target gemma4-e4b.service gemma4-e2b.service
+After=network-online.target gemma4-e4b.service gemma4-e2b.service
+
+[Service]
+Type=simple
+WorkingDirectory=/data/benwulab/gemma4-eval/router
+Environment=CONDA_PREFIX=/home/benwulab/anaconda3/envs/SGLang
+Environment=PATH=/home/benwulab/anaconda3/envs/SGLang/bin:/home/benwulab/anaconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment="MODEL_BACKENDS={\"SubTokenLLM\":\"http://127.0.0.1:8888/v1\",\"SubTokenLLM-E2B\":\"http://127.0.0.1:8889/v1\"}"
+Environment=DEFAULT_MODEL=SubTokenLLM
+ExecStart=/home/benwulab/anaconda3/envs/SGLang/bin/python -m uvicorn ops.model_router:app --app-dir /data/benwulab/gemma4-eval/router --host 0.0.0.0 --port 8890
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+KillMode=control-group
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=default.target

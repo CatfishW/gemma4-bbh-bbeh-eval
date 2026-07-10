@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-07-10T03:14:25.090847+00:00",
+  "hostname": "benwulab-Lambda-Vector",
+  "repo_dir": "/data/benwulab/gemma4-eval/repo-e2b-confirmatory",
+  "repo_revision": "321c6e8abe13168c70772efecd3ac5848fbd7fdb",
+  "preregistration_commit": "4e1904205a1177186c2c03769783b0f79b4fbaa8",
+  "datasets_root": "/data/benwulab/gemma4-eval/datasets",
+  "base_url": "http://127.0.0.1:8889/v1",
+  "model": "SubTokenLLM-E2B",
+  "model_path": "/data/models/gemma-4-E2B-it",
+  "model_hub_id": "google/gemma-4-E2B-it",
+  "model_hub_revision": "70af34e20bd4b7a91f0de6b22675850c43922a03",
+  "model_weight_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+  "benchmarks": "bbh,bbeh,usr",
+  "parallel": 8,
+  "timeout": 300,
+  "retries": 2,
+  "primary_seed": 20260709,
+  "system_messages_sent": 0
+}

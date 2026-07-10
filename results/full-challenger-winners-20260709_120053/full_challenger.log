@@ -1,0 +1,5 @@
+[2026-07-09T12:32:58-04:00] START canonical_short
+[2026-07-09T13:20:51-04:00] DONE canonical_short
+[2026-07-09T13:20:51-04:00] START private_verify
+[2026-07-09T13:55:56-04:00] DONE private_verify
+[2026-07-09T13:55:56-04:00] full challenger winners complete: /data/benwulab/gemma4-eval/runs/full-challenger-winners-20260709_120053

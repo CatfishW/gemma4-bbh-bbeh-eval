@@ -1,0 +1,1 @@
+MODEL_BACKENDS='{"SubTokenLLM":"http://127.0.0.1:8888/v1","SubTokenLLM-E2B":"http://127.0.0.1:8889/v1"}' DEFAULT_MODEL='SubTokenLLM' /home/benwulab/anaconda3/envs/SGLang/bin/python -m uvicorn ops.model_router:app --app-dir /data/benwulab/gemma4-eval/repo-e2b-confirmatory --host 0.0.0.0 --port 8890

@@ -1,0 +1,596 @@
+25/2990 correct=18 acc=0.720
+50/2990 correct=39 acc=0.780
+75/2990 correct=50 acc=0.667
+100/2990 correct=58 acc=0.580
+125/2990 correct=58 acc=0.464
+150/2990 correct=62 acc=0.413
+175/2990 correct=70 acc=0.400
+200/2990 correct=81 acc=0.405
+225/2990 correct=82 acc=0.364
+250/2990 correct=85 acc=0.340
+275/2990 correct=91 acc=0.331
+300/2990 correct=92 acc=0.307
+325/2990 correct=92 acc=0.283
+350/2990 correct=94 acc=0.269
+375/2990 correct=114 acc=0.304
+400/2990 correct=134 acc=0.335
+425/2990 correct=134 acc=0.315
+450/2990 correct=134 acc=0.298
+475/2990 correct=134 acc=0.282
+500/2990 correct=134 acc=0.268
+525/2990 correct=141 acc=0.269
+550/2990 correct=146 acc=0.265
+575/2990 correct=146 acc=0.254
+600/2990 correct=146 acc=0.243
+625/2990 correct=146 acc=0.234
+650/2990 correct=146 acc=0.225
+675/2990 correct=150 acc=0.222
+700/2990 correct=151 acc=0.216
+725/2990 correct=160 acc=0.221
+750/2990 correct=172 acc=0.229
+775/2990 correct=176 acc=0.227
+800/2990 correct=181 acc=0.226
+825/2990 correct=183 acc=0.222
+850/2990 correct=183 acc=0.215
+875/2990 correct=183 acc=0.209
+900/2990 correct=184 acc=0.204
+925/2990 correct=191 acc=0.206
+950/2990 correct=198 acc=0.208
+975/2990 correct=209 acc=0.214
+1000/2990 correct=221 acc=0.221
+1025/2990 correct=234 acc=0.228
+1050/2990 correct=246 acc=0.234
+1075/2990 correct=246 acc=0.229
+1100/2990 correct=246 acc=0.224
+1125/2990 correct=246 acc=0.219
+1150/2990 correct=246 acc=0.214
+1175/2990 correct=246 acc=0.209
+1200/2990 correct=246 acc=0.205
+1225/2990 correct=246 acc=0.201
+1250/2990 correct=246 acc=0.197
+1275/2990 correct=246 acc=0.193
+1300/2990 correct=246 acc=0.189
+1325/2990 correct=253 acc=0.191
+1350/2990 correct=258 acc=0.191
+1375/2990 correct=260 acc=0.189
+1400/2990 correct=264 acc=0.189
+1425/2990 correct=264 acc=0.185
+1450/2990 correct=264 acc=0.182
+1475/2990 correct=264 acc=0.179
+1500/2990 correct=265 acc=0.177
+1525/2990 correct=275 acc=0.180
+1550/2990 correct=285 acc=0.184
+1575/2990 correct=288 acc=0.183
+1600/2990 correct=288 acc=0.180
+1625/2990 correct=288 acc=0.177
+1650/2990 correct=288 acc=0.175
+1675/2990 correct=288 acc=0.172
+1700/2990 correct=288 acc=0.169
+1725/2990 correct=288 acc=0.167
+1750/2990 correct=289 acc=0.165
+1775/2990 correct=289 acc=0.163
+1800/2990 correct=290 acc=0.161
+1825/2990 correct=290 acc=0.159
+1850/2990 correct=290 acc=0.157
+1875/2990 correct=290 acc=0.155
+1900/2990 correct=291 acc=0.153
+1925/2990 correct=295 acc=0.153
+1950/2990 correct=295 acc=0.151
+1975/2990 correct=295 acc=0.149
+2000/2990 correct=295 acc=0.147
+2025/2990 correct=295 acc=0.146
+2050/2990 correct=295 acc=0.144
+2075/2990 correct=298 acc=0.144
+2100/2990 correct=303 acc=0.144
+2125/2990 correct=303 acc=0.143
+2150/2990 correct=303 acc=0.141
+2175/2990 correct=303 acc=0.139
+2200/2990 correct=303 acc=0.138
+2225/2990 correct=303 acc=0.136
+2250/2990 correct=305 acc=0.136
+2275/2990 correct=305 acc=0.134
+2300/2990 correct=305 acc=0.133
+2325/2990 correct=305 acc=0.131
+2350/2990 correct=305 acc=0.130
+2375/2990 correct=305 acc=0.128
+2400/2990 correct=305 acc=0.127
+2425/2990 correct=308 acc=0.127
+2450/2990 correct=308 acc=0.126
+2475/2990 correct=311 acc=0.126
+2500/2990 correct=316 acc=0.126
+2525/2990 correct=316 acc=0.125
+2550/2990 correct=318 acc=0.125
+2575/2990 correct=323 acc=0.125
+2600/2990 correct=325 acc=0.125
+2625/2990 correct=325 acc=0.124
+2650/2990 correct=325 acc=0.123
+2675/2990 correct=325 acc=0.121
+2700/2990 correct=325 acc=0.120
+2725/2990 correct=325 acc=0.119
+2750/2990 correct=329 acc=0.120
+2775/2990 correct=335 acc=0.121
+2800/2990 correct=342 acc=0.122
+2825/2990 correct=348 acc=0.123
+2850/2990 correct=354 acc=0.124
+2875/2990 correct=359 acc=0.125
+2900/2990 correct=365 acc=0.126
+2925/2990 correct=371 acc=0.127
+2950/2990 correct=378 acc=0.128
+2975/2990 correct=384 acc=0.129
+2990/2990 correct=386 acc=0.129
+{
+  "started_at": "2026-07-10T12:14:30.112222+00:00",
+  "finished_at": "2026-07-10T12:27:24.823985+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "direct_answer",
+  "prompt_strategy_description": "Direct answer baseline; final answer only.",
+  "prompt_template": "{input}\n\nReturn only the final answer. Do not include reasoning, explanation, or extra text.",
+  "self_consistency_k": 1,
+  "response_selection": "key_condition_refine",
+  "selection_max_tokens": 64,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": 50,
+  "skip_per_task": 0,
+  "parallel": 8,
+  "max_tokens": 64,
+  "temperature": 0.0,
+  "seed": 20260709,
+  "benchmarks": [
+    {
+      "benchmark": "bbeh",
+      "correct": 57,
+      "total": 1150,
+      "micro_accuracy": 0.049565217391304345,
+      "macro_accuracy": 0.049565217391304345,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 23
+    },
+    {
+      "benchmark": "bbh",
+      "correct": 259,
+      "total": 1350,
+      "micro_accuracy": 0.19185185185185186,
+      "macro_accuracy": 0.19185185185185186,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 27
+    },
+    {
+      "benchmark": "usr",
+      "correct": 70,
+      "total": 490,
+      "micro_accuracy": 0.14285714285714285,
+      "macro_accuracy": 0.14,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boardgame_qa",
+      "correct": 5,
+      "total": 50,
+      "accuracy": 0.1
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boolean_expressions",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_buggy_tables",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_causal_understanding",
+      "correct": 21,
+      "total": 50,
+      "accuracy": 0.42
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_disambiguation_qa",
+      "correct": 3,
+      "total": 50,
+      "accuracy": 0.06
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_dyck_languages",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_geometric_shapes",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_hyperbaton",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_linguini",
+      "correct": 2,
+      "total": 50,
+      "accuracy": 0.04
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_movie_recommendation",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_multistep_arithmetic",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_nycc",
+      "correct": 5,
+      "total": 50,
+      "accuracy": 0.1
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_counting",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_properties",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sarc_triples",
+      "correct": 8,
+      "total": 50,
+      "accuracy": 0.16
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_shuffled_objects",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_spatial_reasoning",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sportqa",
+      "correct": 2,
+      "total": 50,
+      "accuracy": 0.04
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_temporal_sequence",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_time_arithmetic",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_web_of_lies",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_word_sorting",
+      "correct": 3,
+      "total": 50,
+      "accuracy": 0.06
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_zebra_puzzles",
+      "correct": 8,
+      "total": 50,
+      "accuracy": 0.16
+    },
+    {
+      "benchmark": "bbh",
+      "task": "boolean_expressions",
+      "correct": 38,
+      "total": 50,
+      "accuracy": 0.76
+    },
+    {
+      "benchmark": "bbh",
+      "task": "causal_judgement",
+      "correct": 20,
+      "total": 50,
+      "accuracy": 0.4
+    },
+    {
+      "benchmark": "bbh",
+      "task": "date_understanding",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "disambiguation_qa",
+      "correct": 23,
+      "total": 50,
+      "accuracy": 0.46
+    },
+    {
+      "benchmark": "bbh",
+      "task": "dyck_languages",
+      "correct": 2,
+      "total": 50,
+      "accuracy": 0.04
+    },
+    {
+      "benchmark": "bbh",
+      "task": "formal_fallacies",
+      "correct": 9,
+      "total": 50,
+      "accuracy": 0.18
+    },
+    {
+      "benchmark": "bbh",
+      "task": "geometric_shapes",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "hyperbaton",
+      "correct": 42,
+      "total": 50,
+      "accuracy": 0.84
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_five_objects",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_seven_objects",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_three_objects",
+      "correct": 12,
+      "total": 50,
+      "accuracy": 0.24
+    },
+    {
+      "benchmark": "bbh",
+      "task": "movie_recommendation",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "multistep_arithmetic_two",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "navigate",
+      "correct": 4,
+      "total": 50,
+      "accuracy": 0.08
+    },
+    {
+      "benchmark": "bbh",
+      "task": "object_counting",
+      "correct": 22,
+      "total": 50,
+      "accuracy": 0.44
+    },
+    {
+      "benchmark": "bbh",
+      "task": "penguins_in_a_table",
+      "correct": 8,
+      "total": 50,
+      "accuracy": 0.16
+    },
+    {
+      "benchmark": "bbh",
+      "task": "reasoning_about_colored_objects",
+      "correct": 3,
+      "total": 50,
+      "accuracy": 0.06
+    },
+    {
+      "benchmark": "bbh",
+      "task": "ruin_names",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "salient_translation_error_detection",
+      "correct": 13,
+      "total": 50,
+      "accuracy": 0.26
+    },
+    {
+      "benchmark": "bbh",
+      "task": "snarks",
+      "correct": 24,
+      "total": 50,
+      "accuracy": 0.48
+    },
+    {
+      "benchmark": "bbh",
+      "task": "sports_understanding",
+      "correct": 26,
+      "total": 50,
+      "accuracy": 0.52
+    },
+    {
+      "benchmark": "bbh",
+      "task": "temporal_sequences",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_five_objects",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_seven_objects",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_three_objects",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "web_of_lies",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "word_sorting",
+      "correct": 13,
+      "total": 50,
+      "accuracy": 0.26
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 16,
+      "total": 50,
+      "accuracy": 0.32
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 10,
+      "total": 50,
+      "accuracy": 0.2
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 10,
+      "total": 50,
+      "accuracy": 0.2
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 0,
+      "total": 40,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 9,
+      "total": 50,
+      "accuracy": 0.18
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 17,
+      "total": 50,
+      "accuracy": 0.34
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 8,
+      "total": 50,
+      "accuracy": 0.16
+    }
+  ]
+}

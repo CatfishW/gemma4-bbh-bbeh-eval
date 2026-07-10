@@ -1,0 +1,8 @@
+timestamp_utc: 2026-07-10T16:22:49Z
+scope: analysis only; all registered E2B inference had already completed
+failure: exact_mcnemar_p converted a large binomial integer to float and raised OverflowError
+resolution: replace the mathematically equivalent binomial-tail calculation with a stable log-sum-exp implementation and rerun analysis over frozen predictions
+original_analysis_script_sha256: 76c7c7f09c785e00cef5426808a35fef1d73f8d48cc6020d9ef72058ed4bf145
+fixed_analysis_script_sha256: 53a94fbcf802c40e22ffb208c158b965c2b332c61af7c910db0df21e9bcd06d2
+inference_rerun: false
+prediction_mutation: false

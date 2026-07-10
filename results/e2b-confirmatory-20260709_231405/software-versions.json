@@ -1,0 +1,11 @@
+{
+  "python": "3.10.19",
+  "packages": {
+    "sglang": "0.5.10.post2.dev635+g80125febb",
+    "torch": "2.9.1",
+    "transformers": "5.5.4",
+    "fastapi": "0.115.6",
+    "httpx": "0.28.1",
+    "uvicorn": "0.32.1"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "extension_id": "gemma4-e2b-confirmatory-v1-analysis-extension-001",
+  "date": "2026-07-10",
+  "timing": "registered after calibration-validation screening began and before finalist selection or any E2B test request",
+  "scope": "analysis_only",
+  "rationale": "Examples are nested within benchmark tasks. The primary paired example-level analysis is retained, and task-cluster sensitivity analyses are added to quantify dependence and task influence.",
+  "added_analyses": {
+    "task_cluster_bootstrap": {
+      "replicates": 10000,
+      "seed": 20260709,
+      "statistics": [
+        "pooled micro accuracy difference",
+        "macro task accuracy difference"
+      ],
+      "interval": "percentile 95 percent interval from resampling benchmark tasks with replacement"
+    },
+    "task_sign_flip": {
+      "replicates": 100000,
+      "seed": 20260709,
+      "statistic": "absolute pooled correct-count difference after independently flipping each task-level difference",
+      "interpretation": "cluster-robust randomization sensitivity test, not a replacement for the preregistered exact McNemar test"
+    },
+    "influence": "leave one benchmark task out at a time and report the range of pooled accuracy differences",
+    "policy_audit": [
+      "test-time selected prompt counts",
+      "accuracy by selected prompt",
+      "registered-arm token-cap exceedance",
+      "actual test-run token-cap binding"
+    ]
+  },
+  "unchanged": [
+    "primary hypothesis",
+    "primary outcome",
+    "direct-answer baseline",
+    "prompt arms",
+    "calibration-validation-test split",
+    "finalist selection",
+    "exact two-sided McNemar primary test",
+    "Holm correction",
+    "task-stratified paired bootstrap",
+    "system_messages_sent"
+  ],
+  "integrity": {
+    "e2b_test_rows_read_when_registered": 0,
+    "changes_model_inference": false,
+    "changes_selection": false,
+    "system_messages_sent": 0
+  }
+}

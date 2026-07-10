@@ -1,0 +1,14 @@
+python3 eval_benchmarks.py \
+  --datasets-root "/data/benwulab/gemma4-eval/datasets" \
+  --base-url "http://127.0.0.1:8888/v1" \
+  --model "SubTokenLLM" \
+  --benchmarks "bbh,bbeh,usr" \
+  --prompt-policy "/data/benwulab/gemma4-eval/runs/reward-routed-v2-20260709_195846/calibration/policy.json" \
+  --skip-per-task "25" \
+  --self-consistency-k 1 \
+  --temperature 0.0 \
+  --max-tokens 128 \
+  --parallel "2" \
+  --timeout "300" \
+  --retries "2" \
+  --output-dir "/data/benwulab/gemma4-eval/runs/reward-routed-v2-20260709_195846/heldout"

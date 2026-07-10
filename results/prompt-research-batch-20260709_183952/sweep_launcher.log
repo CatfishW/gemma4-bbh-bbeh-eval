@@ -1,0 +1,19 @@
+[2026-07-09T19:01:50-04:00] START direct_answer
+[2026-07-09T19:04:46-04:00] DONE direct_answer
+[2026-07-09T19:04:46-04:00] START private_verify
+[2026-07-09T19:07:48-04:00] DONE private_verify
+[2026-07-09T19:07:48-04:00] START canonical_short
+[2026-07-09T19:12:21-04:00] DONE canonical_short
+[2026-07-09T19:12:21-04:00] START selective_verify
+[2026-07-09T19:16:25-04:00] DONE selective_verify
+[2026-07-09T19:16:25-04:00] START compare_then_commit
+[2026-07-09T19:20:26-04:00] DONE compare_then_commit
+[2026-07-09T19:20:26-04:00] START fast_slow_gate
+[2026-07-09T19:32:25-04:00] DONE fast_slow_gate
+[2026-07-09T19:32:25-04:00] START constraint_guard
+[2026-07-09T19:36:11-04:00] DONE constraint_guard
+[2026-07-09T19:36:11-04:00] START negation_label_guard
+[2026-07-09T19:49:16-04:00] DONE negation_label_guard
+[2026-07-09T19:49:17-04:00] START draft_verify
+[2026-07-09T19:55:59-04:00] DONE draft_verify
+[2026-07-09T19:55:59-04:00] research sweep complete: /data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952

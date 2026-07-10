@@ -1,0 +1,86 @@
+{
+  "remote_host": "benwulab-remote via tang-server",
+  "remote_run_root": "/data/benwulab/gemma4-eval/runs/reward-routed-v2-20260709_195846",
+  "files": [
+    {
+      "path": "aggregate_summary.json",
+      "bytes": 1283,
+      "sha256": "f410dd0a51f0ccab13b4a473508ee41e1c6648e7137358c98edd5b4dc109bed7"
+    },
+    {
+      "path": "arm_comparison.json",
+      "bytes": 13449,
+      "sha256": "094e6c62fe2c67fa4dbae0d73c29582b97b50d18ba72226a79c3b403d26d78b4"
+    },
+    {
+      "path": "calibration/calibration_summary.json",
+      "bytes": 46231,
+      "sha256": "3530edf72617bdd7f628e505336a1fff4a004ded7fe24223303f475d5c08cbec"
+    },
+    {
+      "path": "calibration/policy.json",
+      "bytes": 3798,
+      "sha256": "a47099e2acc731e39a7bcb8a17838ad35f33a92d9318bb4e5f9c65a29e545c01"
+    },
+    {
+      "path": "calibration/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "calibration/stdout.log",
+      "bytes": 46231,
+      "sha256": "3530edf72617bdd7f628e505336a1fff4a004ded7fe24223303f475d5c08cbec"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 722,
+      "sha256": "3e7d3c287bcd71ee3cd72f74cfc82009c31d1edbc137027bf59b9098c4298ba3"
+    },
+    {
+      "path": "examples.md",
+      "bytes": 8217,
+      "sha256": "7bb6a590a8d28a4d4d78aa6acbe2626b2e01f27210a67b19d11530fb96003aa1"
+    },
+    {
+      "path": "heldout/command.txt",
+      "bytes": 540,
+      "sha256": "c60ed0717e4f18ed55eeae5e19b339d2acf153d255bbc8da2c4ce468afb23023"
+    },
+    {
+      "path": "heldout/predictions.jsonl.gz",
+      "bytes": 448444,
+      "sha256": "ba29976161e5512065ad125cc3cc52ad71b0cff140be0f9dc67e1ba4c3874c42"
+    },
+    {
+      "path": "heldout/run_config.json",
+      "bytes": 7955,
+      "sha256": "126bc1c98907d89984e949a415a0b6d8ec2c78c4ed84e52589b632d0b57d9371"
+    },
+    {
+      "path": "heldout/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "heldout/stdout.log",
+      "bytes": 30028,
+      "sha256": "e5070bdeec03941a237ee68ccfe3df7afcb293b1b5c2267b893228830e78833c"
+    },
+    {
+      "path": "heldout/summary.json",
+      "bytes": 15075,
+      "sha256": "08858ce258da675d03d11447157d9c2cac1333f0138ba29619fcc5acd2d31c57"
+    },
+    {
+      "path": "launcher.log",
+      "bytes": 1548,
+      "sha256": "499515e0a118ed3b375c60e3b32d0f250ba0a9ce29b495bfc576db2d85834e82"
+    },
+    {
+      "path": "policy.log",
+      "bytes": 265,
+      "sha256": "b5459a5b518c61c96e45e7b63a2436132d265cf4111987198797ad644de1d7d7"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "remote_host": "benwulab-remote via tang-server",
+  "remote_run_root": "/data/benwulab/gemma4-eval/runs/full-challenger-winners-20260709_120053",
+  "files": [
+    {
+      "path": "aggregate_summary.json",
+      "bytes": 2360,
+      "sha256": "f74a39b4bea0c57fe869c8811010a0039991344e9998baebe506384c458772e6"
+    },
+    {
+      "path": "canonical_short/command.txt",
+      "bytes": 464,
+      "sha256": "7cf84352ac8eba45395c0a45bb109507bc620b3e395f1fa485f12c93f77e2ac4"
+    },
+    {
+      "path": "canonical_short/predictions.jsonl.gz",
+      "bytes": 553830,
+      "sha256": "7cdf5dceefed45b1fd89ecdca04d88956e6fa6152dc863cc1c72704965dc9377"
+    },
+    {
+      "path": "canonical_short/run_config.json",
+      "bytes": 3504,
+      "sha256": "b419d3240d4bfebbf1582a6adecafadfe8845d46d146be9a74690443ad3bbfd5"
+    },
+    {
+      "path": "canonical_short/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "canonical_short/stdout.log",
+      "bytes": 27314,
+      "sha256": "040a337287334b4b8bca46be942768aab7b856ccaa00ca508c133ab75841c9b9"
+    },
+    {
+      "path": "canonical_short/summary.json",
+      "bytes": 10265,
+      "sha256": "ffa8523918fe5453601de50823589f67bbf78ea64580036a3e76e92d6568c3f6"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 510,
+      "sha256": "c7485a42a3caa2800874dc148eb1c3221a7dc01db7063fa7fd7932e624d58bc6"
+    },
+    {
+      "path": "full_challenger.log",
+      "bytes": 330,
+      "sha256": "09baf75e3922858288dad07198d9bbf0b320c4e1ce676427077c967df3248129"
+    },
+    {
+      "path": "private_verify/command.txt",
+      "bytes": 462,
+      "sha256": "9a8cc15b7cfa34287fd93acbbb5e0a15a42c63a6a23534998941e29c0a1af34b"
+    },
+    {
+      "path": "private_verify/predictions.jsonl.gz",
+      "bytes": 481750,
+      "sha256": "9e617fc8846a924efb7daa62176d0d5b7f940e14fa773fb487973d7c56c65112"
+    },
+    {
+      "path": "private_verify/run_config.json",
+      "bytes": 3366,
+      "sha256": "bc6c05b498f39c55b69e5132abd0c5bfccf2ca039b180ed9b0a081b7a3b52670"
+    },
+    {
+      "path": "private_verify/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "private_verify/stdout.log",
+      "bytes": 27177,
+      "sha256": "cf791dc3d877c7066f818841fc8f6d630bac82c9803a2770b55c708c19ae8d71"
+    },
+    {
+      "path": "private_verify/summary.json",
+      "bytes": 10127,
+      "sha256": "c96ff52431115d2bf8bb74c6f91bddb1dab06ff7ea5ac8fd987d8ec635dd8eb2"
+    },
+    {
+      "path": "selected_strategies.json",
+      "bytes": 2445,
+      "sha256": "55f22efc9f08f585c5593b7552362878713d1cb42a238d2414c474185ad86ec5"
+    }
+  ]
+}

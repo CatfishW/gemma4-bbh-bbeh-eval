@@ -1,0 +1,60 @@
+{
+  "analysis_status": "post_hoc_sensitivity",
+  "inference_rerun": false,
+  "prediction_mutation": false,
+  "examples": 9550,
+  "fallback_strategy": "direct_answer",
+  "fallback_examples": 3387,
+  "specialized_examples": 6163,
+  "direct": {
+    "correct": 2520,
+    "accuracy": 0.2638743455497382,
+    "mean_completion_tokens": 14.681151832460733
+  },
+  "cbrr": {
+    "correct": 3382,
+    "accuracy": 0.35413612565445024,
+    "mean_completion_tokens": 65.59937172774869
+  },
+  "fallback_subset": {
+    "examples": 3387,
+    "direct_correct": 732,
+    "cbrr_correct": 733
+  },
+  "specialized_subset": {
+    "examples": 6163,
+    "direct_correct": 1788,
+    "cbrr_correct": 2649
+  },
+  "fallback_replay": {
+    "correct": 3381,
+    "accuracy": 0.35403141361256546,
+    "correct_difference_vs_cbrr": -1,
+    "accuracy_point_difference_vs_direct": 9.015706806282722,
+    "mean_completion_tokens": 49.863350785340316,
+    "paired_wins": 1088,
+    "paired_losses": 227,
+    "exact_mcnemar_two_sided_p": 5.359008107454629e-135
+  },
+  "by_benchmark": {
+    "bbeh": {
+      "examples": 3370,
+      "direct_correct": 364,
+      "fallback_replay_correct": 363,
+      "accuracy_point_difference_vs_direct": -0.02967359050445104
+    },
+    "bbh": {
+      "examples": 5161,
+      "direct_correct": 2102,
+      "fallback_replay_correct": 2954,
+      "accuracy_point_difference_vs_direct": 16.5084285991087
+    },
+    "usr": {
+      "examples": 1019,
+      "direct_correct": 54,
+      "fallback_replay_correct": 64,
+      "accuracy_point_difference_vs_direct": 0.9813542688910697
+    }
+  },
+  "system_messages_sent": 0
+}
