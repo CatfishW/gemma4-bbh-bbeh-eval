@@ -14,7 +14,37 @@ Confirmatory-study materials:
 - [Machine-readable protocol](experiments/e2b_confirmatory_protocol.json)
 - [Frozen 29-arm manifest](experiments/e2b_arm_manifest.jsonl)
 - [Data, model, scoring, and validity statement](docs/DATA_MODEL_AND_EVALUATION_STATEMENT.md)
+- [Paper-oriented study summary](paper/e2b-e4b-study/manuscript.md)
+- [E2B confirmatory result bundle](results/e2b-confirmatory-20260709_231405)
+- [Question, ground truth, direct, and CBRR examples](results/e2b-confirmatory-20260709_231405/analysis/examples.md)
 - [Paper bibliography](paper/references.bib)
+
+## Confirmatory Result
+
+The frozen E2B test contains 9,550 examples. The conservative Bayesian reward
+router (CBRR) is an offline task-conditioned contextual-bandit policy fitted on
+calibration rows; model weights are unchanged.
+
+| E2B arm | Correct | Accuracy | Delta vs direct | Mean completion tokens |
+|---|---:|---:|---:|---:|
+| `direct_answer` | 2,520/9,550 | 26.39% | - | 14.68 |
+| `concise_cot_self_rank_k3` | 3,348/9,550 | 35.06% | +8.67 pp | 681.26 |
+| `cbrr_policy` | 3,382/9,550 | 35.41% | +9.03 pp | 65.60 |
+
+CBRR produced 1,100 paired wins and 238 losses versus direct answer. The exact
+two-sided McNemar p-value is `1.33e-132`, the Holm-adjusted p-value is
+`6.66e-132`, and the task-stratified bootstrap interval is +8.41 to +9.64
+percentage points. A task-cluster bootstrap gives +4.19 to +14.59 points; both
+additional fixed-seed repeats retain +8.89 to +8.96 points.
+
+The effect is concentrated in BBH (+16.61 points). BBEH is flat to slightly
+negative (-0.12 points), and USR improves modestly (+0.88 points). CBRR uses
+about 4.5 times the completion tokens of direct answer, although it slightly
+outperforms self-ranking with about one tenth of the completion tokens. See the
+[confirmatory report](results/e2b-confirmatory-20260709_231405/analysis/report.md),
+[cluster sensitivity](paper/e2b-e4b-study/cluster-robustness/cluster_robustness.md),
+[strict JSON audit](paper/e2b-e4b-study/format-audit/format_audit.md), and
+[post-hoc direct-fallback replay](paper/e2b-e4b-study/budget-sensitivity/fallback_replay_sensitivity.md).
 
 ## Access
 
@@ -47,6 +77,10 @@ Available public model IDs:
 
 - `SubTokenLLM`: Gemma 4 E4B.
 - `SubTokenLLM-E2B`: Gemma 4 E2B.
+
+Deployment verification on 2026-07-10 found both model services, the router, and
+the public tunnel enabled and active under user systemd with zero restarts. See
+the [deployment snapshot](paper/e2b-e4b-study/deployment-verification-20260710.md).
 
 The gateway dispatches by `model` while forwarding the original request body unchanged.
 It does not inject a system prompt. Direct remote endpoints:
@@ -86,6 +120,7 @@ Known downloaded revisions for the first run:
 
 - BBH: `9ee07bd481feebf959a6b59d61ea57bdcf30964d`
 - BBEH: `80d12ca916b7158f22293fcf3144f4d3d854d4be`
+- USR: `39bc520a2f4c243eb04ce1cc27f28c7c61d12e42`
 
 ## Unpuzzles And Simple Reasoning
 

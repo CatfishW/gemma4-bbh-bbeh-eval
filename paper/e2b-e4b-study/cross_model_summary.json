@@ -1,0 +1,74 @@
+{
+  "protocol": "gemma4-e2b-confirmatory-v1",
+  "e2b_test_examples": 9550,
+  "screening_arms_per_model": 29,
+  "e2b_validation_winner": "concise_cot_self_rank_k3",
+  "e4b_validation_winner": "concise_cot_self_rank_k3",
+  "validation_rank_spearman": 0.8882179219786375,
+  "e2b_primary": {
+    "accuracy_difference": 0.09026178010471203,
+    "accuracy_point_difference": 9.026178010471202,
+    "relative_error_reduction": 0.12261735419630154,
+    "paired_wins": 1100,
+    "paired_losses": 238,
+    "discordant_total": 1338,
+    "exact_mcnemar_two_sided_p": 1.3320180491101215e-132,
+    "task_stratified_bootstrap_95": [
+      0.08408376963350786,
+      0.09643979057591623
+    ],
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20260713,
+    "holm_adjusted_p": 6.660090245550607e-132,
+    "significant_at_0_05_after_holm": true
+  },
+  "e4b_prior_heldout": {
+    "status": "complete",
+    "evaluation_split": "index >= 25 within each task",
+    "baseline": {
+      "strategy": "direct_answer",
+      "correct": 3632,
+      "total": 11040,
+      "accuracy": 0.3289855072463768,
+      "source": "archived full direct-answer predictions"
+    },
+    "reward_routed_v2": {
+      "correct": 4020,
+      "total": 11040,
+      "accuracy": 0.3641304347826087,
+      "correct_gain_over_direct": 388,
+      "accuracy_gain_over_direct": 0.035144927536231885,
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 588,
+          "total": 3945,
+          "micro_accuracy": 0.14904942965779466,
+          "macro_accuracy": 0.15382804838182412,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3251,
+          "total": 5836,
+          "micro_accuracy": 0.5570596298834818,
+          "macro_accuracy": 0.560330614078551,
+          "harmonic_task_accuracy": 0.2728296051598265,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 181,
+          "total": 1259,
+          "micro_accuracy": 0.1437648927720413,
+          "macro_accuracy": 0.2131965780011157,
+          "harmonic_task_accuracy": 0.06345413378542178,
+          "tasks": 10
+        }
+      ]
+    },
+    "system_messages_sent": 0
+  },
+  "system_messages_sent": 0
+}
