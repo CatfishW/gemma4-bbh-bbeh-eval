@@ -25,6 +25,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--e4b-policy", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--baseline", default="direct_answer")
+    parser.add_argument("--policy-name", default="e2b_conservative_bayesian_reward_router")
+    parser.add_argument("--study-label", default="E2B")
     parser.add_argument("--calibration-end", type=int, default=25)
     parser.add_argument("--validation-end", type=int, default=50)
     return parser.parse_args()
@@ -297,9 +299,10 @@ def main() -> int:
     )
     best_router = grid_results[0]
     policy_payload = {
-        "name": "e2b_conservative_bayesian_reward_router",
+        "name": args.policy_name,
         "description": (
-            "Offline contextual-bandit prompt policy fitted on E2B calibration rows with a "
+            f"Offline contextual-bandit prompt policy fitted on {args.study_label} calibration "
+            "rows with a "
             "validation-selected conservative Beta-Bernoulli gate."
         ),
         "default_strategy": args.baseline,
