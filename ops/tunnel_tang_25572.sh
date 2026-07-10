@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REMOTE_HOST="${REMOTE_HOST:-tang-server-org}"
-REMOTE_PORT="${REMOTE_PORT:-25571}"
+REMOTE_PORT="${REMOTE_PORT:-25572}"
 LOCAL_PORT="${LOCAL_PORT:-8889}"
 RECONNECT_DELAY="${RECONNECT_DELAY:-5}"
 SSH_CONFIG="${SSH_CONFIG:-/home/benwulab/.ssh/config}"
