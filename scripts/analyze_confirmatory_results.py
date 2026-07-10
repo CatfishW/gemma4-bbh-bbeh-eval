@@ -139,8 +139,20 @@ def exact_mcnemar_p(paired_wins: int, paired_losses: int) -> float:
     discordant = paired_wins + paired_losses
     if discordant == 0:
         return 1.0
-    tail = sum(math.comb(discordant, i) for i in range(min(paired_wins, paired_losses) + 1))
-    return min(1.0, 2.0 * tail / (2**discordant))
+    tail_end = min(paired_wins, paired_losses)
+    log_probability_terms = [
+        math.lgamma(discordant + 1)
+        - math.lgamma(index + 1)
+        - math.lgamma(discordant - index + 1)
+        - discordant * math.log(2.0)
+        for index in range(tail_end + 1)
+    ]
+    largest = max(log_probability_terms)
+    log_tail = largest + math.log(
+        math.fsum(math.exp(value - largest) for value in log_probability_terms)
+    )
+    log_two_sided = math.log(2.0) + log_tail
+    return 1.0 if log_two_sided >= 0.0 else math.exp(log_two_sided)
 
 
 def holm_adjust(p_values: dict[str, float]) -> dict[str, float]:
@@ -275,6 +287,19 @@ def markdown_text(value: str, limit: int = 1800) -> str:
     return value if len(value) <= limit else value[: limit - 3].rstrip() + "..."
 
 
+def benchmark_stratified_keys(
+    keys: list[ExampleKey], limit_per_benchmark: int
+) -> list[ExampleKey]:
+    by_benchmark: dict[str, list[ExampleKey]] = defaultdict(list)
+    for key in sorted(keys):
+        by_benchmark[key[0]].append(key)
+    return [
+        key
+        for benchmark in sorted(by_benchmark)
+        for key in by_benchmark[benchmark][:limit_per_benchmark]
+    ]
+
+
 def write_examples(
     path: Path,
     examples: dict[ExampleKey, Example],
@@ -285,13 +310,20 @@ def write_examples(
     wins = [key for key in keys if not baseline[key]["correct"] and primary[key]["correct"]]
     losses = [key for key in keys if baseline[key]["correct"] and not primary[key]["correct"]]
     agreements = [key for key in keys if baseline[key]["correct"] and primary[key]["correct"]]
-    chosen = [("CBRR win", key) for key in wins[:10]]
-    chosen += [("CBRR loss", key) for key in losses[:5]]
-    chosen += [("Both correct", key) for key in agreements[:3]]
+    chosen = [
+        ("CBRR win", key) for key in benchmark_stratified_keys(wins, 3)
+    ]
+    chosen += [
+        ("CBRR loss", key) for key in benchmark_stratified_keys(losses, 2)
+    ]
+    chosen += [
+        ("Both correct", key) for key in benchmark_stratified_keys(agreements, 1)
+    ]
     lines = [
         "# Confirmatory E2B Examples",
         "",
-        "Examples are selected deterministically from the sorted untouched test rows after scoring.",
+        "Examples are selected deterministically within each benchmark from the sorted "
+        "untouched test rows after scoring.",
         "",
     ]
     for label, key in chosen:
@@ -304,9 +336,11 @@ def write_examples(
                 f"- Ground truth: `{markdown_text(str(routed['target']), 500)}`",
                 f"- Direct answer: `{markdown_text(str(base['prediction']), 500)}`",
                 f"- Direct normalized: `{markdown_text(str(base['normalized_prediction']), 500)}`",
+                f"- Direct correct: `{str(bool(base['correct'])).lower()}`",
                 f"- CBRR strategy: `{routed.get('prompt_strategy', '')}`",
                 f"- CBRR answer: `{markdown_text(str(routed['prediction']), 500)}`",
                 f"- CBRR normalized: `{markdown_text(str(routed['normalized_prediction']), 500)}`",
+                f"- CBRR correct: `{str(bool(routed['correct'])).lower()}`",
                 "",
                 "Question:",
                 "",
