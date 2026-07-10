@@ -1,0 +1,19 @@
+[Unit]
+Description=Reverse tunnel for the public Gemma 4 API router
+Wants=network-online.target gemma4-router.service
+After=network-online.target gemma4-router.service
+
+[Service]
+Type=simple
+WorkingDirectory=/data/benwulab/gemma4-eval/router
+Environment=REMOTE_HOST=tang-server-org
+Environment=REMOTE_PORT=25570
+Environment=LOCAL_PORT=8890
+ExecStart=/data/benwulab/gemma4-eval/router/ops/tunnel_tang_25570.sh
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+KillMode=control-group
+
+[Install]
+WantedBy=default.target

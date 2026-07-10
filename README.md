@@ -56,6 +56,18 @@ curl http://127.0.0.1:8888/v1/models
 curl http://127.0.0.1:8889/v1/models
 ```
 
+The production model servers, router, and public tunnel have tracked user-systemd
+units under `ops/systemd/`. Install and enable them without interrupting a live
+deployment with:
+
+```bash
+./ops/install_systemd_services.sh
+```
+
+The units are started only after any legacy port-owning processes have been stopped.
+User lingering must remain enabled so the deployment starts without an interactive
+login.
+
 Tang tunnel endpoint after the shared model router and `ops/tunnel_tang_25570.sh` are running:
 
 ```bash
