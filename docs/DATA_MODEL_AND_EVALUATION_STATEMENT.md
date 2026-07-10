@@ -14,6 +14,11 @@ embeddings), a 128K context window, and an Apache 2.0 license. The deployment
 uses BF16 weights without quantization, CPU offload, fine-tuning, adapters, or
 changes to the downloaded chat template.
 
+The matched exploratory model is `google/gemma-4-E4B-it` at Hub revision
+`fee6332c1abaafb77f6f9624236c63aa2f1d0187`; its weight SHA-256 is
+`cfbd3d2f1cd71bd471c37fe2bf8546d5028d41e5736f64e1ca6c6b8893125503`.
+The same Hub checksum verification and unmodified BF16 serving conditions apply.
+
 Gemma 4 supports system-role messages, but this study does not send one. Every
 benchmark request has exactly one `user` message. The public router forwards the
 original request bytes and chooses a backend from the existing `model` field; it
