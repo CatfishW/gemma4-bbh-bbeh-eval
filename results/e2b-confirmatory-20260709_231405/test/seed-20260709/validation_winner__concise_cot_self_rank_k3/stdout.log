@@ -1,0 +1,851 @@
+25/9550 correct=17 acc=0.680
+50/9550 correct=32 acc=0.640
+75/9550 correct=53 acc=0.707
+100/9550 correct=68 acc=0.680
+125/9550 correct=84 acc=0.672
+150/9550 correct=106 acc=0.707
+175/9550 correct=123 acc=0.703
+200/9550 correct=141 acc=0.705
+225/9550 correct=150 acc=0.667
+250/9550 correct=165 acc=0.660
+275/9550 correct=177 acc=0.644
+300/9550 correct=188 acc=0.627
+325/9550 correct=199 acc=0.612
+350/9550 correct=214 acc=0.611
+375/9550 correct=229 acc=0.611
+400/9550 correct=252 acc=0.630
+425/9550 correct=272 acc=0.640
+450/9550 correct=292 acc=0.649
+475/9550 correct=310 acc=0.653
+500/9550 correct=326 acc=0.652
+525/9550 correct=346 acc=0.659
+550/9550 correct=360 acc=0.655
+575/9550 correct=371 acc=0.645
+600/9550 correct=380 acc=0.633
+625/9550 correct=383 acc=0.613
+650/9550 correct=393 acc=0.605
+675/9550 correct=400 acc=0.593
+700/9550 correct=408 acc=0.583
+725/9550 correct=414 acc=0.571
+750/9550 correct=416 acc=0.555
+775/9550 correct=417 acc=0.538
+800/9550 correct=417 acc=0.521
+825/9550 correct=418 acc=0.507
+850/9550 correct=419 acc=0.493
+875/9550 correct=419 acc=0.479
+900/9550 correct=420 acc=0.467
+925/9550 correct=420 acc=0.454
+950/9550 correct=428 acc=0.451
+975/9550 correct=443 acc=0.454
+1000/9550 correct=459 acc=0.459
+1025/9550 correct=473 acc=0.461
+1050/9550 correct=492 acc=0.469
+1075/9550 correct=502 acc=0.467
+1100/9550 correct=525 acc=0.477
+1125/9550 correct=540 acc=0.480
+1150/9550 correct=551 acc=0.479
+1175/9550 correct=558 acc=0.475
+1200/9550 correct=561 acc=0.468
+1225/9550 correct=565 acc=0.461
+1250/9550 correct=571 acc=0.457
+1275/9550 correct=578 acc=0.453
+1300/9550 correct=585 acc=0.450
+1325/9550 correct=591 acc=0.446
+1350/9550 correct=607 acc=0.450
+1375/9550 correct=632 acc=0.460
+1400/9550 correct=656 acc=0.469
+1425/9550 correct=681 acc=0.478
+1450/9550 correct=706 acc=0.487
+1475/9550 correct=728 acc=0.494
+1500/9550 correct=753 acc=0.502
+1525/9550 correct=778 acc=0.510
+1550/9550 correct=796 acc=0.514
+1575/9550 correct=810 acc=0.514
+1600/9550 correct=826 acc=0.516
+1625/9550 correct=839 acc=0.516
+1650/9550 correct=856 acc=0.519
+1675/9550 correct=872 acc=0.521
+1700/9550 correct=886 acc=0.521
+1725/9550 correct=903 acc=0.523
+1750/9550 correct=913 acc=0.522
+1775/9550 correct=926 acc=0.522
+1800/9550 correct=938 acc=0.521
+1825/9550 correct=951 acc=0.521
+1850/9550 correct=961 acc=0.519
+1875/9550 correct=975 acc=0.520
+1900/9550 correct=987 acc=0.519
+1925/9550 correct=1003 acc=0.521
+1950/9550 correct=1026 acc=0.526
+1975/9550 correct=1051 acc=0.532
+2000/9550 correct=1075 acc=0.537
+2025/9550 correct=1098 acc=0.542
+2050/9550 correct=1122 acc=0.547
+2075/9550 correct=1146 acc=0.552
+2100/9550 correct=1170 acc=0.557
+2125/9550 correct=1194 acc=0.562
+2150/9550 correct=1213 acc=0.564
+2175/9550 correct=1229 acc=0.565
+2200/9550 correct=1246 acc=0.566
+2225/9550 correct=1262 acc=0.567
+2250/9550 correct=1277 acc=0.568
+2275/9550 correct=1292 acc=0.568
+2300/9550 correct=1305 acc=0.567
+2325/9550 correct=1320 acc=0.568
+2350/9550 correct=1342 acc=0.571
+2375/9550 correct=1366 acc=0.575
+2400/9550 correct=1387 acc=0.578
+2425/9550 correct=1412 acc=0.582
+2450/9550 correct=1432 acc=0.584
+2475/9550 correct=1457 acc=0.589
+2500/9550 correct=1481 acc=0.592
+2525/9550 correct=1505 acc=0.596
+2550/9550 correct=1527 acc=0.599
+2575/9550 correct=1548 acc=0.601
+2600/9550 correct=1571 acc=0.604
+2625/9550 correct=1591 acc=0.606
+2650/9550 correct=1613 acc=0.609
+2675/9550 correct=1637 acc=0.612
+2700/9550 correct=1657 acc=0.614
+2725/9550 correct=1679 acc=0.616
+2750/9550 correct=1700 acc=0.618
+2775/9550 correct=1723 acc=0.621
+2800/9550 correct=1743 acc=0.623
+2825/9550 correct=1767 acc=0.625
+2850/9550 correct=1791 acc=0.628
+2875/9550 correct=1813 acc=0.631
+2900/9550 correct=1836 acc=0.633
+2925/9550 correct=1858 acc=0.635
+2950/9550 correct=1882 acc=0.638
+2975/9550 correct=1903 acc=0.640
+3000/9550 correct=1926 acc=0.642
+3025/9550 correct=1947 acc=0.644
+3050/9550 correct=1970 acc=0.646
+3075/9550 correct=1995 acc=0.649
+3100/9550 correct=2019 acc=0.651
+3125/9550 correct=2042 acc=0.653
+3150/9550 correct=2063 acc=0.655
+3175/9550 correct=2087 acc=0.657
+3200/9550 correct=2110 acc=0.659
+3225/9550 correct=2132 acc=0.661
+3250/9550 correct=2148 acc=0.661
+3275/9550 correct=2158 acc=0.659
+3300/9550 correct=2168 acc=0.657
+3325/9550 correct=2178 acc=0.655
+3350/9550 correct=2190 acc=0.654
+3375/9550 correct=2201 acc=0.652
+3400/9550 correct=2211 acc=0.650
+3425/9550 correct=2219 acc=0.648
+3450/9550 correct=2231 acc=0.647
+3475/9550 correct=2246 acc=0.646
+3500/9550 correct=2261 acc=0.646
+3525/9550 correct=2277 acc=0.646
+3550/9550 correct=2296 acc=0.647
+3575/9550 correct=2312 acc=0.647
+3600/9550 correct=2327 acc=0.646
+3625/9550 correct=2343 acc=0.646
+3650/9550 correct=2358 acc=0.646
+3675/9550 correct=2372 acc=0.645
+3700/9550 correct=2391 acc=0.646
+3725/9550 correct=2406 acc=0.646
+3750/9550 correct=2425 acc=0.647
+3775/9550 correct=2436 acc=0.645
+3800/9550 correct=2442 acc=0.643
+3825/9550 correct=2451 acc=0.641
+3850/9550 correct=2454 acc=0.637
+3875/9550 correct=2460 acc=0.635
+3900/9550 correct=2465 acc=0.632
+3925/9550 correct=2467 acc=0.629
+3950/9550 correct=2471 acc=0.626
+3975/9550 correct=2486 acc=0.625
+4000/9550 correct=2511 acc=0.628
+4025/9550 correct=2536 acc=0.630
+4050/9550 correct=2559 acc=0.632
+4075/9550 correct=2583 acc=0.634
+4100/9550 correct=2608 acc=0.636
+4125/9550 correct=2632 acc=0.638
+4150/9550 correct=2657 acc=0.640
+4175/9550 correct=2674 acc=0.640
+4200/9550 correct=2685 acc=0.639
+4225/9550 correct=2694 acc=0.638
+4250/9550 correct=2702 acc=0.636
+4275/9550 correct=2712 acc=0.634
+4300/9550 correct=2720 acc=0.633
+4325/9550 correct=2731 acc=0.631
+4350/9550 correct=2739 acc=0.630
+4375/9550 correct=2744 acc=0.627
+4400/9550 correct=2749 acc=0.625
+4425/9550 correct=2753 acc=0.622
+4450/9550 correct=2755 acc=0.619
+4475/9550 correct=2758 acc=0.616
+4500/9550 correct=2763 acc=0.614
+4525/9550 correct=2766 acc=0.611
+4550/9550 correct=2769 acc=0.609
+4575/9550 correct=2783 acc=0.608
+4600/9550 correct=2808 acc=0.610
+4625/9550 correct=2831 acc=0.612
+4650/9550 correct=2854 acc=0.614
+4675/9550 correct=2878 acc=0.616
+4700/9550 correct=2897 acc=0.616
+4725/9550 correct=2917 acc=0.617
+4750/9550 correct=2935 acc=0.618
+4775/9550 correct=2945 acc=0.617
+4800/9550 correct=2946 acc=0.614
+4825/9550 correct=2947 acc=0.611
+4850/9550 correct=2947 acc=0.608
+4875/9550 correct=2948 acc=0.605
+4900/9550 correct=2949 acc=0.602
+4925/9550 correct=2951 acc=0.599
+4950/9550 correct=2956 acc=0.597
+4975/9550 correct=2956 acc=0.594
+5000/9550 correct=2956 acc=0.591
+5025/9550 correct=2956 acc=0.588
+5050/9550 correct=2956 acc=0.585
+5075/9550 correct=2956 acc=0.582
+5100/9550 correct=2956 acc=0.580
+5125/9550 correct=2956 acc=0.577
+5150/9550 correct=2957 acc=0.574
+5175/9550 correct=2972 acc=0.574
+5200/9550 correct=2980 acc=0.573
+5225/9550 correct=2980 acc=0.570
+5250/9550 correct=2999 acc=0.571
+5275/9550 correct=2999 acc=0.569
+5300/9550 correct=3004 acc=0.567
+5325/9550 correct=3017 acc=0.567
+5350/9550 correct=3029 acc=0.566
+5375/9550 correct=3035 acc=0.565
+5400/9550 correct=3041 acc=0.563
+5425/9550 correct=3046 acc=0.561
+5450/9550 correct=3046 acc=0.559
+5475/9550 correct=3050 acc=0.557
+5500/9550 correct=3051 acc=0.555
+5525/9550 correct=3052 acc=0.552
+5550/9550 correct=3052 acc=0.550
+5575/9550 correct=3052 acc=0.547
+5600/9550 correct=3052 acc=0.545
+5625/9550 correct=3061 acc=0.544
+5650/9550 correct=3068 acc=0.543
+5675/9550 correct=3075 acc=0.542
+5700/9550 correct=3085 acc=0.541
+5725/9550 correct=3087 acc=0.539
+5750/9550 correct=3090 acc=0.537
+5775/9550 correct=3098 acc=0.536
+5800/9550 correct=3109 acc=0.536
+5825/9550 correct=3117 acc=0.535
+5850/9550 correct=3120 acc=0.533
+5875/9550 correct=3120 acc=0.531
+5900/9550 correct=3120 acc=0.529
+5925/9550 correct=3121 acc=0.527
+5950/9550 correct=3121 acc=0.525
+5975/9550 correct=3122 acc=0.523
+6000/9550 correct=3126 acc=0.521
+6025/9550 correct=3129 acc=0.519
+6050/9550 correct=3131 acc=0.518
+6075/9550 correct=3132 acc=0.516
+6100/9550 correct=3133 acc=0.514
+6125/9550 correct=3138 acc=0.512
+6150/9550 correct=3138 acc=0.510
+6175/9550 correct=3138 acc=0.508
+6200/9550 correct=3138 acc=0.506
+6225/9550 correct=3138 acc=0.504
+6250/9550 correct=3138 acc=0.502
+6275/9550 correct=3138 acc=0.500
+6300/9550 correct=3138 acc=0.498
+6325/9550 correct=3138 acc=0.496
+6350/9550 correct=3138 acc=0.494
+6375/9550 correct=3138 acc=0.492
+6400/9550 correct=3139 acc=0.490
+6425/9550 correct=3140 acc=0.489
+6450/9550 correct=3148 acc=0.488
+6475/9550 correct=3159 acc=0.488
+6500/9550 correct=3167 acc=0.487
+6525/9550 correct=3178 acc=0.487
+6550/9550 correct=3188 acc=0.487
+6575/9550 correct=3199 acc=0.487
+6600/9550 correct=3201 acc=0.485
+6625/9550 correct=3201 acc=0.483
+6650/9550 correct=3201 acc=0.481
+6675/9550 correct=3201 acc=0.480
+6700/9550 correct=3201 acc=0.478
+6725/9550 correct=3201 acc=0.476
+6750/9550 correct=3205 acc=0.475
+6775/9550 correct=3206 acc=0.473
+6800/9550 correct=3209 acc=0.472
+6825/9550 correct=3212 acc=0.471
+6850/9550 correct=3213 acc=0.469
+6875/9550 correct=3216 acc=0.468
+6900/9550 correct=3217 acc=0.466
+6925/9550 correct=3217 acc=0.465
+6950/9550 correct=3217 acc=0.463
+6975/9550 correct=3217 acc=0.461
+7000/9550 correct=3217 acc=0.460
+7025/9550 correct=3217 acc=0.458
+7050/9550 correct=3217 acc=0.456
+7075/9550 correct=3217 acc=0.455
+7100/9550 correct=3217 acc=0.453
+7125/9550 correct=3217 acc=0.452
+7150/9550 correct=3217 acc=0.450
+7175/9550 correct=3217 acc=0.448
+7200/9550 correct=3221 acc=0.447
+7225/9550 correct=3223 acc=0.446
+7250/9550 correct=3226 acc=0.445
+7275/9550 correct=3230 acc=0.444
+7300/9550 correct=3234 acc=0.443
+7325/9550 correct=3238 acc=0.442
+7350/9550 correct=3239 acc=0.441
+7375/9550 correct=3240 acc=0.439
+7400/9550 correct=3240 acc=0.438
+7425/9550 correct=3240 acc=0.436
+7450/9550 correct=3241 acc=0.435
+7475/9550 correct=3242 acc=0.434
+7500/9550 correct=3243 acc=0.432
+7525/9550 correct=3244 acc=0.431
+7550/9550 correct=3244 acc=0.430
+7575/9550 correct=3244 acc=0.428
+7600/9550 correct=3244 acc=0.427
+7625/9550 correct=3245 acc=0.426
+7650/9550 correct=3247 acc=0.424
+7675/9550 correct=3251 acc=0.424
+7700/9550 correct=3259 acc=0.423
+7725/9550 correct=3262 acc=0.422
+7750/9550 correct=3263 acc=0.421
+7775/9550 correct=3266 acc=0.420
+7800/9550 correct=3266 acc=0.419
+7825/9550 correct=3266 acc=0.417
+7850/9550 correct=3267 acc=0.416
+7875/9550 correct=3267 acc=0.415
+7900/9550 correct=3267 acc=0.414
+7925/9550 correct=3268 acc=0.412
+7950/9550 correct=3268 acc=0.411
+7975/9550 correct=3268 acc=0.410
+8000/9550 correct=3268 acc=0.408
+8025/9550 correct=3268 acc=0.407
+8050/9550 correct=3268 acc=0.406
+8075/9550 correct=3268 acc=0.405
+8100/9550 correct=3269 acc=0.404
+8125/9550 correct=3269 acc=0.402
+8150/9550 correct=3269 acc=0.401
+8175/9550 correct=3269 acc=0.400
+8200/9550 correct=3269 acc=0.399
+8225/9550 correct=3269 acc=0.397
+8250/9550 correct=3272 acc=0.397
+8275/9550 correct=3273 acc=0.396
+8300/9550 correct=3274 acc=0.394
+8325/9550 correct=3277 acc=0.394
+8350/9550 correct=3279 acc=0.393
+8375/9550 correct=3280 acc=0.392
+8400/9550 correct=3284 acc=0.391
+8425/9550 correct=3289 acc=0.390
+8450/9550 correct=3293 acc=0.390
+8475/9550 correct=3297 acc=0.389
+8500/9550 correct=3300 acc=0.388
+8525/9550 correct=3304 acc=0.388
+8550/9550 correct=3305 acc=0.387
+8575/9550 correct=3305 acc=0.385
+8600/9550 correct=3305 acc=0.384
+8625/9550 correct=3305 acc=0.383
+8650/9550 correct=3306 acc=0.382
+8675/9550 correct=3308 acc=0.381
+8700/9550 correct=3309 acc=0.380
+8725/9550 correct=3310 acc=0.379
+8750/9550 correct=3311 acc=0.378
+8775/9550 correct=3312 acc=0.377
+8800/9550 correct=3312 acc=0.376
+8825/9550 correct=3312 acc=0.375
+8850/9550 correct=3313 acc=0.374
+8875/9550 correct=3313 acc=0.373
+8900/9550 correct=3313 acc=0.372
+8925/9550 correct=3313 acc=0.371
+8950/9550 correct=3313 acc=0.370
+8975/9550 correct=3313 acc=0.369
+9000/9550 correct=3313 acc=0.368
+9025/9550 correct=3313 acc=0.367
+9050/9550 correct=3313 acc=0.366
+9075/9550 correct=3313 acc=0.365
+9100/9550 correct=3313 acc=0.364
+9125/9550 correct=3315 acc=0.363
+9150/9550 correct=3319 acc=0.363
+9175/9550 correct=3324 acc=0.362
+9200/9550 correct=3325 acc=0.361
+9225/9550 correct=3326 acc=0.361
+9250/9550 correct=3326 acc=0.360
+9275/9550 correct=3329 acc=0.359
+9300/9550 correct=3329 acc=0.358
+9325/9550 correct=3329 acc=0.357
+9350/9550 correct=3329 acc=0.356
+9375/9550 correct=3329 acc=0.355
+9400/9550 correct=3329 acc=0.354
+9425/9550 correct=3329 acc=0.353
+9450/9550 correct=3329 acc=0.352
+9475/9550 correct=3332 acc=0.352
+9500/9550 correct=3338 acc=0.351
+9525/9550 correct=3343 acc=0.351
+9550/9550 correct=3348 acc=0.351
+{
+  "started_at": "2026-07-10T10:40:28.873303+00:00",
+  "finished_at": "2026-07-10T14:23:59.805170+00:00",
+  "base_url": "http://127.0.0.1:8889/v1",
+  "model": "SubTokenLLM-E2B",
+  "prompt_strategy": "concise_cot",
+  "prompt_strategy_description": "Concise chain-of-thought with final answer delimiter.",
+  "prompt_template": "{input}\n\nThink briefly and solve the problem. Keep the reasoning concise.\nEnd with exactly one line in this format: The final answer is: <answer>",
+  "self_consistency_k": 3,
+  "response_selection": "self_rank",
+  "selection_max_tokens": 64,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": null,
+  "skip_per_task": 50,
+  "parallel": 8,
+  "max_tokens": 256,
+  "temperature": 0.7,
+  "seed": 20260709,
+  "benchmarks": [
+    {
+      "benchmark": "bbeh",
+      "correct": 347,
+      "total": 3370,
+      "micro_accuracy": 0.1029673590504451,
+      "macro_accuracy": 0.10886128364389235,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 23
+    },
+    {
+      "benchmark": "bbh",
+      "correct": 2958,
+      "total": 5161,
+      "micro_accuracy": 0.5731447393915908,
+      "macro_accuracy": 0.5795434858520321,
+      "harmonic_task_accuracy": 0.1248094915491296,
+      "tasks": 27
+    },
+    {
+      "benchmark": "usr",
+      "correct": 43,
+      "total": 1019,
+      "micro_accuracy": 0.042198233562315994,
+      "macro_accuracy": 0.10910082593112046,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 9
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boardgame_qa",
+      "correct": 55,
+      "total": 150,
+      "accuracy": 0.36666666666666664
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boolean_expressions",
+      "correct": 37,
+      "total": 150,
+      "accuracy": 0.24666666666666667
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_buggy_tables",
+      "correct": 2,
+      "total": 150,
+      "accuracy": 0.013333333333333334
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_causal_understanding",
+      "correct": 42,
+      "total": 150,
+      "accuracy": 0.28
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_disambiguation_qa",
+      "correct": 25,
+      "total": 70,
+      "accuracy": 0.35714285714285715
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_dyck_languages",
+      "correct": 4,
+      "total": 150,
+      "accuracy": 0.02666666666666667
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_geometric_shapes",
+      "correct": 15,
+      "total": 150,
+      "accuracy": 0.1
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_hyperbaton",
+      "correct": 0,
+      "total": 150,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_linguini",
+      "correct": 2,
+      "total": 150,
+      "accuracy": 0.013333333333333334
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_movie_recommendation",
+      "correct": 61,
+      "total": 150,
+      "accuracy": 0.4066666666666667
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_multistep_arithmetic",
+      "correct": 0,
+      "total": 150,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_nycc",
+      "correct": 16,
+      "total": 150,
+      "accuracy": 0.10666666666666667
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_counting",
+      "correct": 0,
+      "total": 150,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_properties",
+      "correct": 0,
+      "total": 150,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sarc_triples",
+      "correct": 21,
+      "total": 150,
+      "accuracy": 0.14
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_shuffled_objects",
+      "correct": 5,
+      "total": 150,
+      "accuracy": 0.03333333333333333
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_spatial_reasoning",
+      "correct": 2,
+      "total": 150,
+      "accuracy": 0.013333333333333334
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sportqa",
+      "correct": 21,
+      "total": 150,
+      "accuracy": 0.14
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_temporal_sequence",
+      "correct": 2,
+      "total": 150,
+      "accuracy": 0.013333333333333334
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_time_arithmetic",
+      "correct": 0,
+      "total": 150,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_web_of_lies",
+      "correct": 2,
+      "total": 150,
+      "accuracy": 0.013333333333333334
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_word_sorting",
+      "correct": 11,
+      "total": 150,
+      "accuracy": 0.07333333333333333
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_zebra_puzzles",
+      "correct": 24,
+      "total": 150,
+      "accuracy": 0.16
+    },
+    {
+      "benchmark": "bbh",
+      "task": "boolean_expressions",
+      "correct": 140,
+      "total": 200,
+      "accuracy": 0.7
+    },
+    {
+      "benchmark": "bbh",
+      "task": "causal_judgement",
+      "correct": 64,
+      "total": 137,
+      "accuracy": 0.46715328467153283
+    },
+    {
+      "benchmark": "bbh",
+      "task": "date_understanding",
+      "correct": 152,
+      "total": 200,
+      "accuracy": 0.76
+    },
+    {
+      "benchmark": "bbh",
+      "task": "disambiguation_qa",
+      "correct": 60,
+      "total": 200,
+      "accuracy": 0.3
+    },
+    {
+      "benchmark": "bbh",
+      "task": "dyck_languages",
+      "correct": 4,
+      "total": 200,
+      "accuracy": 0.02
+    },
+    {
+      "benchmark": "bbh",
+      "task": "formal_fallacies",
+      "correct": 129,
+      "total": 200,
+      "accuracy": 0.645
+    },
+    {
+      "benchmark": "bbh",
+      "task": "geometric_shapes",
+      "correct": 45,
+      "total": 200,
+      "accuracy": 0.225
+    },
+    {
+      "benchmark": "bbh",
+      "task": "hyperbaton",
+      "correct": 195,
+      "total": 200,
+      "accuracy": 0.975
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_five_objects",
+      "correct": 122,
+      "total": 200,
+      "accuracy": 0.61
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_seven_objects",
+      "correct": 102,
+      "total": 200,
+      "accuracy": 0.51
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_three_objects",
+      "correct": 192,
+      "total": 200,
+      "accuracy": 0.96
+    },
+    {
+      "benchmark": "bbh",
+      "task": "movie_recommendation",
+      "correct": 125,
+      "total": 200,
+      "accuracy": 0.625
+    },
+    {
+      "benchmark": "bbh",
+      "task": "multistep_arithmetic_two",
+      "correct": 186,
+      "total": 200,
+      "accuracy": 0.93
+    },
+    {
+      "benchmark": "bbh",
+      "task": "navigate",
+      "correct": 173,
+      "total": 200,
+      "accuracy": 0.865
+    },
+    {
+      "benchmark": "bbh",
+      "task": "object_counting",
+      "correct": 180,
+      "total": 200,
+      "accuracy": 0.9
+    },
+    {
+      "benchmark": "bbh",
+      "task": "penguins_in_a_table",
+      "correct": 86,
+      "total": 96,
+      "accuracy": 0.8958333333333334
+    },
+    {
+      "benchmark": "bbh",
+      "task": "reasoning_about_colored_objects",
+      "correct": 185,
+      "total": 200,
+      "accuracy": 0.925
+    },
+    {
+      "benchmark": "bbh",
+      "task": "ruin_names",
+      "correct": 83,
+      "total": 200,
+      "accuracy": 0.415
+    },
+    {
+      "benchmark": "bbh",
+      "task": "salient_translation_error_detection",
+      "correct": 124,
+      "total": 200,
+      "accuracy": 0.62
+    },
+    {
+      "benchmark": "bbh",
+      "task": "snarks",
+      "correct": 87,
+      "total": 128,
+      "accuracy": 0.6796875
+    },
+    {
+      "benchmark": "bbh",
+      "task": "sports_understanding",
+      "correct": 39,
+      "total": 200,
+      "accuracy": 0.195
+    },
+    {
+      "benchmark": "bbh",
+      "task": "temporal_sequences",
+      "correct": 195,
+      "total": 200,
+      "accuracy": 0.975
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_five_objects",
+      "correct": 74,
+      "total": 200,
+      "accuracy": 0.37
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_seven_objects",
+      "correct": 28,
+      "total": 200,
+      "accuracy": 0.14
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_three_objects",
+      "correct": 174,
+      "total": 200,
+      "accuracy": 0.87
+    },
+    {
+      "benchmark": "bbh",
+      "task": "web_of_lies",
+      "correct": 12,
+      "total": 200,
+      "accuracy": 0.06
+    },
+    {
+      "benchmark": "bbh",
+      "task": "word_sorting",
+      "correct": 2,
+      "total": 200,
+      "accuracy": 0.01
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 0,
+      "total": 11,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 5,
+      "total": 14,
+      "accuracy": 0.35714285714285715
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 2,
+      "total": 14,
+      "accuracy": 0.14285714285714285
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 8,
+      "total": 310,
+      "accuracy": 0.025806451612903226
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 12,
+      "total": 310,
+      "accuracy": 0.03870967741935484
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 4,
+      "total": 230,
+      "accuracy": 0.017391304347826087
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 0,
+      "total": 70,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 5,
+      "total": 30,
+      "accuracy": 0.16666666666666666
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 7,
+      "total": 30,
+      "accuracy": 0.23333333333333334
+    }
+  ]
+}

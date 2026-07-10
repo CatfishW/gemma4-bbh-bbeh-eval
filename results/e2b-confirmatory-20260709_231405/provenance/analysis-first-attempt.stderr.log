@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/data/benwulab/gemma4-eval/repo-e2b-confirmatory/scripts/analyze_confirmatory_results.py", line 526, in <module>
+    raise SystemExit(main())
+  File "/data/benwulab/gemma4-eval/repo-e2b-confirmatory/scripts/analyze_confirmatory_results.py", line 467, in main
+    comparisons[arm] = comparison(
+  File "/data/benwulab/gemma4-eval/repo-e2b-confirmatory/scripts/analyze_confirmatory_results.py", line 235, in comparison
+    "exact_mcnemar_two_sided_p": exact_mcnemar_p(wins, losses),
+  File "/data/benwulab/gemma4-eval/repo-e2b-confirmatory/scripts/analyze_confirmatory_results.py", line 143, in exact_mcnemar_p
+    return min(1.0, 2.0 * tail / (2**discordant))
+OverflowError: int too large to convert to float

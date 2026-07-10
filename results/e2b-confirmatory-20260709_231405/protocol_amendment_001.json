@@ -1,0 +1,27 @@
+{
+  "amendment_id": "gemma4-e2b-confirmatory-v1-amendment-001",
+  "date": "2026-07-09",
+  "timing": "before any E2B benchmark inference",
+  "scope": "deployment_only",
+  "reason": "Tang port 25571 was already owned by an unrelated long-running aggregator and the requested public Nginx route /llm/v1 was already healthy.",
+  "change": {
+    "planned_public_base_url": "https://llm.agaii.org/llm-e2b/v1",
+    "actual_public_base_url": "https://llm.agaii.org/llm/v1",
+    "dispatch": "The unchanged request body's model field selects SubTokenLLM or SubTokenLLM-E2B through a body-preserving router."
+  },
+  "unchanged": [
+    "model revision",
+    "dataset revisions",
+    "prompt arms",
+    "calibration-validation-test split",
+    "selection rules",
+    "hypotheses",
+    "statistical analysis",
+    "local E2B evaluation endpoint http://127.0.0.1:8889/v1"
+  ],
+  "integrity": {
+    "request_body_mutation": false,
+    "system_prompt_injection": false,
+    "system_messages_sent_by_evaluator": 0
+  }
+}

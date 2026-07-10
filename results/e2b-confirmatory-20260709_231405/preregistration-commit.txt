@@ -1,0 +1,7 @@
+commit 4e1904205a1177186c2c03769783b0f79b4fbaa8
+Author:     CatfishW <1819409756@qq.com>
+AuthorDate: Thu Jul 9 23:02:52 2026 -0400
+Commit:     CatfishW <1819409756@qq.com>
+CommitDate: Thu Jul 9 23:02:52 2026 -0400
+
+    feat: preregister Gemma 4 E2B confirmation
