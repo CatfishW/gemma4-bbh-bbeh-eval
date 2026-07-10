@@ -8,6 +8,14 @@ Small, auditable harness for evaluating the Gemma 4 E2B and E4B deployments agai
 
 The evaluator uses the OpenAI-compatible chat completions API and intentionally sends no system message. Each request contains exactly one `user` message.
 
+Confirmatory-study materials:
+
+- [E2B preregistered protocol](docs/E2B_CONFIRMATORY_PROTOCOL.md)
+- [Machine-readable protocol](experiments/e2b_confirmatory_protocol.json)
+- [Frozen 29-arm manifest](experiments/e2b_arm_manifest.jsonl)
+- [Data, model, scoring, and validity statement](docs/DATA_MODEL_AND_EVALUATION_STATEMENT.md)
+- [Paper bibliography](paper/references.bib)
+
 ## Access
 
 Use:
