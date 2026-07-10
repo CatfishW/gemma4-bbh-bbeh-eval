@@ -5,6 +5,8 @@ from eval_benchmarks import (
     Example,
     PROMPT_STRATEGIES,
     build_prompt,
+    build_selection_prompt,
+    generation_seed,
     prompt_run_metadata,
     resolve_prompt_strategy,
 )
@@ -72,6 +74,31 @@ class PromptPolicyTests(unittest.TestCase):
             self.assertIn("Question text", prompt)
             self.assertIn("only", prompt.lower())
             self.assertIn("answer", prompt.lower())
+
+    def test_generation_seed_is_stable_and_example_specific(self) -> None:
+        same = generation_seed(20260709, self.example, 0)
+        self.assertEqual(same, generation_seed(20260709, self.example, 0))
+        self.assertNotEqual(same, generation_seed(20260710, self.example, 0))
+        self.assertNotEqual(same, generation_seed(20260709, self.example, 1))
+        other = Example(
+            benchmark="bbh",
+            task="date_understanding",
+            index=26,
+            input="Question text",
+            target="(A)",
+        )
+        self.assertNotEqual(same, generation_seed(20260709, other, 0))
+        self.assertGreaterEqual(same, 0)
+        self.assertLessEqual(same, 0x7FFFFFFF)
+
+    def test_selection_prompts_keep_question_candidates_and_answer_contract(self) -> None:
+        generations = [{"prediction": "A"}, {"prediction": "B"}]
+        for mode in ("self_rank", "key_condition_refine"):
+            prompt = build_selection_prompt(mode, "Question text", generations)
+            self.assertIn("Question text", prompt)
+            self.assertIn("Candidate 1", prompt)
+            self.assertIn("Candidate 2", prompt)
+            self.assertIn("only the final answer", prompt.lower())
 
 
 if __name__ == "__main__":

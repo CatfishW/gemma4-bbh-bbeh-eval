@@ -5,6 +5,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -233,6 +234,58 @@ PROMPT_STRATEGIES: dict[str, PromptStrategy] = {
             "Translate the problem into compact symbols, equations, constraints, or a proof sketch "
             "when useful. Then solve.\n"
             "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "plan_and_solve_plus": PromptStrategy(
+        name="plan_and_solve_plus",
+        description="Detailed Plan-and-Solve with explicit variable extraction and verification.",
+        template=(
+            "{input}\n\n"
+            "First identify the relevant facts, variables, and the exact quantity or label requested. "
+            "Make a compact plan, carry it out without skipping calculations or constraints, and "
+            "verify the result against the question.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "least_to_most": PromptStrategy(
+        name="least_to_most",
+        description="Decompose into simpler subproblems and solve them in dependency order.",
+        template=(
+            "{input}\n\n"
+            "Break the problem into the smallest useful subproblems. Solve them from simplest to "
+            "hardest, carrying each result forward exactly once.\n"
+            "End with exactly one line in this format: The final answer is: <answer>"
+        ),
+    ),
+    "condition_reconstruction": PromptStrategy(
+        name="condition_reconstruction",
+        description="Novel single-pass adaptation of key-condition verification.",
+        template=(
+            "{input}\n\n"
+            "Privately derive a candidate answer. Identify the one condition most capable of making "
+            "that candidate wrong, temporarily hide that condition, and reconstruct what it must be "
+            "from the candidate. Compare the reconstruction with the actual condition and correct "
+            "the candidate if they conflict. Output only the final answer, with no explanation."
+        ),
+    ),
+    "counterexample_guard": PromptStrategy(
+        name="counterexample_guard",
+        description="Try one targeted counterexample or violated constraint before committing.",
+        template=(
+            "{input}\n\n"
+            "Solve directly, then privately try to disprove the candidate with one targeted "
+            "counterexample or violated constraint. Change it only if that check succeeds. Output "
+            "only the final answer, with no reasoning or extra text."
+        ),
+    ),
+    "rank_two_paths": PromptStrategy(
+        name="rank_two_paths",
+        description="Generate two compact reasoning paths privately and rank them before answering.",
+        template=(
+            "{input}\n\n"
+            "Privately form two genuinely different compact solution paths. Compare their crucial "
+            "steps against the given facts, rank the paths by correctness, and use the stronger one. "
+            "Output only the final answer, with no reasoning or extra text."
         ),
     ),
 }
@@ -518,6 +571,14 @@ def example_task_key(example: Example) -> str:
     return f"{example.benchmark}/{example.task}"
 
 
+def generation_seed(base_seed: int, example: Example, sample_index: int) -> int:
+    identity = (
+        f"{base_seed}|{example.benchmark}|{example.task}|{example.index}|{sample_index}"
+    )
+    digest = hashlib.sha256(identity.encode("utf-8")).digest()
+    return int.from_bytes(digest[:4], "big") & 0x7FFFFFFF
+
+
 def resolve_prompt_strategy(args: argparse.Namespace, example: Example) -> str:
     policy = getattr(args, "prompt_policy_map", {})
     default_strategy = getattr(args, "prompt_policy_default", args.prompt_strategy)
@@ -551,12 +612,39 @@ def prompt_run_metadata(args: argparse.Namespace) -> dict:
     }
 
 
+def build_selection_prompt(
+    mode: str,
+    question: str,
+    generations: list[dict],
+) -> str:
+    candidates = "\n\n".join(
+        f"Candidate {index + 1}:\n{item['prediction']}"
+        for index, item in enumerate(generations)
+    )
+    if mode == "self_rank":
+        return (
+            f"Question:\n{question}\n\n{candidates}\n\n"
+            "Compare the candidates against the exact question and every decisive constraint. "
+            "Do not vote by wording or length. Select or correct the answer that is best supported. "
+            "Return only the final answer, with no explanation."
+        )
+    if mode == "key_condition_refine":
+        return (
+            f"Question:\n{question}\n\n{candidates}\n\n"
+            "Verify the candidate by identifying the single key condition most likely to expose an "
+            "error. Reconstruct or recompute that condition independently, correct the candidate if "
+            "needed, and return only the final answer with no explanation."
+        )
+    raise ValueError(f"unknown response selection mode: {mode}")
+
+
 def post_chat_completion(
     base_url: str,
     model: str,
     prompt: str,
     max_tokens: int,
     temperature: float,
+    seed: int,
     timeout: int,
     retries: int,
 ) -> dict:
@@ -566,6 +654,7 @@ def post_chat_completion(
         "messages": [{"role": "user", "content": prompt}],
         "max_completion_tokens": max_tokens,
         "temperature": temperature,
+        "seed": seed,
     }
     body = json.dumps(payload).encode("utf-8")
     headers = {"Content-Type": "application/json"}
@@ -588,14 +677,17 @@ def run_one(args: argparse.Namespace, example: Example) -> dict:
     prompt = build_prompt(example.input, strategy_name)
     started = time.time()
     generations = []
+    selection = None
     try:
         for sample_index in range(args.self_consistency_k):
+            seed = generation_seed(args.seed, example, sample_index)
             response = post_chat_completion(
                 base_url=args.base_url,
                 model=args.model,
                 prompt=prompt,
                 max_tokens=args.max_tokens,
                 temperature=args.temperature,
+                seed=seed,
                 timeout=args.timeout,
                 retries=args.retries,
             )
@@ -603,18 +695,49 @@ def run_one(args: argparse.Namespace, example: Example) -> dict:
             generations.append(
                 {
                     "sample_index": sample_index,
+                    "seed": seed,
                     "prediction": sample_content,
                     "normalized_prediction": preprocess_prediction(sample_content),
                     "usage": response.get("usage", {}),
                 }
             )
-        chosen_normalized = majority_vote(generations)
-        chosen = next(
-            item["prediction"]
-            for item in generations
-            if item["normalized_prediction"] == chosen_normalized
-        )
-        content = chosen
+        if args.response_selection == "majority_vote":
+            chosen_normalized = majority_vote(generations)
+            content = next(
+                item["prediction"]
+                for item in generations
+                if item["normalized_prediction"] == chosen_normalized
+            )
+        else:
+            selection_prompt = build_selection_prompt(
+                args.response_selection,
+                example.input,
+                generations,
+            )
+            selection_seed = generation_seed(
+                args.seed,
+                example,
+                args.self_consistency_k,
+            )
+            selection_response = post_chat_completion(
+                base_url=args.base_url,
+                model=args.model,
+                prompt=selection_prompt,
+                max_tokens=args.selection_max_tokens,
+                temperature=0.0,
+                seed=selection_seed,
+                timeout=args.timeout,
+                retries=args.retries,
+            )
+            content = selection_response["choices"][0]["message"].get("content") or ""
+            selection = {
+                "mode": args.response_selection,
+                "seed": selection_seed,
+                "prompt": selection_prompt,
+                "prediction": content,
+                "normalized_prediction": preprocess_prediction(content),
+                "usage": selection_response.get("usage", {}),
+            }
         correct = evaluate_correctness(content, example.target)
         error_text = None
     except Exception as exc:  # Keep long runs moving; errors are scored incorrect.
@@ -633,9 +756,15 @@ def run_one(args: argparse.Namespace, example: Example) -> dict:
         "correct": correct,
         "elapsed_seconds": elapsed,
         "prompt_strategy": strategy_name,
+        "base_seed": args.seed,
         "self_consistency_k": args.self_consistency_k,
+        "response_selection": args.response_selection,
         "generations": generations,
-        "usage": combine_usage([item.get("usage", {}) for item in generations]),
+        "selection": selection,
+        "usage": combine_usage(
+            [item.get("usage", {}) for item in generations]
+            + ([selection.get("usage", {})] if selection is not None else [])
+        ),
         "error": error_text,
     }
 
@@ -712,6 +841,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--parallel", type=int, default=1)
     parser.add_argument("--max-tokens", type=int, default=64)
     parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--seed", type=int, default=20260709)
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--retries", type=int, default=2)
     parser.add_argument(
@@ -739,6 +869,12 @@ def parse_args() -> argparse.Namespace:
         help="Skip the first N indexed examples of every task, for held-out evaluation.",
     )
     parser.add_argument("--self-consistency-k", type=int, default=1)
+    parser.add_argument(
+        "--response-selection",
+        choices=["majority_vote", "self_rank", "key_condition_refine"],
+        default="majority_vote",
+    )
+    parser.add_argument("--selection-max-tokens", type=int, default=64)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     if args.prompt_mode == "answer_only":
@@ -747,6 +883,12 @@ def parse_args() -> argparse.Namespace:
         args.prompt_strategy = "raw"
     if args.self_consistency_k < 1:
         raise SystemExit("--self-consistency-k must be >= 1")
+    if args.response_selection == "self_rank" and args.self_consistency_k < 2:
+        raise SystemExit("--response-selection self_rank requires --self-consistency-k >= 2")
+    if args.response_selection == "key_condition_refine" and args.self_consistency_k != 1:
+        raise SystemExit(
+            "--response-selection key_condition_refine requires --self-consistency-k 1"
+        )
     if args.skip_per_task < 0:
         raise SystemExit("--skip-per-task must be >= 0")
     args.prompt_policy_payload = None
@@ -805,10 +947,13 @@ def write_run_config(args: argparse.Namespace, examples: list[Example]) -> None:
         "parallel": args.parallel,
         "max_tokens": args.max_tokens,
         "temperature": args.temperature,
+        "seed": args.seed,
         "timeout": args.timeout,
         "retries": args.retries,
         **prompt_run_metadata(args),
         "self_consistency_k": args.self_consistency_k,
+        "response_selection": args.response_selection,
+        "selection_max_tokens": args.selection_max_tokens,
         "skip_per_task": args.skip_per_task,
         "system_messages_sent": 0,
         "request_message_shape": [{"role": "user", "content": "<rendered prompt>"}],
@@ -877,6 +1022,8 @@ def main() -> int:
         "model": args.model,
         **prompt_run_metadata(args),
         "self_consistency_k": args.self_consistency_k,
+        "response_selection": args.response_selection,
+        "selection_max_tokens": args.selection_max_tokens,
         "system_messages_sent": 0,
         "request_message_shape": [{"role": "user", "content": "<benchmark prompt>"}],
         "limit_per_task": args.limit_per_task,
@@ -884,6 +1031,7 @@ def main() -> int:
         "parallel": args.parallel,
         "max_tokens": args.max_tokens,
         "temperature": args.temperature,
+        "seed": args.seed,
         **summarize(records),
     }
     summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")

@@ -1,0 +1,90 @@
+{
+  "protocol_id": "gemma4-e2b-confirmatory-v1",
+  "frozen_on": "2026-07-09",
+  "status": "preregistered-before-e2b-benchmark-inference",
+  "model": {
+    "hub_id": "google/gemma-4-E2B-it",
+    "hub_revision": "70af34e20bd4b7a91f0de6b22675850c43922a03",
+    "served_model_name": "SubTokenLLM-E2B",
+    "local_port": 8889,
+    "public_base_url": "https://llm.agaii.org/llm-e2b/v1"
+  },
+  "datasets": {
+    "bbh": "9ee07bd481feebf959a6b59d61ea57bdcf30964d",
+    "bbeh": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+    "unpuzzles_and_simple_reasoning": "39bc520a2f4c243eb04ce1cc27f28c7c61d12e42"
+  },
+  "arm_manifest": "experiments/e2b_arm_manifest.jsonl",
+  "split": {
+    "unit": "within-task source index",
+    "calibration": "0 <= index < 25",
+    "validation": "25 <= index < 50",
+    "test": "index >= 50",
+    "short_tasks": "Tasks with fewer than 50 examples contribute all available rows to calibration/validation and no rows beyond their length."
+  },
+  "randomness": {
+    "primary_seed": 20260709,
+    "robustness_seeds": [20260710, 20260711],
+    "seed_derivation": "SHA-256(base_seed|benchmark|task|index|sample_index), first 31 bits"
+  },
+  "hypotheses": {
+    "primary": "The calibration-fitted conservative Bayesian reward router has higher exact-match accuracy than direct_answer on the untouched E2B test split.",
+    "secondary_novel_prompt": "condition_reconstruction has higher exact-match accuracy than direct_answer on the untouched E2B test split.",
+    "secondary_transfer": "The frozen E4B reward_routed_v2 policy transfers positively to E2B relative to direct_answer.",
+    "exploratory_scale": "Prompt-policy effects differ between E2B and the earlier exploratory E4B experiment."
+  },
+  "selection": {
+    "screening": "Run every arm on all examples with index < 50.",
+    "universal_winner": "Maximize validation exact matches; break ties by lower mean completion tokens, then manifest order.",
+    "router_candidates": "Only arms with eligible_for_router=true.",
+    "router": "For each task and candidate arm, fit Beta(wins+1, losses+1) on paired calibration discordances against direct_answer. Route only when net wins and posterior superiority pass a validation-selected conservative gate.",
+    "router_hyperparameters": {
+      "minimum_net_wins": [1, 2, 3, 4],
+      "posterior_probability_threshold": [0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
+    },
+    "router_hyperparameter_selection": "Maximize validation exact matches; break ties by lower token use, fewer routed tasks, higher posterior threshold, higher minimum net wins, then fixed grid order.",
+    "test_finalists": [
+      "direct_answer",
+      "private_verify",
+      "condition_reconstruction",
+      "validation-selected universal winner",
+      "calibration-fitted conservative Bayesian reward router",
+      "frozen E4B reward_routed_v2 transfer policy"
+    ],
+    "deduplication": "Identical finalist configurations are run once."
+  },
+  "outcomes": {
+    "primary": "pooled micro exact-match accuracy across BBH, BBEH, and unpuzzles_and_simple_reasoning test rows",
+    "secondary": [
+      "per-benchmark micro accuracy",
+      "macro task accuracy",
+      "paired correct-gain count",
+      "completion and total tokens",
+      "wall-clock latency",
+      "request error rate"
+    ]
+  },
+  "inference": {
+    "primary_test": "exact two-sided McNemar test for router versus direct_answer",
+    "secondary_tests": "exact two-sided McNemar tests versus direct_answer with Holm family-wise correction",
+    "effect_intervals": "10000-replicate task-stratified paired bootstrap, fixed seed 20260709, percentile 95% confidence interval",
+    "reported_effects": [
+      "absolute accuracy-point difference",
+      "relative error reduction",
+      "discordant win/loss counts",
+      "Holm-adjusted p-value"
+    ],
+    "alpha": 0.05
+  },
+  "robustness": {
+    "full_test_repeats": "Repeat direct_answer and the primary router at seeds 20260710 and 20260711.",
+    "model_scale_replication": "Compare the confirmatory E2B effects with the already completed exploratory E4B results without reclassifying E4B as confirmatory."
+  },
+  "integrity": {
+    "system_messages_sent": 0,
+    "test_labels_used_for_selection": false,
+    "endpoint_rewrites_request_body": false,
+    "raw_predictions_and_logs_retained": true,
+    "test_launch_gate": "selection.json and its SHA-256 must be written before any index >= 50 request"
+  }
+}
