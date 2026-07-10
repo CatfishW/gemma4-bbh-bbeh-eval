@@ -1,0 +1,1431 @@
+{
+  "source_roots": [
+    "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952"
+  ],
+  "source_files": {
+    "direct_answer": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/direct_answer/predictions.jsonl"
+    ],
+    "private_verify": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/private_verify/predictions.jsonl"
+    ],
+    "canonical_short": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/canonical_short/predictions.jsonl"
+    ],
+    "compare_then_commit": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/compare_then_commit/predictions.jsonl"
+    ],
+    "constraint_guard": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/constraint_guard/predictions.jsonl"
+    ],
+    "selective_verify": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/selective_verify/predictions.jsonl"
+    ],
+    "draft_verify": [
+      "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952/draft_verify/predictions.jsonl"
+    ]
+  },
+  "calibration_size_per_task": 25,
+  "calibration_examples": 1500,
+  "strategies": [
+    "direct_answer",
+    "private_verify",
+    "canonical_short",
+    "compare_then_commit",
+    "constraint_guard",
+    "selective_verify",
+    "draft_verify"
+  ],
+  "baseline": "direct_answer",
+  "selected_strategy_counts": {
+    "direct_answer": 40,
+    "private_verify": 3,
+    "compare_then_commit": 7,
+    "draft_verify": 2,
+    "canonical_short": 5,
+    "selective_verify": 1,
+    "constraint_guard": 2
+  },
+  "tasks": [
+    {
+      "task": "bbeh/bbeh_boardgame_qa",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 1,
+        "canonical_short": 1,
+        "compare_then_commit": 0,
+        "constraint_guard": 1,
+        "selective_verify": 1,
+        "draft_verify": 1
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.07407407407407407,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.07407407407407407,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.07407407407407407
+      }
+    },
+    {
+      "task": "bbeh/bbeh_boolean_expressions",
+      "selected_strategy": "private_verify",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 5,
+        "private_verify": 7,
+        "canonical_short": 7,
+        "compare_then_commit": 7,
+        "constraint_guard": 6,
+        "selective_verify": 6,
+        "draft_verify": 6
+      },
+      "posterior_means": {
+        "direct_answer": 0.2222222222222222,
+        "private_verify": 0.2962962962962963,
+        "canonical_short": 0.2962962962962963,
+        "compare_then_commit": 0.2962962962962963,
+        "constraint_guard": 0.25925925925925924,
+        "selective_verify": 0.25925925925925924,
+        "draft_verify": 0.25925925925925924
+      }
+    },
+    {
+      "task": "bbeh/bbeh_buggy_tables",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_causal_understanding",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 12,
+        "private_verify": 11,
+        "canonical_short": 10,
+        "compare_then_commit": 10,
+        "constraint_guard": 11,
+        "selective_verify": 12,
+        "draft_verify": 11
+      },
+      "posterior_means": {
+        "direct_answer": 0.48148148148148145,
+        "private_verify": 0.4444444444444444,
+        "canonical_short": 0.4074074074074074,
+        "compare_then_commit": 0.4074074074074074,
+        "constraint_guard": 0.4444444444444444,
+        "selective_verify": 0.48148148148148145,
+        "draft_verify": 0.4444444444444444
+      }
+    },
+    {
+      "task": "bbeh/bbeh_disambiguation_qa",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 8,
+        "private_verify": 9,
+        "canonical_short": 7,
+        "compare_then_commit": 10,
+        "constraint_guard": 7,
+        "selective_verify": 9,
+        "draft_verify": 8
+      },
+      "posterior_means": {
+        "direct_answer": 0.3333333333333333,
+        "private_verify": 0.37037037037037035,
+        "canonical_short": 0.2962962962962963,
+        "compare_then_commit": 0.4074074074074074,
+        "constraint_guard": 0.2962962962962963,
+        "selective_verify": 0.37037037037037035,
+        "draft_verify": 0.3333333333333333
+      }
+    },
+    {
+      "task": "bbeh/bbeh_dyck_languages",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_geometric_shapes",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 9,
+        "private_verify": 8,
+        "canonical_short": 8,
+        "compare_then_commit": 10,
+        "constraint_guard": 9,
+        "selective_verify": 7,
+        "draft_verify": 7
+      },
+      "posterior_means": {
+        "direct_answer": 0.37037037037037035,
+        "private_verify": 0.3333333333333333,
+        "canonical_short": 0.3333333333333333,
+        "compare_then_commit": 0.4074074074074074,
+        "constraint_guard": 0.37037037037037035,
+        "selective_verify": 0.2962962962962963,
+        "draft_verify": 0.2962962962962963
+      }
+    },
+    {
+      "task": "bbeh/bbeh_hyperbaton",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_linguini",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 1,
+        "canonical_short": 1,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 1,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.07407407407407407,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_movie_recommendation",
+      "selected_strategy": "draft_verify",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 11,
+        "private_verify": 12,
+        "canonical_short": 13,
+        "compare_then_commit": 12,
+        "constraint_guard": 12,
+        "selective_verify": 12,
+        "draft_verify": 14
+      },
+      "posterior_means": {
+        "direct_answer": 0.4444444444444444,
+        "private_verify": 0.48148148148148145,
+        "canonical_short": 0.5185185185185185,
+        "compare_then_commit": 0.48148148148148145,
+        "constraint_guard": 0.48148148148148145,
+        "selective_verify": 0.48148148148148145,
+        "draft_verify": 0.5555555555555556
+      }
+    },
+    {
+      "task": "bbeh/bbeh_multistep_arithmetic",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_nycc",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 4,
+        "private_verify": 3,
+        "canonical_short": 3,
+        "compare_then_commit": 4,
+        "constraint_guard": 4,
+        "selective_verify": 4,
+        "draft_verify": 4
+      },
+      "posterior_means": {
+        "direct_answer": 0.18518518518518517,
+        "private_verify": 0.14814814814814814,
+        "canonical_short": 0.14814814814814814,
+        "compare_then_commit": 0.18518518518518517,
+        "constraint_guard": 0.18518518518518517,
+        "selective_verify": 0.18518518518518517,
+        "draft_verify": 0.18518518518518517
+      }
+    },
+    {
+      "task": "bbeh/bbeh_object_counting",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_object_properties",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 2,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.1111111111111111,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_sarc_triples",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 5,
+        "private_verify": 4,
+        "canonical_short": 4,
+        "compare_then_commit": 3,
+        "constraint_guard": 3,
+        "selective_verify": 4,
+        "draft_verify": 4
+      },
+      "posterior_means": {
+        "direct_answer": 0.2222222222222222,
+        "private_verify": 0.18518518518518517,
+        "canonical_short": 0.18518518518518517,
+        "compare_then_commit": 0.14814814814814814,
+        "constraint_guard": 0.14814814814814814,
+        "selective_verify": 0.18518518518518517,
+        "draft_verify": 0.18518518518518517
+      }
+    },
+    {
+      "task": "bbeh/bbeh_shuffled_objects",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 1,
+        "canonical_short": 1,
+        "compare_then_commit": 1,
+        "constraint_guard": 1,
+        "selective_verify": 1,
+        "draft_verify": 1
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.07407407407407407,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.07407407407407407,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.07407407407407407
+      }
+    },
+    {
+      "task": "bbeh/bbeh_spatial_reasoning",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_sportqa",
+      "selected_strategy": "canonical_short",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 2,
+        "canonical_short": 3,
+        "compare_then_commit": 1,
+        "constraint_guard": 1,
+        "selective_verify": 1,
+        "draft_verify": 3
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.1111111111111111,
+        "canonical_short": 0.14814814814814814,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.07407407407407407,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.14814814814814814
+      }
+    },
+    {
+      "task": "bbeh/bbeh_temporal_sequence",
+      "selected_strategy": "selective_verify",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 3,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.14814814814814814,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_time_arithmetic",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 1,
+        "constraint_guard": 1,
+        "selective_verify": 1,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.07407407407407407,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_web_of_lies",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 3,
+        "private_verify": 1,
+        "canonical_short": 2,
+        "compare_then_commit": 2,
+        "constraint_guard": 1,
+        "selective_verify": 2,
+        "draft_verify": 1
+      },
+      "posterior_means": {
+        "direct_answer": 0.14814814814814814,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.1111111111111111,
+        "compare_then_commit": 0.1111111111111111,
+        "constraint_guard": 0.07407407407407407,
+        "selective_verify": 0.1111111111111111,
+        "draft_verify": 0.07407407407407407
+      }
+    },
+    {
+      "task": "bbeh/bbeh_word_sorting",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 2,
+        "private_verify": 1,
+        "canonical_short": 1,
+        "compare_then_commit": 1,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.1111111111111111,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.07407407407407407,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbeh/bbeh_zebra_puzzles",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 5,
+        "private_verify": 3,
+        "canonical_short": 3,
+        "compare_then_commit": 4,
+        "constraint_guard": 3,
+        "selective_verify": 4,
+        "draft_verify": 3
+      },
+      "posterior_means": {
+        "direct_answer": 0.2222222222222222,
+        "private_verify": 0.14814814814814814,
+        "canonical_short": 0.14814814814814814,
+        "compare_then_commit": 0.18518518518518517,
+        "constraint_guard": 0.14814814814814814,
+        "selective_verify": 0.18518518518518517,
+        "draft_verify": 0.14814814814814814
+      }
+    },
+    {
+      "task": "bbh/boolean_expressions",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 19,
+        "private_verify": 18,
+        "canonical_short": 16,
+        "compare_then_commit": 17,
+        "constraint_guard": 16,
+        "selective_verify": 18,
+        "draft_verify": 13
+      },
+      "posterior_means": {
+        "direct_answer": 0.7407407407407407,
+        "private_verify": 0.7037037037037037,
+        "canonical_short": 0.6296296296296297,
+        "compare_then_commit": 0.6666666666666666,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.7037037037037037,
+        "draft_verify": 0.5185185185185185
+      }
+    },
+    {
+      "task": "bbh/causal_judgement",
+      "selected_strategy": "canonical_short",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 15,
+        "private_verify": 15,
+        "canonical_short": 17,
+        "compare_then_commit": 14,
+        "constraint_guard": 16,
+        "selective_verify": 16,
+        "draft_verify": 15
+      },
+      "posterior_means": {
+        "direct_answer": 0.5925925925925926,
+        "private_verify": 0.5925925925925926,
+        "canonical_short": 0.6666666666666666,
+        "compare_then_commit": 0.5555555555555556,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.6296296296296297,
+        "draft_verify": 0.5925925925925926
+      }
+    },
+    {
+      "task": "bbh/date_understanding",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 15,
+        "canonical_short": 17,
+        "compare_then_commit": 19,
+        "constraint_guard": 11,
+        "selective_verify": 12,
+        "draft_verify": 18
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.5925925925925926,
+        "canonical_short": 0.6666666666666666,
+        "compare_then_commit": 0.7407407407407407,
+        "constraint_guard": 0.4444444444444444,
+        "selective_verify": 0.48148148148148145,
+        "draft_verify": 0.7037037037037037
+      }
+    },
+    {
+      "task": "bbh/disambiguation_qa",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 13,
+        "private_verify": 14,
+        "canonical_short": 13,
+        "compare_then_commit": 15,
+        "constraint_guard": 15,
+        "selective_verify": 15,
+        "draft_verify": 13
+      },
+      "posterior_means": {
+        "direct_answer": 0.5185185185185185,
+        "private_verify": 0.5555555555555556,
+        "canonical_short": 0.5185185185185185,
+        "compare_then_commit": 0.5925925925925926,
+        "constraint_guard": 0.5925925925925926,
+        "selective_verify": 0.5925925925925926,
+        "draft_verify": 0.5185185185185185
+      }
+    },
+    {
+      "task": "bbh/dyck_languages",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 3,
+        "private_verify": 1,
+        "canonical_short": 0,
+        "compare_then_commit": 2,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.14814814814814814,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.1111111111111111,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbh/formal_fallacies",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 17,
+        "private_verify": 14,
+        "canonical_short": 15,
+        "compare_then_commit": 14,
+        "constraint_guard": 15,
+        "selective_verify": 15,
+        "draft_verify": 14
+      },
+      "posterior_means": {
+        "direct_answer": 0.6666666666666666,
+        "private_verify": 0.5555555555555556,
+        "canonical_short": 0.5925925925925926,
+        "compare_then_commit": 0.5555555555555556,
+        "constraint_guard": 0.5925925925925926,
+        "selective_verify": 0.5925925925925926,
+        "draft_verify": 0.5555555555555556
+      }
+    },
+    {
+      "task": "bbh/geometric_shapes",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 8,
+        "private_verify": 7,
+        "canonical_short": 8,
+        "compare_then_commit": 7,
+        "constraint_guard": 7,
+        "selective_verify": 7,
+        "draft_verify": 7
+      },
+      "posterior_means": {
+        "direct_answer": 0.3333333333333333,
+        "private_verify": 0.2962962962962963,
+        "canonical_short": 0.3333333333333333,
+        "compare_then_commit": 0.2962962962962963,
+        "constraint_guard": 0.2962962962962963,
+        "selective_verify": 0.2962962962962963,
+        "draft_verify": 0.2962962962962963
+      }
+    },
+    {
+      "task": "bbh/hyperbaton",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 22,
+        "private_verify": 22,
+        "canonical_short": 22,
+        "compare_then_commit": 22,
+        "constraint_guard": 22,
+        "selective_verify": 22,
+        "draft_verify": 23
+      },
+      "posterior_means": {
+        "direct_answer": 0.8518518518518519,
+        "private_verify": 0.8518518518518519,
+        "canonical_short": 0.8518518518518519,
+        "compare_then_commit": 0.8518518518518519,
+        "constraint_guard": 0.8518518518518519,
+        "selective_verify": 0.8518518518518519,
+        "draft_verify": 0.8888888888888888
+      }
+    },
+    {
+      "task": "bbh/logical_deduction_five_objects",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 15,
+        "private_verify": 16,
+        "canonical_short": 15,
+        "compare_then_commit": 16,
+        "constraint_guard": 16,
+        "selective_verify": 16,
+        "draft_verify": 7
+      },
+      "posterior_means": {
+        "direct_answer": 0.5925925925925926,
+        "private_verify": 0.6296296296296297,
+        "canonical_short": 0.5925925925925926,
+        "compare_then_commit": 0.6296296296296297,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.6296296296296297,
+        "draft_verify": 0.2962962962962963
+      }
+    },
+    {
+      "task": "bbh/logical_deduction_seven_objects",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 18,
+        "private_verify": 16,
+        "canonical_short": 16,
+        "compare_then_commit": 17,
+        "constraint_guard": 16,
+        "selective_verify": 16,
+        "draft_verify": 15
+      },
+      "posterior_means": {
+        "direct_answer": 0.7037037037037037,
+        "private_verify": 0.6296296296296297,
+        "canonical_short": 0.6296296296296297,
+        "compare_then_commit": 0.6666666666666666,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.6296296296296297,
+        "draft_verify": 0.5925925925925926
+      }
+    },
+    {
+      "task": "bbh/logical_deduction_three_objects",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 24,
+        "private_verify": 22,
+        "canonical_short": 19,
+        "compare_then_commit": 22,
+        "constraint_guard": 22,
+        "selective_verify": 21,
+        "draft_verify": 4
+      },
+      "posterior_means": {
+        "direct_answer": 0.9259259259259259,
+        "private_verify": 0.8518518518518519,
+        "canonical_short": 0.7407407407407407,
+        "compare_then_commit": 0.8518518518518519,
+        "constraint_guard": 0.8518518518518519,
+        "selective_verify": 0.8148148148148148,
+        "draft_verify": 0.18518518518518517
+      }
+    },
+    {
+      "task": "bbh/movie_recommendation",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 18,
+        "private_verify": 18,
+        "canonical_short": 18,
+        "compare_then_commit": 17,
+        "constraint_guard": 17,
+        "selective_verify": 18,
+        "draft_verify": 17
+      },
+      "posterior_means": {
+        "direct_answer": 0.7037037037037037,
+        "private_verify": 0.7037037037037037,
+        "canonical_short": 0.7037037037037037,
+        "compare_then_commit": 0.6666666666666666,
+        "constraint_guard": 0.6666666666666666,
+        "selective_verify": 0.7037037037037037,
+        "draft_verify": 0.6666666666666666
+      }
+    },
+    {
+      "task": "bbh/multistep_arithmetic_two",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 1,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbh/navigate",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 16,
+        "private_verify": 16,
+        "canonical_short": 16,
+        "compare_then_commit": 16,
+        "constraint_guard": 16,
+        "selective_verify": 16,
+        "draft_verify": 15
+      },
+      "posterior_means": {
+        "direct_answer": 0.6296296296296297,
+        "private_verify": 0.6296296296296297,
+        "canonical_short": 0.6296296296296297,
+        "compare_then_commit": 0.6296296296296297,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.6296296296296297,
+        "draft_verify": 0.5925925925925926
+      }
+    },
+    {
+      "task": "bbh/object_counting",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 15,
+        "private_verify": 15,
+        "canonical_short": 15,
+        "compare_then_commit": 14,
+        "constraint_guard": 12,
+        "selective_verify": 14,
+        "draft_verify": 16
+      },
+      "posterior_means": {
+        "direct_answer": 0.5925925925925926,
+        "private_verify": 0.5925925925925926,
+        "canonical_short": 0.5925925925925926,
+        "compare_then_commit": 0.5555555555555556,
+        "constraint_guard": 0.48148148148148145,
+        "selective_verify": 0.5555555555555556,
+        "draft_verify": 0.6296296296296297
+      }
+    },
+    {
+      "task": "bbh/penguins_in_a_table",
+      "selected_strategy": "draft_verify",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 8,
+        "private_verify": 12,
+        "canonical_short": 13,
+        "compare_then_commit": 15,
+        "constraint_guard": 14,
+        "selective_verify": 11,
+        "draft_verify": 17
+      },
+      "posterior_means": {
+        "direct_answer": 0.3333333333333333,
+        "private_verify": 0.48148148148148145,
+        "canonical_short": 0.5185185185185185,
+        "compare_then_commit": 0.5925925925925926,
+        "constraint_guard": 0.5555555555555556,
+        "selective_verify": 0.4444444444444444,
+        "draft_verify": 0.6666666666666666
+      }
+    },
+    {
+      "task": "bbh/reasoning_about_colored_objects",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 9,
+        "private_verify": 18,
+        "canonical_short": 18,
+        "compare_then_commit": 19,
+        "constraint_guard": 16,
+        "selective_verify": 18,
+        "draft_verify": 17
+      },
+      "posterior_means": {
+        "direct_answer": 0.37037037037037035,
+        "private_verify": 0.7037037037037037,
+        "canonical_short": 0.7037037037037037,
+        "compare_then_commit": 0.7407407407407407,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.7037037037037037,
+        "draft_verify": 0.6666666666666666
+      }
+    },
+    {
+      "task": "bbh/ruin_names",
+      "selected_strategy": "constraint_guard",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 14,
+        "private_verify": 15,
+        "canonical_short": 14,
+        "compare_then_commit": 14,
+        "constraint_guard": 16,
+        "selective_verify": 14,
+        "draft_verify": 14
+      },
+      "posterior_means": {
+        "direct_answer": 0.5555555555555556,
+        "private_verify": 0.5925925925925926,
+        "canonical_short": 0.5555555555555556,
+        "compare_then_commit": 0.5555555555555556,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.5555555555555556,
+        "draft_verify": 0.5555555555555556
+      }
+    },
+    {
+      "task": "bbh/salient_translation_error_detection",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 13,
+        "private_verify": 14,
+        "canonical_short": 13,
+        "compare_then_commit": 16,
+        "constraint_guard": 16,
+        "selective_verify": 10,
+        "draft_verify": 13
+      },
+      "posterior_means": {
+        "direct_answer": 0.5185185185185185,
+        "private_verify": 0.5555555555555556,
+        "canonical_short": 0.5185185185185185,
+        "compare_then_commit": 0.6296296296296297,
+        "constraint_guard": 0.6296296296296297,
+        "selective_verify": 0.4074074074074074,
+        "draft_verify": 0.5185185185185185
+      }
+    },
+    {
+      "task": "bbh/snarks",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 20,
+        "private_verify": 19,
+        "canonical_short": 21,
+        "compare_then_commit": 18,
+        "constraint_guard": 19,
+        "selective_verify": 18,
+        "draft_verify": 19
+      },
+      "posterior_means": {
+        "direct_answer": 0.7777777777777778,
+        "private_verify": 0.7407407407407407,
+        "canonical_short": 0.8148148148148148,
+        "compare_then_commit": 0.7037037037037037,
+        "constraint_guard": 0.7407407407407407,
+        "selective_verify": 0.7037037037037037,
+        "draft_verify": 0.7407407407407407
+      }
+    },
+    {
+      "task": "bbh/sports_understanding",
+      "selected_strategy": "canonical_short",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 11,
+        "private_verify": 8,
+        "canonical_short": 13,
+        "compare_then_commit": 4,
+        "constraint_guard": 7,
+        "selective_verify": 1,
+        "draft_verify": 10
+      },
+      "posterior_means": {
+        "direct_answer": 0.4444444444444444,
+        "private_verify": 0.3333333333333333,
+        "canonical_short": 0.5185185185185185,
+        "compare_then_commit": 0.18518518518518517,
+        "constraint_guard": 0.2962962962962963,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.4074074074074074
+      }
+    },
+    {
+      "task": "bbh/temporal_sequences",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 25,
+        "private_verify": 25,
+        "canonical_short": 25,
+        "compare_then_commit": 25,
+        "constraint_guard": 25,
+        "selective_verify": 25,
+        "draft_verify": 16
+      },
+      "posterior_means": {
+        "direct_answer": 0.9629629629629629,
+        "private_verify": 0.9629629629629629,
+        "canonical_short": 0.9629629629629629,
+        "compare_then_commit": 0.9629629629629629,
+        "constraint_guard": 0.9629629629629629,
+        "selective_verify": 0.9629629629629629,
+        "draft_verify": 0.6296296296296297
+      }
+    },
+    {
+      "task": "bbh/tracking_shuffled_objects_five_objects",
+      "selected_strategy": "canonical_short",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 5,
+        "private_verify": 4,
+        "canonical_short": 7,
+        "compare_then_commit": 5,
+        "constraint_guard": 4,
+        "selective_verify": 6,
+        "draft_verify": 5
+      },
+      "posterior_means": {
+        "direct_answer": 0.2222222222222222,
+        "private_verify": 0.18518518518518517,
+        "canonical_short": 0.2962962962962963,
+        "compare_then_commit": 0.2222222222222222,
+        "constraint_guard": 0.18518518518518517,
+        "selective_verify": 0.25925925925925924,
+        "draft_verify": 0.2222222222222222
+      }
+    },
+    {
+      "task": "bbh/tracking_shuffled_objects_seven_objects",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 0,
+        "private_verify": 2,
+        "canonical_short": 2,
+        "compare_then_commit": 4,
+        "constraint_guard": 3,
+        "selective_verify": 1,
+        "draft_verify": 2
+      },
+      "posterior_means": {
+        "direct_answer": 0.037037037037037035,
+        "private_verify": 0.1111111111111111,
+        "canonical_short": 0.1111111111111111,
+        "compare_then_commit": 0.18518518518518517,
+        "constraint_guard": 0.14814814814814814,
+        "selective_verify": 0.07407407407407407,
+        "draft_verify": 0.1111111111111111
+      }
+    },
+    {
+      "task": "bbh/tracking_shuffled_objects_three_objects",
+      "selected_strategy": "compare_then_commit",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 5,
+        "private_verify": 6,
+        "canonical_short": 7,
+        "compare_then_commit": 8,
+        "constraint_guard": 6,
+        "selective_verify": 6,
+        "draft_verify": 1
+      },
+      "posterior_means": {
+        "direct_answer": 0.2222222222222222,
+        "private_verify": 0.25925925925925924,
+        "canonical_short": 0.2962962962962963,
+        "compare_then_commit": 0.3333333333333333,
+        "constraint_guard": 0.25925925925925924,
+        "selective_verify": 0.25925925925925924,
+        "draft_verify": 0.07407407407407407
+      }
+    },
+    {
+      "task": "bbh/web_of_lies",
+      "selected_strategy": "private_verify",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 2,
+        "private_verify": 10,
+        "canonical_short": 10,
+        "compare_then_commit": 1,
+        "constraint_guard": 7,
+        "selective_verify": 6,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.1111111111111111,
+        "private_verify": 0.4074074074074074,
+        "canonical_short": 0.4074074074074074,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.2962962962962963,
+        "selective_verify": 0.25925925925925924,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "bbh/word_sorting",
+      "selected_strategy": "private_verify",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 9,
+        "private_verify": 14,
+        "canonical_short": 5,
+        "compare_then_commit": 7,
+        "constraint_guard": 14,
+        "selective_verify": 14,
+        "draft_verify": 5
+      },
+      "posterior_means": {
+        "direct_answer": 0.37037037037037035,
+        "private_verify": 0.5555555555555556,
+        "canonical_short": 0.2222222222222222,
+        "compare_then_commit": 0.2962962962962963,
+        "constraint_guard": 0.5555555555555556,
+        "selective_verify": 0.5555555555555556,
+        "draft_verify": 0.2222222222222222
+      }
+    },
+    {
+      "task": "usr/shifted_unpuzzles/original",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 11,
+        "private_verify": 11,
+        "canonical_short": 12,
+        "compare_then_commit": 10,
+        "constraint_guard": 10,
+        "selective_verify": 9,
+        "draft_verify": 8
+      },
+      "posterior_means": {
+        "direct_answer": 0.4444444444444444,
+        "private_verify": 0.4444444444444444,
+        "canonical_short": 0.48148148148148145,
+        "compare_then_commit": 0.4074074074074074,
+        "constraint_guard": 0.4074074074074074,
+        "selective_verify": 0.37037037037037035,
+        "draft_verify": 0.3333333333333333
+      }
+    },
+    {
+      "task": "usr/shifted_unpuzzles/shifted",
+      "selected_strategy": "canonical_short",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 6,
+        "private_verify": 7,
+        "canonical_short": 8,
+        "compare_then_commit": 5,
+        "constraint_guard": 6,
+        "selective_verify": 6,
+        "draft_verify": 4
+      },
+      "posterior_means": {
+        "direct_answer": 0.25925925925925924,
+        "private_verify": 0.2962962962962963,
+        "canonical_short": 0.3333333333333333,
+        "compare_then_commit": 0.2222222222222222,
+        "constraint_guard": 0.25925925925925924,
+        "selective_verify": 0.25925925925925924,
+        "draft_verify": 0.18518518518518517
+      }
+    },
+    {
+      "task": "usr/shifted_unpuzzles/unpuzzle",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 3,
+        "private_verify": 2,
+        "canonical_short": 2,
+        "compare_then_commit": 2,
+        "constraint_guard": 3,
+        "selective_verify": 3,
+        "draft_verify": 2
+      },
+      "posterior_means": {
+        "direct_answer": 0.14814814814814814,
+        "private_verify": 0.1111111111111111,
+        "canonical_short": 0.1111111111111111,
+        "compare_then_commit": 0.1111111111111111,
+        "constraint_guard": 0.14814814814814814,
+        "selective_verify": 0.14814814814814814,
+        "draft_verify": 0.1111111111111111
+      }
+    },
+    {
+      "task": "usr/simple_reasoning/char_ct",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 1,
+        "constraint_guard": 1,
+        "selective_verify": 2,
+        "draft_verify": 1
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.07407407407407407,
+        "selective_verify": 0.1111111111111111,
+        "draft_verify": 0.07407407407407407
+      }
+    },
+    {
+      "task": "usr/simple_reasoning/logic_ev",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 10,
+        "private_verify": 10,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.4074074074074074,
+        "private_verify": 0.4074074074074074,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "usr/simple_reasoning/logic_neg",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 4,
+        "private_verify": 0,
+        "canonical_short": 0,
+        "compare_then_commit": 0,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 0
+      },
+      "posterior_means": {
+        "direct_answer": 0.18518518518518517,
+        "private_verify": 0.037037037037037035,
+        "canonical_short": 0.037037037037037035,
+        "compare_then_commit": 0.037037037037037035,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.037037037037037035
+      }
+    },
+    {
+      "task": "usr/simple_reasoning/mathgap",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 1,
+        "private_verify": 1,
+        "canonical_short": 1,
+        "compare_then_commit": 1,
+        "constraint_guard": 0,
+        "selective_verify": 0,
+        "draft_verify": 1
+      },
+      "posterior_means": {
+        "direct_answer": 0.07407407407407407,
+        "private_verify": 0.07407407407407407,
+        "canonical_short": 0.07407407407407407,
+        "compare_then_commit": 0.07407407407407407,
+        "constraint_guard": 0.037037037037037035,
+        "selective_verify": 0.037037037037037035,
+        "draft_verify": 0.07407407407407407
+      }
+    },
+    {
+      "task": "usr/simple_reasoning/word_ct",
+      "selected_strategy": "constraint_guard",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 16,
+        "private_verify": 17,
+        "canonical_short": 17,
+        "compare_then_commit": 16,
+        "constraint_guard": 18,
+        "selective_verify": 17,
+        "draft_verify": 17
+      },
+      "posterior_means": {
+        "direct_answer": 0.6296296296296297,
+        "private_verify": 0.6666666666666666,
+        "canonical_short": 0.6666666666666666,
+        "compare_then_commit": 0.6296296296296297,
+        "constraint_guard": 0.7037037037037037,
+        "selective_verify": 0.6666666666666666,
+        "draft_verify": 0.6666666666666666
+      }
+    },
+    {
+      "task": "usr/unpuzzles/original",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 11,
+        "private_verify": 11,
+        "canonical_short": 11,
+        "compare_then_commit": 10,
+        "constraint_guard": 10,
+        "selective_verify": 10,
+        "draft_verify": 7
+      },
+      "posterior_means": {
+        "direct_answer": 0.4444444444444444,
+        "private_verify": 0.4444444444444444,
+        "canonical_short": 0.4444444444444444,
+        "compare_then_commit": 0.4074074074074074,
+        "constraint_guard": 0.4074074074074074,
+        "selective_verify": 0.4074074074074074,
+        "draft_verify": 0.2962962962962963
+      }
+    },
+    {
+      "task": "usr/unpuzzles/unpuzzle",
+      "selected_strategy": "direct_answer",
+      "calibration_examples": 25,
+      "rewards": {
+        "direct_answer": 7,
+        "private_verify": 5,
+        "canonical_short": 5,
+        "compare_then_commit": 4,
+        "constraint_guard": 5,
+        "selective_verify": 3,
+        "draft_verify": 5
+      },
+      "posterior_means": {
+        "direct_answer": 0.2962962962962963,
+        "private_verify": 0.2222222222222222,
+        "canonical_short": 0.2222222222222222,
+        "compare_then_commit": 0.18518518518518517,
+        "constraint_guard": 0.2222222222222222,
+        "selective_verify": 0.14814814814814814,
+        "draft_verify": 0.2222222222222222
+      }
+    }
+  ]
+}

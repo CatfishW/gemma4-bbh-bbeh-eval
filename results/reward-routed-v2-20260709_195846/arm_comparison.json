@@ -1,0 +1,524 @@
+{
+  "aggregate": {
+    "status": "complete",
+    "evaluation_split": "index >= 25 within each task",
+    "baseline": {
+      "strategy": "direct_answer",
+      "correct": 3632,
+      "total": 11040,
+      "accuracy": 0.3289855072463768,
+      "source": "archived full direct-answer predictions"
+    },
+    "reward_routed_v2": {
+      "correct": 4020,
+      "total": 11040,
+      "accuracy": 0.3641304347826087,
+      "correct_gain_over_direct": 388,
+      "accuracy_gain_over_direct": 0.035144927536231885,
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 588,
+          "total": 3945,
+          "micro_accuracy": 0.14904942965779466,
+          "macro_accuracy": 0.15382804838182412,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3251,
+          "total": 5836,
+          "micro_accuracy": 0.5570596298834818,
+          "macro_accuracy": 0.560330614078551,
+          "harmonic_task_accuracy": 0.2728296051598265,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 181,
+          "total": 1259,
+          "micro_accuracy": 0.1437648927720413,
+          "macro_accuracy": 0.2131965780011157,
+          "harmonic_task_accuracy": 0.06345413378542178,
+          "tasks": 10
+        }
+      ]
+    },
+    "system_messages_sent": 0
+  },
+  "by_selected_arm": {
+    "canonical_short": {
+      "total": 826,
+      "policy_correct": 347,
+      "direct_correct": 333,
+      "errors": 0,
+      "delta_vs_direct": 14
+    },
+    "compare_then_commit": {
+      "total": 1445,
+      "policy_correct": 713,
+      "direct_correct": 499,
+      "errors": 0,
+      "delta_vs_direct": 214
+    },
+    "constraint_guard": {
+      "total": 320,
+      "policy_correct": 169,
+      "direct_correct": 157,
+      "errors": 0,
+      "delta_vs_direct": 12
+    },
+    "direct_answer": {
+      "total": 7353,
+      "policy_correct": 2429,
+      "direct_correct": 2426,
+      "errors": 0,
+      "delta_vs_direct": 3
+    },
+    "draft_verify": {
+      "total": 296,
+      "policy_correct": 137,
+      "direct_correct": 99,
+      "errors": 0,
+      "delta_vs_direct": 38
+    },
+    "private_verify": {
+      "total": 625,
+      "policy_correct": 216,
+      "direct_correct": 115,
+      "errors": 0,
+      "delta_vs_direct": 101
+    },
+    "selective_verify": {
+      "total": 175,
+      "policy_correct": 9,
+      "direct_correct": 3,
+      "errors": 0,
+      "delta_vs_direct": 6
+    }
+  },
+  "by_task": {
+    "bbeh/bbeh_boardgame_qa": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 62,
+      "direct_correct": 62,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_boolean_expressions": {
+      "strategy": "private_verify",
+      "total": 175,
+      "policy_correct": 36,
+      "direct_correct": 29,
+      "delta_vs_direct": 7
+    },
+    "bbeh/bbeh_buggy_tables": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 1,
+      "direct_correct": 1,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_causal_understanding": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 84,
+      "direct_correct": 84,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_disambiguation_qa": {
+      "strategy": "compare_then_commit",
+      "total": 95,
+      "policy_correct": 37,
+      "direct_correct": 40,
+      "delta_vs_direct": -3
+    },
+    "bbeh/bbeh_dyck_languages": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 9,
+      "direct_correct": 9,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_geometric_shapes": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 62,
+      "direct_correct": 61,
+      "delta_vs_direct": 1
+    },
+    "bbeh/bbeh_hyperbaton": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 5,
+      "direct_correct": 6,
+      "delta_vs_direct": -1
+    },
+    "bbeh/bbeh_linguini": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 7,
+      "direct_correct": 7,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_movie_recommendation": {
+      "strategy": "draft_verify",
+      "total": 175,
+      "policy_correct": 65,
+      "direct_correct": 66,
+      "delta_vs_direct": -1
+    },
+    "bbeh/bbeh_multistep_arithmetic": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 0,
+      "direct_correct": 0,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_nycc": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 21,
+      "direct_correct": 22,
+      "delta_vs_direct": -1
+    },
+    "bbeh/bbeh_object_counting": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 0,
+      "direct_correct": 0,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_object_properties": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 6,
+      "direct_correct": 6,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_sarc_triples": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 42,
+      "direct_correct": 41,
+      "delta_vs_direct": 1
+    },
+    "bbeh/bbeh_shuffled_objects": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 32,
+      "direct_correct": 31,
+      "delta_vs_direct": 1
+    },
+    "bbeh/bbeh_spatial_reasoning": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 3,
+      "direct_correct": 3,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_sportqa": {
+      "strategy": "canonical_short",
+      "total": 175,
+      "policy_correct": 35,
+      "direct_correct": 33,
+      "delta_vs_direct": 2
+    },
+    "bbeh/bbeh_temporal_sequence": {
+      "strategy": "selective_verify",
+      "total": 175,
+      "policy_correct": 9,
+      "direct_correct": 3,
+      "delta_vs_direct": 6
+    },
+    "bbeh/bbeh_time_arithmetic": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 5,
+      "direct_correct": 5,
+      "delta_vs_direct": 0
+    },
+    "bbeh/bbeh_web_of_lies": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 13,
+      "direct_correct": 15,
+      "delta_vs_direct": -2
+    },
+    "bbeh/bbeh_word_sorting": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 16,
+      "direct_correct": 15,
+      "delta_vs_direct": 1
+    },
+    "bbeh/bbeh_zebra_puzzles": {
+      "strategy": "direct_answer",
+      "total": 175,
+      "policy_correct": 38,
+      "direct_correct": 37,
+      "delta_vs_direct": 1
+    },
+    "bbh/boolean_expressions": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 166,
+      "direct_correct": 166,
+      "delta_vs_direct": 0
+    },
+    "bbh/causal_judgement": {
+      "strategy": "canonical_short",
+      "total": 162,
+      "policy_correct": 100,
+      "direct_correct": 100,
+      "delta_vs_direct": 0
+    },
+    "bbh/date_understanding": {
+      "strategy": "compare_then_commit",
+      "total": 225,
+      "policy_correct": 128,
+      "direct_correct": 20,
+      "delta_vs_direct": 108
+    },
+    "bbh/disambiguation_qa": {
+      "strategy": "compare_then_commit",
+      "total": 225,
+      "policy_correct": 134,
+      "direct_correct": 120,
+      "delta_vs_direct": 14
+    },
+    "bbh/dyck_languages": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 20,
+      "direct_correct": 20,
+      "delta_vs_direct": 0
+    },
+    "bbh/formal_fallacies": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 136,
+      "direct_correct": 136,
+      "delta_vs_direct": 0
+    },
+    "bbh/geometric_shapes": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 73,
+      "direct_correct": 73,
+      "delta_vs_direct": 0
+    },
+    "bbh/hyperbaton": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 205,
+      "direct_correct": 205,
+      "delta_vs_direct": 0
+    },
+    "bbh/logical_deduction_five_objects": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 153,
+      "direct_correct": 151,
+      "delta_vs_direct": 2
+    },
+    "bbh/logical_deduction_seven_objects": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 150,
+      "direct_correct": 148,
+      "delta_vs_direct": 2
+    },
+    "bbh/logical_deduction_three_objects": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 201,
+      "direct_correct": 201,
+      "delta_vs_direct": 0
+    },
+    "bbh/movie_recommendation": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 134,
+      "direct_correct": 133,
+      "delta_vs_direct": 1
+    },
+    "bbh/multistep_arithmetic_two": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 6,
+      "direct_correct": 6,
+      "delta_vs_direct": 0
+    },
+    "bbh/navigate": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 144,
+      "direct_correct": 144,
+      "delta_vs_direct": 0
+    },
+    "bbh/object_counting": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 138,
+      "direct_correct": 139,
+      "delta_vs_direct": -1
+    },
+    "bbh/penguins_in_a_table": {
+      "strategy": "draft_verify",
+      "total": 121,
+      "policy_correct": 72,
+      "direct_correct": 33,
+      "delta_vs_direct": 39
+    },
+    "bbh/reasoning_about_colored_objects": {
+      "strategy": "compare_then_commit",
+      "total": 225,
+      "policy_correct": 162,
+      "direct_correct": 110,
+      "delta_vs_direct": 52
+    },
+    "bbh/ruin_names": {
+      "strategy": "constraint_guard",
+      "total": 225,
+      "policy_correct": 164,
+      "direct_correct": 153,
+      "delta_vs_direct": 11
+    },
+    "bbh/salient_translation_error_detection": {
+      "strategy": "compare_then_commit",
+      "total": 225,
+      "policy_correct": 134,
+      "direct_correct": 124,
+      "delta_vs_direct": 10
+    },
+    "bbh/snarks": {
+      "strategy": "direct_answer",
+      "total": 153,
+      "policy_correct": 111,
+      "direct_correct": 111,
+      "delta_vs_direct": 0
+    },
+    "bbh/sports_understanding": {
+      "strategy": "canonical_short",
+      "total": 225,
+      "policy_correct": 148,
+      "direct_correct": 135,
+      "delta_vs_direct": 13
+    },
+    "bbh/temporal_sequences": {
+      "strategy": "direct_answer",
+      "total": 225,
+      "policy_correct": 224,
+      "direct_correct": 224,
+      "delta_vs_direct": 0
+    },
+    "bbh/tracking_shuffled_objects_five_objects": {
+      "strategy": "canonical_short",
+      "total": 225,
+      "policy_correct": 50,
+      "direct_correct": 48,
+      "delta_vs_direct": 2
+    },
+    "bbh/tracking_shuffled_objects_seven_objects": {
+      "strategy": "compare_then_commit",
+      "total": 225,
+      "policy_correct": 33,
+      "direct_correct": 36,
+      "delta_vs_direct": -3
+    },
+    "bbh/tracking_shuffled_objects_three_objects": {
+      "strategy": "compare_then_commit",
+      "total": 225,
+      "policy_correct": 85,
+      "direct_correct": 49,
+      "delta_vs_direct": 36
+    },
+    "bbh/web_of_lies": {
+      "strategy": "private_verify",
+      "total": 225,
+      "policy_correct": 95,
+      "direct_correct": 24,
+      "delta_vs_direct": 71
+    },
+    "bbh/word_sorting": {
+      "strategy": "private_verify",
+      "total": 225,
+      "policy_correct": 85,
+      "direct_correct": 62,
+      "delta_vs_direct": 23
+    },
+    "usr/shifted_unpuzzles/original": {
+      "strategy": "direct_answer",
+      "total": 36,
+      "policy_correct": 9,
+      "direct_correct": 9,
+      "delta_vs_direct": 0
+    },
+    "usr/shifted_unpuzzles/shifted": {
+      "strategy": "canonical_short",
+      "total": 39,
+      "policy_correct": 14,
+      "direct_correct": 17,
+      "delta_vs_direct": -3
+    },
+    "usr/shifted_unpuzzles/unpuzzle": {
+      "strategy": "direct_answer",
+      "total": 39,
+      "policy_correct": 19,
+      "direct_correct": 19,
+      "delta_vs_direct": 0
+    },
+    "usr/simple_reasoning/char_ct": {
+      "strategy": "direct_answer",
+      "total": 15,
+      "policy_correct": 1,
+      "direct_correct": 1,
+      "delta_vs_direct": 0
+    },
+    "usr/simple_reasoning/logic_ev": {
+      "strategy": "direct_answer",
+      "total": 335,
+      "policy_correct": 78,
+      "direct_correct": 80,
+      "delta_vs_direct": -2
+    },
+    "usr/simple_reasoning/logic_neg": {
+      "strategy": "direct_answer",
+      "total": 335,
+      "policy_correct": 18,
+      "direct_correct": 18,
+      "delta_vs_direct": 0
+    },
+    "usr/simple_reasoning/mathgap": {
+      "strategy": "direct_answer",
+      "total": 255,
+      "policy_correct": 3,
+      "direct_correct": 3,
+      "delta_vs_direct": 0
+    },
+    "usr/simple_reasoning/word_ct": {
+      "strategy": "constraint_guard",
+      "total": 95,
+      "policy_correct": 5,
+      "direct_correct": 4,
+      "delta_vs_direct": 1
+    },
+    "usr/unpuzzles/original": {
+      "strategy": "direct_answer",
+      "total": 55,
+      "policy_correct": 13,
+      "direct_correct": 13,
+      "delta_vs_direct": 0
+    },
+    "usr/unpuzzles/unpuzzle": {
+      "strategy": "direct_answer",
+      "total": 55,
+      "policy_correct": 21,
+      "direct_correct": 21,
+      "delta_vs_direct": 0
+    }
+  },
+  "total_request_errors": 0
+}

@@ -154,7 +154,14 @@ Run the complete calibration and online held-out confirmation with:
 ./scripts/run_reward_routed_policy.sh
 ```
 
-The archived offline replay scores `4,738/11,040` (42.92%) on the held-out suffix, compared with `3,632/11,040` (32.90%) for direct answer. See [docs/PROMPT_OPTIMIZATION_RESEARCH.md](docs/PROMPT_OPTIMIZATION_RESEARCH.md) for the protocol, research basis, and RL decision.
+To fit a conservative policy from a calibration-only strategy sweep and confirm it on the held-out suffix:
+
+```bash
+SAMPLE_ROOT=/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952 \
+./scripts/run_sampled_policy_confirmation.sh
+```
+
+The fully live `reward_routed_v2` run scores `4,020/11,040` (36.41%), compared with `3,632/11,040` (32.90%) for direct answer: +388 correct and +3.51 accuracy points with zero request errors. The higher-ceiling v1 archived replay scores `4,738/11,040` (42.92%) and is recorded separately from live confirmation. See [docs/PROMPT_OPTIMIZATION_RESEARCH.md](docs/PROMPT_OPTIMIZATION_RESEARCH.md) for the protocol, research basis, examples, negative results, and RL decision.
 
 ## Prompt Strategy Matrix
 

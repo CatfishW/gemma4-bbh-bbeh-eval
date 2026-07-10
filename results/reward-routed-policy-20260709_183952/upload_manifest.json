@@ -1,0 +1,86 @@
+{
+  "remote_host": "benwulab-remote via tang-server",
+  "remote_run_root": "/data/benwulab/gemma4-eval/runs/reward-routed-policy-20260709_183952",
+  "files": [
+    {
+      "path": "aggregate_summary.json",
+      "bytes": 1012,
+      "sha256": "123ba8eb42e033b11e3057fc184fe3b7dc7a339de156665db3d92e1f3fa3af28"
+    },
+    {
+      "path": "environment.json",
+      "bytes": 802,
+      "sha256": "c5dfaa2b597b13b89a115672af4cb29d5157713ca5669b18e6e819cf4a455caf"
+    },
+    {
+      "path": "offline/calibration_summary.json",
+      "bytes": 59796,
+      "sha256": "3199fe7b8e088a53062f37d9d71712b4afe11cc9495f4a5e10b376a7fd16cc4f"
+    },
+    {
+      "path": "offline/examples.md",
+      "bytes": 21598,
+      "sha256": "7f4a8ef0f8bb98df6abc9ae7d1f9d209516bca7eae866da52e9e1c8cb5ad3410"
+    },
+    {
+      "path": "offline/heldout_predictions.jsonl.gz",
+      "bytes": 787046,
+      "sha256": "4185903063f0ce54a85e5490bac63f96c02524de9313b38f1bea241d4851ae03"
+    },
+    {
+      "path": "offline/heldout_summary.json",
+      "bytes": 10468,
+      "sha256": "56758b395ce4cc6170929fff578aa7faf056a155f9d19dfea26818006a83efa4"
+    },
+    {
+      "path": "offline/policy.json",
+      "bytes": 3810,
+      "sha256": "f92ef437dfd42bc6d6e43d7622bc59204e077c865e7d17fac7066861406a6229"
+    },
+    {
+      "path": "offline/stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "offline/stdout.log",
+      "bytes": 10468,
+      "sha256": "56758b395ce4cc6170929fff578aa7faf056a155f9d19dfea26818006a83efa4"
+    },
+    {
+      "path": "online_heldout/command.txt",
+      "bytes": 551,
+      "sha256": "5f054f5c5c9f193d616794d0d7a28ea7acd53364c299b94d15b699289a8d33fd"
+    },
+    {
+      "path": "online_heldout/predictions.jsonl.gz",
+      "bytes": 186674,
+      "sha256": "555da5951c3283fd6bc2208ca5795ae9c8247e53ba45ee177b745651a1e7d383"
+    },
+    {
+      "path": "online_heldout/run_config.json",
+      "bytes": 7957,
+      "sha256": "e45a8f20b4f6c3d8dd1b36ee74640bfd7b56b0755280ab9853a4753bb7716dda"
+    },
+    {
+      "path": "online_heldout/stderr.log",
+      "bytes": 11,
+      "sha256": "b4a6c06672677cf0e25ec72bec83beae33305cee4b8087f168962014373b02bb"
+    },
+    {
+      "path": "online_heldout/stdout.log",
+      "bytes": 3932,
+      "sha256": "198c104cedfea47cadaad0a3cc331030c6313c5c597fd337e831e376456dce6a"
+    },
+    {
+      "path": "policy.log",
+      "bytes": 71,
+      "sha256": "6db55ca9c86db86538c33f4af9adea186cf912b8653e98d48cbe1eceac095ddf"
+    },
+    {
+      "path": "replay_validation.json",
+      "bytes": 492,
+      "sha256": "4190990ef50c743318171169eaa20161bfc1a956c375f6a73184e4ac6f9c0b61"
+    }
+  ]
+}

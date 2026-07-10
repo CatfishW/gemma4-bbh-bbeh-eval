@@ -1,0 +1,414 @@
+{
+  "status": "complete_after_compute_reallocation",
+  "note": "The redundant v1 live replay was stopped after partial validation; compute was redirected to the new-arm sweep and v2 held-out confirmation.",
+  "reward_routed_v1": {
+    "status": "offline_heldout_complete_live_validation_partial",
+    "evaluation_split": "index >= 25 within each task",
+    "baseline": {
+      "strategy": "direct_answer",
+      "correct": 3632,
+      "total": 11040,
+      "accuracy": 0.3289855072463768
+    },
+    "reward_routed_policy": {
+      "correct": 4738,
+      "total": 11040,
+      "accuracy": 0.42916666666666664
+    },
+    "absolute_correct_gain": 1106,
+    "absolute_accuracy_gain": 0.10018115942028985,
+    "live_validation": {
+      "status": "partial_live_validation_complete",
+      "stop_reason": "Archived held-out replay was already complete; compute redirected to new strategies.",
+      "online_rows": 2994,
+      "online_correct": 1961,
+      "online_accuracy": 0.6549766199064796,
+      "archived_correct_on_same_keys": 1949,
+      "exact_normalized_matches": 2912,
+      "exact_match_rate": 0.9726118904475618,
+      "same_correctness": 2942,
+      "same_correctness_rate": 0.9826319305277221,
+      "request_errors": 0,
+      "system_messages_sent": 0
+    },
+    "system_messages_sent": 0
+  },
+  "research_sweep": {
+    "root": "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952",
+    "ranking": [
+      {
+        "strategy": "private_verify",
+        "correct": 484,
+        "total": 1500,
+        "accuracy": 0.32266666666666666,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 64,
+            "total": 575,
+            "micro_accuracy": 0.11130434782608696,
+            "macro_accuracy": 0.11130434782608696,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 356,
+            "total": 675,
+            "micro_accuracy": 0.5274074074074074,
+            "macro_accuracy": 0.5274074074074074,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 64,
+            "total": 250,
+            "micro_accuracy": 0.256,
+            "macro_accuracy": 0.256,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "canonical_short",
+        "correct": 475,
+        "total": 1500,
+        "accuracy": 0.31666666666666665,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 64,
+            "total": 575,
+            "micro_accuracy": 0.11130434782608696,
+            "macro_accuracy": 0.11130434782608696,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 355,
+            "total": 675,
+            "micro_accuracy": 0.5259259259259259,
+            "macro_accuracy": 0.5259259259259259,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 56,
+            "total": 250,
+            "micro_accuracy": 0.224,
+            "macro_accuracy": 0.224,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "direct_answer",
+        "correct": 466,
+        "total": 1500,
+        "accuracy": 0.31066666666666665,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 71,
+            "total": 575,
+            "micro_accuracy": 0.12347826086956522,
+            "macro_accuracy": 0.12347826086956522,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 325,
+            "total": 675,
+            "micro_accuracy": 0.48148148148148145,
+            "macro_accuracy": 0.4814814814814815,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 70,
+            "total": 250,
+            "micro_accuracy": 0.28,
+            "macro_accuracy": 0.28,
+            "harmonic_task_accuracy": 0.12356451532019458,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "compare_then_commit",
+        "correct": 464,
+        "total": 1500,
+        "accuracy": 0.30933333333333335,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 66,
+            "total": 575,
+            "micro_accuracy": 0.11478260869565217,
+            "macro_accuracy": 0.11478260869565218,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 349,
+            "total": 675,
+            "micro_accuracy": 0.5170370370370371,
+            "macro_accuracy": 0.5170370370370371,
+            "harmonic_task_accuracy": 0.23050029910813855,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 49,
+            "total": 250,
+            "micro_accuracy": 0.196,
+            "macro_accuracy": 0.196,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "constraint_guard",
+        "correct": 461,
+        "total": 1500,
+        "accuracy": 0.30733333333333335,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 60,
+            "total": 575,
+            "micro_accuracy": 0.10434782608695652,
+            "macro_accuracy": 0.10434782608695652,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 348,
+            "total": 675,
+            "micro_accuracy": 0.5155555555555555,
+            "macro_accuracy": 0.5155555555555555,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 53,
+            "total": 250,
+            "micro_accuracy": 0.212,
+            "macro_accuracy": 0.212,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "selective_verify",
+        "correct": 454,
+        "total": 1500,
+        "accuracy": 0.30266666666666664,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 68,
+            "total": 575,
+            "micro_accuracy": 0.11826086956521739,
+            "macro_accuracy": 0.11826086956521739,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 336,
+            "total": 675,
+            "micro_accuracy": 0.49777777777777776,
+            "macro_accuracy": 0.49777777777777776,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 50,
+            "total": 250,
+            "micro_accuracy": 0.2,
+            "macro_accuracy": 0.2,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "draft_verify",
+        "correct": 404,
+        "total": 1500,
+        "accuracy": 0.2693333333333333,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 63,
+            "total": 575,
+            "micro_accuracy": 0.10956521739130434,
+            "macro_accuracy": 0.10956521739130436,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 296,
+            "total": 675,
+            "micro_accuracy": 0.43851851851851853,
+            "macro_accuracy": 0.43851851851851853,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 45,
+            "total": 250,
+            "micro_accuracy": 0.18,
+            "macro_accuracy": 0.18000000000000002,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "fast_slow_gate",
+        "correct": 288,
+        "total": 1500,
+        "accuracy": 0.192,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 47,
+            "total": 575,
+            "micro_accuracy": 0.0817391304347826,
+            "macro_accuracy": 0.0817391304347826,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 196,
+            "total": 675,
+            "micro_accuracy": 0.2903703703703704,
+            "macro_accuracy": 0.2903703703703704,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 45,
+            "total": 250,
+            "micro_accuracy": 0.18,
+            "macro_accuracy": 0.18,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      },
+      {
+        "strategy": "negation_label_guard",
+        "correct": 282,
+        "total": 1500,
+        "accuracy": 0.188,
+        "benchmarks": [
+          {
+            "benchmark": "bbeh",
+            "correct": 45,
+            "total": 575,
+            "micro_accuracy": 0.0782608695652174,
+            "macro_accuracy": 0.0782608695652174,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 23
+          },
+          {
+            "benchmark": "bbh",
+            "correct": 218,
+            "total": 675,
+            "micro_accuracy": 0.32296296296296295,
+            "macro_accuracy": 0.32296296296296295,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 27
+          },
+          {
+            "benchmark": "usr",
+            "correct": 19,
+            "total": 250,
+            "micro_accuracy": 0.076,
+            "macro_accuracy": 0.076,
+            "harmonic_task_accuracy": 0.0,
+            "tasks": 10
+          }
+        ],
+        "system_messages_sent": 0
+      }
+    ]
+  },
+  "reward_routed_v2": {
+    "status": "complete",
+    "evaluation_split": "index >= 25 within each task",
+    "baseline": {
+      "strategy": "direct_answer",
+      "correct": 3632,
+      "total": 11040,
+      "accuracy": 0.3289855072463768,
+      "source": "archived full direct-answer predictions"
+    },
+    "reward_routed_v2": {
+      "correct": 4020,
+      "total": 11040,
+      "accuracy": 0.3641304347826087,
+      "correct_gain_over_direct": 388,
+      "accuracy_gain_over_direct": 0.035144927536231885,
+      "benchmarks": [
+        {
+          "benchmark": "bbeh",
+          "correct": 588,
+          "total": 3945,
+          "micro_accuracy": 0.14904942965779466,
+          "macro_accuracy": 0.15382804838182412,
+          "harmonic_task_accuracy": 0.0,
+          "tasks": 23
+        },
+        {
+          "benchmark": "bbh",
+          "correct": 3251,
+          "total": 5836,
+          "micro_accuracy": 0.5570596298834818,
+          "macro_accuracy": 0.560330614078551,
+          "harmonic_task_accuracy": 0.2728296051598265,
+          "tasks": 27
+        },
+        {
+          "benchmark": "usr",
+          "correct": 181,
+          "total": 1259,
+          "micro_accuracy": 0.1437648927720413,
+          "macro_accuracy": 0.2131965780011157,
+          "harmonic_task_accuracy": 0.06345413378542178,
+          "tasks": 10
+        }
+      ]
+    },
+    "system_messages_sent": 0
+  },
+  "system_messages_sent": 0
+}

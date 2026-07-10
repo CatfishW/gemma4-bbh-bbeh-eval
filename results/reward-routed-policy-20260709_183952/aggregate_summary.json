@@ -1,0 +1,32 @@
+{
+  "status": "offline_heldout_complete_live_validation_partial",
+  "evaluation_split": "index >= 25 within each task",
+  "baseline": {
+    "strategy": "direct_answer",
+    "correct": 3632,
+    "total": 11040,
+    "accuracy": 0.3289855072463768
+  },
+  "reward_routed_policy": {
+    "correct": 4738,
+    "total": 11040,
+    "accuracy": 0.42916666666666664
+  },
+  "absolute_correct_gain": 1106,
+  "absolute_accuracy_gain": 0.10018115942028985,
+  "live_validation": {
+    "status": "partial_live_validation_complete",
+    "stop_reason": "Archived held-out replay was already complete; compute redirected to new strategies.",
+    "online_rows": 2994,
+    "online_correct": 1961,
+    "online_accuracy": 0.6549766199064796,
+    "archived_correct_on_same_keys": 1949,
+    "exact_normalized_matches": 2912,
+    "exact_match_rate": 0.9726118904475618,
+    "same_correctness": 2942,
+    "same_correctness_rate": 0.9826319305277221,
+    "request_errors": 0,
+    "system_messages_sent": 0
+  },
+  "system_messages_sent": 0
+}

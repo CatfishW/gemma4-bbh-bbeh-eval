@@ -1,0 +1,51 @@
+[2026-07-09T19:58:46-04:00] START reward-routed-v2 held-out confirmation
+[2026-07-09T20:33:45-04:00] DONE reward-routed-v2 held-out confirmation
+{
+  "status": "complete",
+  "evaluation_split": "index >= 25 within each task",
+  "baseline": {
+    "strategy": "direct_answer",
+    "correct": 3632,
+    "total": 11040,
+    "accuracy": 0.3289855072463768,
+    "source": "archived full direct-answer predictions"
+  },
+  "reward_routed_v2": {
+    "correct": 4020,
+    "total": 11040,
+    "accuracy": 0.3641304347826087,
+    "correct_gain_over_direct": 388,
+    "accuracy_gain_over_direct": 0.035144927536231885,
+    "benchmarks": [
+      {
+        "benchmark": "bbeh",
+        "correct": 588,
+        "total": 3945,
+        "micro_accuracy": 0.14904942965779466,
+        "macro_accuracy": 0.15382804838182412,
+        "harmonic_task_accuracy": 0.0,
+        "tasks": 23
+      },
+      {
+        "benchmark": "bbh",
+        "correct": 3251,
+        "total": 5836,
+        "micro_accuracy": 0.5570596298834818,
+        "macro_accuracy": 0.560330614078551,
+        "harmonic_task_accuracy": 0.2728296051598265,
+        "tasks": 27
+      },
+      {
+        "benchmark": "usr",
+        "correct": 181,
+        "total": 1259,
+        "micro_accuracy": 0.1437648927720413,
+        "macro_accuracy": 0.2131965780011157,
+        "harmonic_task_accuracy": 0.06345413378542178,
+        "tasks": 10
+      }
+    ]
+  },
+  "system_messages_sent": 0
+}
+[2026-07-09T20:33:45-04:00] reward-routed-v2 complete: /data/benwulab/gemma4-eval/runs/reward-routed-v2-20260709_195846

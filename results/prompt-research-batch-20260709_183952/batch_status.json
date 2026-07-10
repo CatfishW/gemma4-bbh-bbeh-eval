@@ -1,0 +1,6 @@
+{
+  "status": "complete",
+  "policy_v1_root": "/data/benwulab/gemma4-eval/runs/reward-routed-policy-20260709_183952",
+  "sweep_root": "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952",
+  "policy_v2_root": "/data/benwulab/gemma4-eval/runs/reward-routed-v2-20260709_195846"
+}

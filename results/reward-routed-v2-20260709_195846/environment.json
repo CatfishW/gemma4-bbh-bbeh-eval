@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-07-09T19:58:46-04:00",
+  "hostname": "benwulab-Lambda-Vector",
+  "repo_dir": "/data/benwulab/gemma4-eval/repo",
+  "repo_revision": "871f4a62",
+  "sample_root": "/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952",
+  "datasets_root": "/data/benwulab/gemma4-eval/datasets",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "benchmarks": "bbh,bbeh,usr",
+  "calibration_size": "25",
+  "min_reward_gain": "2",
+  "parallel": "2",
+  "strategies": "direct_answer,private_verify,canonical_short,compare_then_commit,constraint_guard,selective_verify,draft_verify",
+  "direct_heldout_correct": "3632",
+  "direct_heldout_total": "11040",
+  "system_messages_sent": 0
+}
