@@ -24,7 +24,7 @@ does not add messages or prompt text.
 | Dataset | Revision | Included tasks | Included examples | License |
 |---|---|---:|---:|---|
 | `suzgunmirac/BIG-Bench-Hard` | `9ee07bd481feebf959a6b59d61ea57bdcf30964d` | 27 | 6,511 | MIT |
-| `google-deepmind/bbeh` | `80d12ca916b7158f22293fcf3144f4d3d854d4be` | 23 | 4,520 | Apache 2.0 |
+| `google-deepmind/bbeh` | `80d12ca916b7158f22293fcf3144f4d3d854d4be` | 23 | 4,520 | Apache 2.0 software; CC BY 4.0 materials |
 | `google-deepmind/unpuzzles_and_simple_reasoning` | `39bc520a2f4c243eb04ce1cc27f28c7c61d12e42` | 10 | 1,509 | Apache 2.0 |
 
 USR includes all auto-scorable `simple_reasoning` rows and every non-empty
