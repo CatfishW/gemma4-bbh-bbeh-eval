@@ -86,6 +86,12 @@ Direct answer and CBRR are repeated over the full test split with seeds 20260710
 revision is allowed under this protocol; any later search must be labeled exploratory
 and use a newly declared holdout.
 
+Analysis extension 001 was registered after screening began but before finalist
+selection or any test request. It leaves the primary analysis unchanged and adds a
+task-cluster bootstrap, a fixed-seed task sign-flip sensitivity test, leave-one-task-out
+influence, and a token-cap binding audit. The machine-readable declaration is
+`experiments/e2b_analysis_extension_001.json`.
+
 ## Validity boundaries
 
 Task-conditioned routing measures generalization to new examples from known tasks,
