@@ -105,7 +105,9 @@ PY
 
 cd "$REPO_DIR"
 git add "$LOCAL_RESULT_DIR" scripts/collect_e2b_results.sh
-git diff --cached --check
+# Generated provenance is byte-for-byte verified against the remote manifest and may
+# contain tool-emitted whitespace. Keep source linting separate from immutable artifacts.
+git diff --cached --check -- scripts/collect_e2b_results.sh
 if git diff --cached --quiet; then
   echo "no changes to commit"
   exit 0

@@ -1,0 +1,2 @@
+2026-07-09T23:55:44-04:00
+Temporary GPU 0 power limit reduced from 300 W to 250 W during exploratory screening after temperature reached 87 C; accuracy and token outcomes remain primary for this run.

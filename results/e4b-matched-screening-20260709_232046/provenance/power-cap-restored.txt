@@ -1,0 +1,5 @@
+restored_at_utc=2026-07-10T12:30:53.742088+00:00
+gpu_index=0
+previous_limit_watts=250
+restored_limit_watts=300
+reason=temporary thermal-control cap removed after matched E4B run completed

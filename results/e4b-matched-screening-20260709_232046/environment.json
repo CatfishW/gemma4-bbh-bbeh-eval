@@ -1,0 +1,12 @@
+{
+  "created_at": "2026-07-09T23:20:46-04:00",
+  "study_role": "exploratory_matched_model_scale_replication",
+  "hostname": "benwulab-Lambda-Vector",
+  "repo_revision": "502857b625e00cec53fe447618cc5df5d32d3244",
+  "model": "SubTokenLLM",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "seed": 20260709,
+  "parallel": 8,
+  "split": "indices below 50 only",
+  "system_messages_sent": 0
+}

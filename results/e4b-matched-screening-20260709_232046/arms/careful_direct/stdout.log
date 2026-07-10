@@ -1,0 +1,596 @@
+25/2990 correct=17 acc=0.680
+50/2990 correct=37 acc=0.740
+75/2990 correct=53 acc=0.707
+100/2990 correct=69 acc=0.690
+125/2990 correct=88 acc=0.704
+150/2990 correct=101 acc=0.673
+175/2990 correct=112 acc=0.640
+200/2990 correct=124 acc=0.620
+225/2990 correct=125 acc=0.556
+250/2990 correct=131 acc=0.524
+275/2990 correct=142 acc=0.516
+300/2990 correct=156 acc=0.520
+325/2990 correct=162 acc=0.498
+350/2990 correct=172 acc=0.491
+375/2990 correct=192 acc=0.512
+400/2990 correct=217 acc=0.542
+425/2990 correct=231 acc=0.544
+450/2990 correct=249 acc=0.553
+475/2990 correct=265 acc=0.558
+500/2990 correct=281 acc=0.562
+525/2990 correct=304 acc=0.579
+550/2990 correct=323 acc=0.587
+575/2990 correct=342 acc=0.595
+600/2990 correct=354 acc=0.590
+625/2990 correct=356 acc=0.570
+650/2990 correct=358 acc=0.551
+675/2990 correct=372 acc=0.551
+700/2990 correct=386 acc=0.551
+725/2990 correct=401 acc=0.553
+750/2990 correct=414 acc=0.552
+775/2990 correct=423 acc=0.546
+800/2990 correct=436 acc=0.545
+825/2990 correct=453 acc=0.549
+850/2990 correct=473 acc=0.556
+875/2990 correct=488 acc=0.558
+900/2990 correct=507 acc=0.563
+925/2990 correct=522 acc=0.564
+950/2990 correct=534 acc=0.562
+975/2990 correct=554 acc=0.568
+1000/2990 correct=568 acc=0.568
+1025/2990 correct=580 acc=0.566
+1050/2990 correct=587 acc=0.559
+1075/2990 correct=612 acc=0.569
+1100/2990 correct=636 acc=0.578
+1125/2990 correct=643 acc=0.572
+1150/2990 correct=644 acc=0.560
+1175/2990 correct=645 acc=0.549
+1200/2990 correct=648 acc=0.540
+1225/2990 correct=653 acc=0.533
+1250/2990 correct=666 acc=0.533
+1275/2990 correct=669 acc=0.525
+1300/2990 correct=675 acc=0.519
+1325/2990 correct=689 acc=0.520
+1350/2990 correct=696 acc=0.516
+1375/2990 correct=698 acc=0.508
+1400/2990 correct=701 acc=0.501
+1425/2990 correct=707 acc=0.496
+1450/2990 correct=712 acc=0.491
+1475/2990 correct=713 acc=0.483
+1500/2990 correct=714 acc=0.476
+1525/2990 correct=725 acc=0.475
+1550/2990 correct=739 acc=0.477
+1575/2990 correct=748 acc=0.475
+1600/2990 correct=752 acc=0.470
+1625/2990 correct=752 acc=0.463
+1650/2990 correct=752 acc=0.456
+1675/2990 correct=759 acc=0.453
+1700/2990 correct=769 acc=0.452
+1725/2990 correct=769 acc=0.446
+1750/2990 correct=770 acc=0.440
+1775/2990 correct=770 acc=0.434
+1800/2990 correct=772 acc=0.429
+1825/2990 correct=784 acc=0.430
+1850/2990 correct=795 acc=0.430
+1875/2990 correct=795 acc=0.424
+1900/2990 correct=796 acc=0.419
+1925/2990 correct=799 acc=0.415
+1950/2990 correct=800 acc=0.410
+1975/2990 correct=800 acc=0.405
+2000/2990 correct=800 acc=0.400
+2025/2990 correct=800 acc=0.395
+2050/2990 correct=800 acc=0.390
+2075/2990 correct=805 acc=0.388
+2100/2990 correct=814 acc=0.388
+2125/2990 correct=815 acc=0.384
+2150/2990 correct=819 acc=0.381
+2175/2990 correct=820 acc=0.377
+2200/2990 correct=820 acc=0.373
+2225/2990 correct=821 acc=0.369
+2250/2990 correct=829 acc=0.368
+2275/2990 correct=829 acc=0.364
+2300/2990 correct=829 acc=0.360
+2325/2990 correct=829 acc=0.357
+2350/2990 correct=830 acc=0.353
+2375/2990 correct=831 acc=0.350
+2400/2990 correct=834 acc=0.347
+2425/2990 correct=836 acc=0.345
+2450/2990 correct=838 acc=0.342
+2475/2990 correct=840 acc=0.339
+2500/2990 correct=844 acc=0.338
+2525/2990 correct=844 acc=0.334
+2550/2990 correct=853 acc=0.335
+2575/2990 correct=862 acc=0.335
+2600/2990 correct=864 acc=0.332
+2625/2990 correct=864 acc=0.329
+2650/2990 correct=864 acc=0.326
+2675/2990 correct=864 acc=0.323
+2700/2990 correct=864 acc=0.320
+2725/2990 correct=864 acc=0.317
+2750/2990 correct=868 acc=0.316
+2775/2990 correct=874 acc=0.315
+2800/2990 correct=879 acc=0.314
+2825/2990 correct=884 acc=0.313
+2850/2990 correct=891 acc=0.313
+2875/2990 correct=899 acc=0.313
+2900/2990 correct=908 acc=0.313
+2925/2990 correct=914 acc=0.312
+2950/2990 correct=922 acc=0.313
+2975/2990 correct=929 acc=0.312
+2990/2990 correct=934 acc=0.312
+{
+  "started_at": "2026-07-10T05:15:26.254190+00:00",
+  "finished_at": "2026-07-10T05:20:54.827508+00:00",
+  "base_url": "http://127.0.0.1:8888/v1",
+  "model": "SubTokenLLM",
+  "prompt_strategy": "careful_direct",
+  "prompt_strategy_description": "Direct answer with a careful-read instruction and no visible reasoning.",
+  "prompt_template": "{input}\n\nRead the problem carefully, including every condition and answer-choice label. Compute or infer the answer, then return only the final answer. No explanation.",
+  "self_consistency_k": 1,
+  "response_selection": "majority_vote",
+  "selection_max_tokens": 64,
+  "system_messages_sent": 0,
+  "request_message_shape": [
+    {
+      "role": "user",
+      "content": "<benchmark prompt>"
+    }
+  ],
+  "limit_per_task": 50,
+  "skip_per_task": 0,
+  "parallel": 8,
+  "max_tokens": 128,
+  "temperature": 0.0,
+  "seed": 20260709,
+  "benchmarks": [
+    {
+      "benchmark": "bbeh",
+      "correct": 145,
+      "total": 1150,
+      "micro_accuracy": 0.12608695652173912,
+      "macro_accuracy": 0.12608695652173912,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 23
+    },
+    {
+      "benchmark": "bbh",
+      "correct": 698,
+      "total": 1350,
+      "micro_accuracy": 0.5170370370370371,
+      "macro_accuracy": 0.5170370370370371,
+      "harmonic_task_accuracy": 0.21264792871515256,
+      "tasks": 27
+    },
+    {
+      "benchmark": "usr",
+      "correct": 91,
+      "total": 490,
+      "micro_accuracy": 0.18571428571428572,
+      "macro_accuracy": 0.183,
+      "harmonic_task_accuracy": 0.0,
+      "tasks": 10
+    }
+  ],
+  "tasks": [
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boardgame_qa",
+      "correct": 3,
+      "total": 50,
+      "accuracy": 0.06
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_boolean_expressions",
+      "correct": 11,
+      "total": 50,
+      "accuracy": 0.22
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_buggy_tables",
+      "correct": 1,
+      "total": 50,
+      "accuracy": 0.02
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_causal_understanding",
+      "correct": 26,
+      "total": 50,
+      "accuracy": 0.52
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_disambiguation_qa",
+      "correct": 13,
+      "total": 50,
+      "accuracy": 0.26
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_dyck_languages",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_geometric_shapes",
+      "correct": 17,
+      "total": 50,
+      "accuracy": 0.34
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_hyperbaton",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_linguini",
+      "correct": 2,
+      "total": 50,
+      "accuracy": 0.04
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_movie_recommendation",
+      "correct": 24,
+      "total": 50,
+      "accuracy": 0.48
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_multistep_arithmetic",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_nycc",
+      "correct": 5,
+      "total": 50,
+      "accuracy": 0.1
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_counting",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_object_properties",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sarc_triples",
+      "correct": 14,
+      "total": 50,
+      "accuracy": 0.28
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_shuffled_objects",
+      "correct": 6,
+      "total": 50,
+      "accuracy": 0.12
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_spatial_reasoning",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_sportqa",
+      "correct": 9,
+      "total": 50,
+      "accuracy": 0.18
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_temporal_sequence",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_time_arithmetic",
+      "correct": 1,
+      "total": 50,
+      "accuracy": 0.02
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_web_of_lies",
+      "correct": 4,
+      "total": 50,
+      "accuracy": 0.08
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_word_sorting",
+      "correct": 3,
+      "total": 50,
+      "accuracy": 0.06
+    },
+    {
+      "benchmark": "bbeh",
+      "task": "bbeh_zebra_puzzles",
+      "correct": 6,
+      "total": 50,
+      "accuracy": 0.12
+    },
+    {
+      "benchmark": "bbh",
+      "task": "boolean_expressions",
+      "correct": 37,
+      "total": 50,
+      "accuracy": 0.74
+    },
+    {
+      "benchmark": "bbh",
+      "task": "causal_judgement",
+      "correct": 32,
+      "total": 50,
+      "accuracy": 0.64
+    },
+    {
+      "benchmark": "bbh",
+      "task": "date_understanding",
+      "correct": 31,
+      "total": 50,
+      "accuracy": 0.62
+    },
+    {
+      "benchmark": "bbh",
+      "task": "disambiguation_qa",
+      "correct": 23,
+      "total": 50,
+      "accuracy": 0.46
+    },
+    {
+      "benchmark": "bbh",
+      "task": "dyck_languages",
+      "correct": 4,
+      "total": 50,
+      "accuracy": 0.08
+    },
+    {
+      "benchmark": "bbh",
+      "task": "formal_fallacies",
+      "correct": 27,
+      "total": 50,
+      "accuracy": 0.54
+    },
+    {
+      "benchmark": "bbh",
+      "task": "geometric_shapes",
+      "correct": 16,
+      "total": 50,
+      "accuracy": 0.32
+    },
+    {
+      "benchmark": "bbh",
+      "task": "hyperbaton",
+      "correct": 46,
+      "total": 50,
+      "accuracy": 0.92
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_five_objects",
+      "correct": 32,
+      "total": 50,
+      "accuracy": 0.64
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_seven_objects",
+      "correct": 33,
+      "total": 50,
+      "accuracy": 0.66
+    },
+    {
+      "benchmark": "bbh",
+      "task": "logical_deduction_three_objects",
+      "correct": 43,
+      "total": 50,
+      "accuracy": 0.86
+    },
+    {
+      "benchmark": "bbh",
+      "task": "movie_recommendation",
+      "correct": 31,
+      "total": 50,
+      "accuracy": 0.62
+    },
+    {
+      "benchmark": "bbh",
+      "task": "multistep_arithmetic_two",
+      "correct": 1,
+      "total": 50,
+      "accuracy": 0.02
+    },
+    {
+      "benchmark": "bbh",
+      "task": "navigate",
+      "correct": 30,
+      "total": 50,
+      "accuracy": 0.6
+    },
+    {
+      "benchmark": "bbh",
+      "task": "object_counting",
+      "correct": 28,
+      "total": 50,
+      "accuracy": 0.56
+    },
+    {
+      "benchmark": "bbh",
+      "task": "penguins_in_a_table",
+      "correct": 22,
+      "total": 50,
+      "accuracy": 0.44
+    },
+    {
+      "benchmark": "bbh",
+      "task": "reasoning_about_colored_objects",
+      "correct": 37,
+      "total": 50,
+      "accuracy": 0.74
+    },
+    {
+      "benchmark": "bbh",
+      "task": "ruin_names",
+      "correct": 34,
+      "total": 50,
+      "accuracy": 0.68
+    },
+    {
+      "benchmark": "bbh",
+      "task": "salient_translation_error_detection",
+      "correct": 28,
+      "total": 50,
+      "accuracy": 0.56
+    },
+    {
+      "benchmark": "bbh",
+      "task": "snarks",
+      "correct": 35,
+      "total": 50,
+      "accuracy": 0.7
+    },
+    {
+      "benchmark": "bbh",
+      "task": "sports_understanding",
+      "correct": 17,
+      "total": 50,
+      "accuracy": 0.34
+    },
+    {
+      "benchmark": "bbh",
+      "task": "temporal_sequences",
+      "correct": 50,
+      "total": 50,
+      "accuracy": 1.0
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_five_objects",
+      "correct": 7,
+      "total": 50,
+      "accuracy": 0.14
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_seven_objects",
+      "correct": 4,
+      "total": 50,
+      "accuracy": 0.08
+    },
+    {
+      "benchmark": "bbh",
+      "task": "tracking_shuffled_objects_three_objects",
+      "correct": 18,
+      "total": 50,
+      "accuracy": 0.36
+    },
+    {
+      "benchmark": "bbh",
+      "task": "web_of_lies",
+      "correct": 9,
+      "total": 50,
+      "accuracy": 0.18
+    },
+    {
+      "benchmark": "bbh",
+      "task": "word_sorting",
+      "correct": 23,
+      "total": 50,
+      "accuracy": 0.46
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/original",
+      "correct": 19,
+      "total": 50,
+      "accuracy": 0.38
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/shifted",
+      "correct": 17,
+      "total": 50,
+      "accuracy": 0.34
+    },
+    {
+      "benchmark": "usr",
+      "task": "shifted_unpuzzles/unpuzzle",
+      "correct": 9,
+      "total": 50,
+      "accuracy": 0.18
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/char_ct",
+      "correct": 2,
+      "total": 40,
+      "accuracy": 0.05
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_ev",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/logic_neg",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/mathgap",
+      "correct": 0,
+      "total": 50,
+      "accuracy": 0.0
+    },
+    {
+      "benchmark": "usr",
+      "task": "simple_reasoning/word_ct",
+      "correct": 19,
+      "total": 50,
+      "accuracy": 0.38
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/original",
+      "correct": 18,
+      "total": 50,
+      "accuracy": 0.36
+    },
+    {
+      "benchmark": "usr",
+      "task": "unpuzzles/unpuzzle",
+      "correct": 7,
+      "total": 50,
+      "accuracy": 0.14
+    }
+  ]
+}
