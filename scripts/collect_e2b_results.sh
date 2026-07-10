@@ -10,7 +10,7 @@ BRANCH="${BRANCH:-agent/rl-informed-prompt-strategies}"
 
 RUN_NAME="$(basename "$REMOTE_RUN_ROOT")"
 REMOTE_PARENT="$(dirname "$REMOTE_RUN_ROOT")"
-if [[ ! "$RUN_NAME" =~ ^e2b-confirmatory-[0-9]{8}_[0-9]{6}$ ]]; then
+if [[ ! "$RUN_NAME" =~ ^(e2b-confirmatory|e4b-matched-screening)-[0-9]{8}_[0-9]{6}$ ]]; then
   echo "unexpected run name: $RUN_NAME" >&2
   exit 1
 fi
@@ -110,6 +110,6 @@ if git diff --cached --quiet; then
   echo "no changes to commit"
   exit 0
 fi
-git commit -m "results: add Gemma 4 E2B confirmatory experiment"
+git commit -m "results: add $RUN_NAME"
 git push origin "$BRANCH"
 echo "published $LOCAL_RESULT_DIR to $BRANCH"
