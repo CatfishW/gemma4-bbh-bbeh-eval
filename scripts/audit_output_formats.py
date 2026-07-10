@@ -128,7 +128,7 @@ def main() -> int:
     (args.output_dir / "format_audit.json").write_text(json.dumps(summary, indent=2) + "\n")
     fields = [key for key in results[0] if key not in {"by_benchmark"}]
     with (args.output_dir / "format_audit.csv").open("w", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows({key: row[key] for key in fields} for row in results)
 
