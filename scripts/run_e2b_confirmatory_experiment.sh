@@ -7,6 +7,8 @@ RUNS_BASE="${RUNS_BASE:-/data/benwulab/gemma4-eval/runs}"
 RUN_ROOT="${RUN_ROOT:-$RUNS_BASE/e2b-confirmatory-$(date +%Y%m%d_%H%M%S)}"
 BASE_URL="${BASE_URL:-http://127.0.0.1:8889/v1}"
 MODEL="${MODEL:-SubTokenLLM-E2B}"
+MODEL_PATH="${MODEL_PATH:-/data/models/gemma-4-E2B-it}"
+SGLANG_PYTHON="${SGLANG_PYTHON:-/home/benwulab/anaconda3/envs/SGLang/bin/python}"
 BENCHMARKS="${BENCHMARKS:-bbh,bbeh,usr}"
 PARALLEL="${PARALLEL:-4}"
 TIMEOUT="${TIMEOUT:-300}"
@@ -15,6 +17,7 @@ PRIMARY_SEED="${PRIMARY_SEED:-20260709}"
 MANIFEST="$REPO_DIR/experiments/e2b_arm_manifest.jsonl"
 PROTOCOL="$REPO_DIR/experiments/e2b_confirmatory_protocol.json"
 E4B_POLICY="$REPO_DIR/experiments/e4b_reward_routed_v2_policy.json"
+AMENDMENT="$REPO_DIR/experiments/e2b_protocol_amendment_001.json"
 PREREG_COMMIT="${PREREG_COMMIT:-$(git -C "$REPO_DIR" rev-parse HEAD)}"
 LOG="$RUN_ROOT/experiment.log"
 
@@ -133,8 +136,12 @@ PY
 cp "$MANIFEST" "$RUN_ROOT/arm_manifest.jsonl"
 cp "$PROTOCOL" "$RUN_ROOT/protocol.json"
 cp "$E4B_POLICY" "$RUN_ROOT/e4b_transfer_policy.json"
+cp "$AMENDMENT" "$RUN_ROOT/protocol_amendment_001.json"
 sha256sum "$RUN_ROOT/arm_manifest.jsonl" "$RUN_ROOT/protocol.json" \
-  "$RUN_ROOT/e4b_transfer_policy.json" > "$RUN_ROOT/frozen_inputs.sha256"
+  "$RUN_ROOT/e4b_transfer_policy.json" "$RUN_ROOT/protocol_amendment_001.json" \
+  > "$RUN_ROOT/frozen_inputs.sha256"
+
+MODEL_WEIGHT_SHA256="$(sha256sum "$MODEL_PATH/model.safetensors" | awk '{print $1}')"
 
 python3 - "$RUN_ROOT/environment.json" <<PY
 import json
@@ -150,6 +157,10 @@ Path("$RUN_ROOT/environment.json").write_text(json.dumps({
     "datasets_root": "$DATASETS_ROOT",
     "base_url": "$BASE_URL",
     "model": "$MODEL",
+    "model_path": "$MODEL_PATH",
+    "model_hub_id": "google/gemma-4-E2B-it",
+    "model_hub_revision": "70af34e20bd4b7a91f0de6b22675850c43922a03",
+    "model_weight_sha256": "$MODEL_WEIGHT_SHA256",
     "benchmarks": "$BENCHMARKS",
     "parallel": int("$PARALLEL"),
     "timeout": int("$TIMEOUT"),
@@ -160,6 +171,27 @@ Path("$RUN_ROOT/environment.json").write_text(json.dumps({
 PY
 nvidia-smi -q > "$RUN_ROOT/nvidia-smi-q.txt"
 python3 --version > "$RUN_ROOT/python-version.txt" 2>&1
+"$SGLANG_PYTHON" - "$RUN_ROOT/software-versions.json" <<'PY'
+import importlib.metadata
+import json
+from pathlib import Path
+import platform
+import sys
+
+packages = {}
+for name in ("sglang", "torch", "transformers", "fastapi", "httpx", "uvicorn"):
+    try:
+        packages[name] = importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        packages[name] = None
+Path(sys.argv[1]).write_text(json.dumps({
+    "python": platform.python_version(),
+    "packages": packages,
+}, indent=2) + "\n")
+PY
+git show --no-patch --format=fuller "$PREREG_COMMIT" > "$RUN_ROOT/preregistration-commit.txt"
+cp /data/benwulab/gemma4-eval/deployments/e2b/launch-command.txt \
+  "$RUN_ROOT/e2b-launch-command.txt"
 
 write_status "screening" "running every preregistered arm on indices below 50"
 python3 - "$MANIFEST" <<'PY' |
