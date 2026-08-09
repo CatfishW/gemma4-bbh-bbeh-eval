@@ -41,7 +41,7 @@ class TrainConfig:
     max_new_tokens: int = 320
     max_prompt_tokens: int = 3072
     generation_batch_size: int = 16
-    generation_max_batch_tokens: int = 16384
+    generation_max_batch_tokens: int = 12288
 
     # Optimization
     learning_rate: float = 2e-5
@@ -50,7 +50,7 @@ class TrainConfig:
     adam_beta2: float = 0.95
     weight_decay: float = 0.0
     max_grad_norm: float = 1.0
-    train_tokens_per_microbatch: int = 4096
+    train_tokens_per_microbatch: int = 3072
     loss_length_normalizer: int = 320  # constant normalizer (Dr. GRPO style)
 
     # Length shaping

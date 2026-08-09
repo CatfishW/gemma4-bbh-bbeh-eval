@@ -12,10 +12,10 @@
   "top_p": 1.0,
   "max_new_tokens": 384,
   "max_prompt_tokens": 3072,
-  "generation_batch_size": 48,
+  "generation_batch_size": 32,
   "learning_rate": 2e-05,
   "warmup_iterations": 5,
-  "train_tokens_per_microbatch": 4096,
+  "train_tokens_per_microbatch": 3072,
   "loss_length_normalizer": 384,
   "seed": 20260709,
   "save_every": 5,
@@ -23,5 +23,5 @@
   "val_probe_size": 300,
   "val_probe_max_new_tokens": 256,
   "output_dir": "/data/benwulab/gemma4-rl/runs/grpo-e2b",
-  "generation_max_batch_tokens": 16384
+  "generation_max_batch_tokens": 12288
 }

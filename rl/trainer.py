@@ -280,7 +280,9 @@ class RLTrainer:
 
     # ----- optimization ---------------------------------------------------
 
-    def _train_microbatches(self, scored: list[ScoredRollout]) -> list[list[ScoredRollout]]:
+    def _train_microbatches(
+        self, scored: list[ScoredRollout], microbatch_token_cap: int
+    ) -> list[list[ScoredRollout]]:
         informative = [s for s in scored if abs(s.advantage) > 1e-6 and s.result.completion_token_ids]
         informative.sort(
             key=lambda s: len(s.result.prompt_token_ids) + len(s.result.completion_token_ids)
@@ -291,7 +293,7 @@ class RLTrainer:
         for item in informative:
             length = len(item.result.prompt_token_ids) + len(item.result.completion_token_ids)
             longest = max(current_longest, length)
-            if current and longest * (len(current) + 1) > self.config.train_tokens_per_microbatch:
+            if current and longest * (len(current) + 1) > microbatch_token_cap:
                 batches.append(current)
                 current = []
                 longest = length
@@ -302,12 +304,37 @@ class RLTrainer:
         return batches
 
     def _optimize(self, scored: list[ScoredRollout]) -> dict:
+        """One optimizer step over the iteration's rollouts.
+
+        On CUDA OOM (shared GPU, fluctuating co-tenant usage) the whole step is
+        redone from zeroed gradients with a halved microbatch token cap, so no
+        partial backward can double-count.
+        """
+        cap = self.config.train_tokens_per_microbatch
+        attempts = 0
+        while True:
+            try:
+                return self._optimize_once(scored, cap)
+            except torch.OutOfMemoryError:
+                attempts += 1
+                self.optimizer.zero_grad(set_to_none=True)
+                torch.cuda.empty_cache()
+                cap = max(512, cap // 2)
+                if attempts > 3:
+                    raise
+                LOGGER.warning(
+                    "optimize OOM: retrying iteration %d with microbatch cap %d",
+                    self.iteration,
+                    cap,
+                )
+
+    def _optimize_once(self, scored: list[ScoredRollout], microbatch_token_cap: int) -> dict:
         self.model.train()
         total_rollouts = len(scored)
         normalizer = float(total_rollouts * self.config.loss_length_normalizer)
         loss_sum = 0.0
         token_count = 0
-        microbatches = self._train_microbatches(scored)
+        microbatches = self._train_microbatches(scored, microbatch_token_cap)
         self.optimizer.zero_grad(set_to_none=True)
         for microbatch in microbatches:
             pad_id = self.tokenizer.pad_token_id
