@@ -82,18 +82,36 @@ def main() -> int:
     model.eval()
 
     requests: list[RolloutRequest] = []
-    skipped_long = 0
+    skipped_rows: list[dict] = []
     for example in rows:
         token_ids = chat_prompt_token_ids(tokenizer, example, args.prompt_strategy)
         if len(token_ids) > args.max_prompt_tokens:
-            skipped_long += 1
+            # Scored as incorrect so accuracy denominators match the frozen
+            # split exactly; applied identically to every evaluated policy.
+            skipped_rows.append(
+                {
+                    "benchmark": example.benchmark,
+                    "task": example.task,
+                    "index": example.index,
+                    "prompt_strategy": args.prompt_strategy,
+                    "target": example.target,
+                    "prediction": "",
+                    "correct": False,
+                    "completion_tokens": 0,
+                    "skipped_long_prompt": True,
+                }
+            )
             continue
         requests.append(
             RolloutRequest(
                 prompt_id=prompt_id(example), example=example, prompt_token_ids=token_ids
             )
         )
-    logging.info("evaluating %d examples (%d skipped over prompt cap)", len(requests), skipped_long)
+    logging.info(
+        "evaluating %d examples (%d over prompt cap scored incorrect)",
+        len(requests),
+        len(skipped_rows),
+    )
 
     results = generate_rollouts(
         model,
@@ -108,7 +126,7 @@ def main() -> int:
         device=args.device,
     )
 
-    records = []
+    records = list(skipped_rows)
     for result in results:
         correct = evaluate_correctness(result.completion_text, result.example.target)
         records.append(
@@ -147,7 +165,7 @@ def main() -> int:
         "prompt_strategy": args.prompt_strategy,
         "max_new_tokens": max_new_tokens,
         "temperature": 0.0,
-        "skipped_over_prompt_cap": skipped_long,
+        "skipped_over_prompt_cap": len(skipped_rows),
         "overall": accuracy(records),
         "by_benchmark": {
             benchmark: accuracy([row for row in records if row["benchmark"] == benchmark])
