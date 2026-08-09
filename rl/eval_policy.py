@@ -40,7 +40,7 @@ def main() -> int:
     parser.add_argument("--split", choices=["validation", "test", "train"], default="validation")
     parser.add_argument("--prompt-strategy", default="concise_cot")
     parser.add_argument("--max-new-tokens", type=int)
-    parser.add_argument("--max-prompt-tokens", type=int, default=6144)
+    parser.add_argument("--max-prompt-tokens", type=int, default=16384)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--limit", type=int, help="cap examples for smoke runs")
     parser.add_argument("--device", default="cuda:0")
