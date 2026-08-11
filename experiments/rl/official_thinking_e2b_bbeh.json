@@ -1,0 +1,81 @@
+{
+  "name": "gemma4_public_native_thinking_bbeh_v3",
+  "registered_at": "2026-08-11",
+  "status": "post-hoc protocol correction fixed before full-run outcomes",
+  "purpose": [
+    "best-public reproduction of the Gemma 4 E2B BBEH result in Table 5",
+    "frozen-test native-thinking comparison of Base, GRPO, and VOLT"
+  ],
+  "model": {
+    "checkpoint": "google/gemma-4-E2B-it",
+    "revision": "70af34e20bd4b7a91f0de6b22675850c43922a03",
+    "weights_sha256": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+    "dtype": "bfloat16",
+    "attention_implementation": "sdpa"
+  },
+  "dataset": {
+    "name": "google-deepmind/bbeh",
+    "revision": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+    "official_scorer": "bbeh/evaluate.py:evaluate_correctness"
+  },
+  "prompt": {
+    "messages": [
+      "user"
+    ],
+    "manual_system_message": false,
+    "enable_thinking": true,
+    "template_behavior": "the pinned Gemma tokenizer inserts one leading system <|think|> turn",
+    "content": "task.json input plus the exact BBEH Appendix-C evaluation suffix",
+    "score_field": "tokenizer.parse_response(...).content only",
+    "retain_for_audit": [
+      "thinking",
+      "final content",
+      "raw response with control tokens"
+    ]
+  },
+  "generation": {
+    "do_sample": true,
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 64,
+    "max_new_tokens": 8192,
+    "seed": 20260709,
+    "samples_per_example": 1,
+    "report_truncation": true,
+    "resume_without_resampling_completed_rows": true
+  },
+  "cells": [
+    {
+      "model": "base",
+      "scope": "all 4520 BBEH rows",
+      "use": "comparison with the paper's reported 21.9% micro average"
+    },
+    {
+      "model": "base",
+      "scope": "index >= 50 subset of the all-row predictions",
+      "use": "baseline for the untouched 3370-row adapter comparison"
+    },
+    {
+      "model": "GRPO checkpoint-0045",
+      "scope": "frozen test, index >= 50",
+      "use": "compute-matched RL baseline"
+    },
+    {
+      "model": "VOLT checkpoint-0045",
+      "scope": "frozen test, index >= 50",
+      "use": "new method"
+    }
+  ],
+  "claim_boundaries": [
+    "The Gemma 4 report discloses thinking mode and its BBEH score, but not the BBEH output-token ceiling, seed, sample count, or complete internal harness.",
+    "The 8192-token ceiling is a fixed public-reproduction choice, not a claim about Google's undisclosed setting.",
+    "The full 4520-row base run is the only cell compared directly with the paper; adapter claims use only frozen index>=50 rows.",
+    "This profile is separate from and does not replace the preregistered greedy non-thinking RL evaluation."
+  ],
+  "sources": {
+    "gemma4_report": "https://arxiv.org/pdf/2607.02770",
+    "gemma4_model_card": "https://huggingface.co/google/gemma-4-E2B-it",
+    "bbeh_paper": "https://arxiv.org/pdf/2502.19187",
+    "bbeh_repository": "https://github.com/google-deepmind/bbeh"
+  }
+}

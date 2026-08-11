@@ -1,220 +1,761 @@
 # Gemma 4 E2B/E4B Reasoning Evaluation
 
-Small, auditable harness for evaluating the Gemma 4 E2B and E4B deployments against:
+<p align="center">
+  <a href="./README.md"><img src="https://img.shields.io/badge/Language-English-0969DA?style=for-the-badge" alt="English"></a>
+  <a href="./README.zh-CN.md"><img src="https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-DE2910?style=for-the-badge" alt="简体中文"></a>
+</p>
 
-- BBH from `suzgunmirac/BIG-Bench-Hard`
-- BBEH from `google-deepmind/bbeh`
-- USR from `google-deepmind/unpuzzles_and_simple_reasoning`
+This repository measures — and then improves — how well two small deployed
+language models (Gemma 4 E2B and E4B) solve hard reasoning benchmarks, without
+ever touching the benchmark's test questions during tuning.
 
-The evaluator uses the OpenAI-compatible chat completions API and intentionally sends no system message. Each request contains exactly one `user` message.
+It contains three things:
 
-Confirmatory-study materials:
+1. **An evaluation harness** (`eval_benchmarks.py`) that asks a model
+   benchmark questions one at a time and scores the answers by exact match.
+2. **A prompt-strategy study**: 26 different ways of phrasing the request
+   ("prompt strategies"), measured head-to-head, plus a calibrated per-task
+   router (CBRR) that picks the best strategy for each task. No model weights
+   change.
+3. **A reinforcement-learning method (VOLT)** that does change model weights:
+   LoRA fine-tuning driven by a novel budget-aware RL algorithm, trained only
+   on the small calibration split of the same protocol. Method and theory live
+   in [paper/volt/](paper/volt/).
 
-- [E2B preregistered protocol](docs/E2B_CONFIRMATORY_PROTOCOL.md)
-- [Machine-readable protocol](experiments/e2b_confirmatory_protocol.json)
-- [Frozen 29-arm manifest](experiments/e2b_arm_manifest.jsonl)
-- [Data, model, scoring, and validity statement](docs/DATA_MODEL_AND_EVALUATION_STATEMENT.md)
-- [Paper-oriented study summary](paper/e2b-e4b-study/manuscript.md)
-- [E2B confirmatory result bundle](results/e2b-confirmatory-20260709_231405)
-- [Question, ground truth, direct, and CBRR examples](results/e2b-confirmatory-20260709_231405/analysis/examples.md)
-- [Paper bibliography](paper/references.bib)
+## The benchmarks
 
-## Confirmatory Result
+| Benchmark | What it tests | Examples used |
+|---|---|---:|
+| **BBH** (BIG-Bench Hard, 27 tasks) | Logic, dates, tables, tracking objects, word sorting | 6,511 |
+| **BBEH** (BIG-Bench Extra Hard, 23 tasks) | Much harder successors of BBH tasks | 4,520 |
+| **USR** (Unpuzzles & Simple Reasoning) | Puzzles, "unpuzzled" trivial variants, simple reasoning | 1,509 |
 
-The frozen E2B test contains 9,550 examples. The conservative Bayesian reward
-router (CBRR) is an offline task-conditioned contextual-bandit policy fitted on
-calibration rows; model weights are unchanged.
+12,540 examples total. Every example has a known correct answer, so scoring is
+automatic: the model's reply is normalized (case, punctuation, option-label
+forms like `(A)` vs `A`, numbers, LaTeX) and compared with the reference.
 
-| E2B arm | Correct | Accuracy | Delta vs direct | Mean completion tokens |
-|---|---:|---:|---:|---:|
-| `direct_answer` | 2,520/9,550 | 26.39% | - | 14.68 |
-| `concise_cot_self_rank_k3` | 3,348/9,550 | 35.06% | +8.67 pp | 681.26 |
-| `cbrr_policy` | 3,382/9,550 | 35.41% | +9.03 pp | 65.60 |
+**The split rule (frozen before any tuning):** inside every task, examples are
+numbered. Numbers 0-24 are *calibration* (may be used for tuning), 25-49 are
+*validation* (may be used for selecting between tuned variants), and 50+ are
+the *test* split (9,550 examples) that nothing is ever tuned on. Prompt-only
+headline numbers below are from that untouched test split; results explicitly
+labeled *validation* are not test claims.
 
-CBRR produced 1,100 paired wins and 238 losses versus direct answer. The exact
-two-sided McNemar p-value is `1.33e-132`, the Holm-adjusted p-value is
-`6.66e-132`, and the task-stratified bootstrap interval is +8.41 to +9.64
-percentage points. A task-cluster bootstrap gives +4.19 to +14.59 points; both
-additional fixed-seed repeats retain +8.89 to +8.96 points.
+## The models
 
-### Untouched E2B test by dataset
+- `SubTokenLLM-E2B` — Gemma 4 E2B instruction-tuned ("effective 2B" parameters).
+- `SubTokenLLM` — Gemma 4 E4B ("effective 4B").
 
-The test split contains 5,161 BBH, 3,370 BBEH, and 1,019 USR examples.
-
-| Finalist | BBH | BBEH | USR | Overall |
-|---|---:|---:|---:|---:|
-| `direct_answer` | 2,102/5,161 (40.73%) | 364/3,370 (10.80%) | 54/1,019 (5.30%) | 2,520/9,550 (26.39%) |
-| `private_verify` | 1,585/5,161 (30.71%) | 315/3,370 (9.35%) | 86/1,019 (8.44%) | 1,986/9,550 (20.80%) |
-| `condition_reconstruction` | 1,689/5,161 (32.73%) | 348/3,370 (10.33%) | 32/1,019 (3.14%) | 2,069/9,550 (21.66%) |
-| `concise_cot_self_rank_k3` | 2,958/5,161 (57.31%) | 347/3,370 (10.30%) | 43/1,019 (4.22%) | 3,348/9,550 (35.06%) |
-| `cbrr_policy` | **2,959/5,161 (57.33%)** | 360/3,370 (10.68%) | 63/1,019 (6.18%) | **3,382/9,550 (35.41%)** |
-| `e4b_policy_transfer` | 2,095/5,161 (40.59%) | 347/3,370 (10.30%) | 54/1,019 (5.30%) | 2,496/9,550 (26.14%) |
-
-CBRR's effect is concentrated in BBH (+16.61 points). BBEH is flat to slightly
-negative (-0.12 points), and USR improves modestly (+0.88 points). CBRR uses
-about 4.5 times the completion tokens of direct answer, although it slightly
-outperforms self-ranking with about one tenth of the completion tokens.
-
-### Matched validation by model and dataset
-
-The matched validation split contains 675 BBH, 575 BBEH, and 240 USR examples.
-CBRR is task-conditioned, so its rows are shown separately from the universal
-prompt matrix. E4B results are exploratory because E4B informed strategy
-development.
-
-| Model and strategy | BBH | BBEH | USR | Overall |
-|---|---:|---:|---:|---:|
-| E2B `direct_answer` | 40.74% | 10.43% | 15.83% | 25.03% |
-| E2B `concise_cot_self_rank_k3` | 59.11% | 11.30% | 17.50% | 33.96% |
-| E2B `cbrr_policy` | 57.78% | 11.48% | 16.67% | 33.29% |
-| E4B `direct_answer` | 50.52% | 14.61% | 25.00% | 32.55% |
-| E4B `concise_cot_self_rank_k3` | 65.93% | 15.30% | 20.83% | 39.13% |
-| E4B `cbrr_policy` | **67.56%** | **16.35%** | **29.17%** | **41.61%** |
-
-<details>
-<summary>All 29 universal arms by model and dataset</summary>
-
-| Strategy | E2B BBH | E2B BBEH | E2B USR | E2B all | E4B BBH | E4B BBEH | E4B USR | E4B all |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| `concise_cot_self_rank_k3` | **59.11%** | 11.30% | **17.50%** | **33.96%** | **65.93%** | **15.30%** | 20.83% | **39.13%** |
-| `canonical_short` | 45.33% | **11.48%** | 13.33% | 27.11% | 55.26% | 13.74% | 20.00% | 33.56% |
-| `direct_answer` | 40.74% | 10.43% | 15.83% | 25.03% | 50.52% | 14.61% | **25.00%** | 32.55% |
-| `option_elimination` | 41.63% | 9.22% | 9.58% | 23.96% | 52.74% | 11.30% | 19.17% | 31.34% |
-| `compare_then_commit` | 35.26% | 10.96% | 13.33% | 22.35% | 53.48% | 14.09% | 18.75% | 32.68% |
-| `counterexample_guard` | 35.85% | 9.39% | 13.33% | 22.01% | 52.59% | 14.78% | 18.33% | 32.48% |
-| `native_format` | 38.37% | 7.83% | 15.00% | 22.82% | 52.59% | 11.30% | 20.42% | 31.48% |
-| `rank_two_paths` | 34.67% | 10.43% | 13.33% | 21.88% | 52.44% | 14.09% | 18.75% | 32.21% |
-| `selective_verify` | 37.48% | 8.35% | 14.58% | 22.55% | 51.11% | 14.09% | 17.92% | 31.48% |
-| `private_verify` | 29.93% | 10.61% | 12.92% | 19.73% | 55.70% | 13.91% | 22.50% | 34.23% |
-| `constraint_guard` | 33.04% | 10.61% | 11.67% | 20.94% | 54.07% | 14.09% | 18.33% | 32.89% |
-| `careful_direct` | 31.11% | 8.70% | 14.17% | 19.73% | 51.85% | 14.09% | 17.50% | 31.74% |
-| `condition_reconstruction` | 32.59% | 9.91% | 13.33% | 20.74% | 50.96% | 12.52% | 17.50% | 30.74% |
-| `answer_type_router` | 36.15% | 9.91% | 10.83% | 21.95% | 46.67% | 13.74% | 10.42% | 28.12% |
-| `chain_of_draft` | 34.22% | 2.78% | 6.67% | 17.65% | 54.22% | 3.48% | 17.50% | 28.72% |
-| `concise_cot_sc_k3` | 38.81% | 2.26% | 5.00% | 19.26% | 50.22% | 3.30% | 7.92% | 25.30% |
-| `concise_cot` | 35.41% | 1.57% | 4.58% | 17.38% | 46.67% | 3.83% | 10.42% | 24.30% |
-| `premise_conclusion` | 32.74% | 2.09% | 5.42% | 16.51% | 47.56% | 2.09% | 8.75% | 23.76% |
-| `draft_verify` | 15.26% | 6.61% | 5.42% | 10.34% | 42.81% | 14.09% | 17.08% | 27.58% |
-| `negation_label_guard` | 23.56% | 4.00% | 2.50% | 12.62% | 33.78% | 8.70% | 9.17% | 20.13% |
-| `direct_key_condition_refine` | 31.70% | 5.91% | 14.58% | 18.99% | 19.26% | 5.04% | 13.33% | 12.82% |
-| `fast_slow_gate` | 13.04% | 4.17% | 6.25% | 8.52% | 28.74% | 8.52% | 17.08% | 19.06% |
-| `strict_json` | 14.07% | 4.87% | 1.67% | 8.52% | 20.44% | 7.13% | 3.75% | 12.62% |
-| `step_back` | 8.15% | 0.35% | 1.67% | 4.09% | 18.81% | 0.35% | 1.67% | 8.93% |
-| `plan_and_solve` | 8.89% | 0.00% | 0.42% | 4.09% | 12.74% | 0.00% | 1.25% | 5.97% |
-| `least_to_most` | 4.00% | 0.00% | 0.00% | 1.81% | 7.70% | 0.17% | 1.25% | 3.76% |
-| `raw` | 1.48% | 3.13% | 0.83% | 2.01% | 0.74% | 4.00% | 2.08% | 2.21% |
-| `symbolic_proof` | 4.00% | 0.00% | 0.00% | 1.81% | 4.44% | 0.17% | 0.83% | 2.21% |
-| `plan_and_solve_plus` | 2.81% | 0.00% | 0.00% | 1.28% | 4.15% | 0.17% | 0.83% | 2.08% |
-
-</details>
-
-See the
-[confirmatory report](results/e2b-confirmatory-20260709_231405/analysis/report.md),
-[cluster sensitivity](paper/e2b-e4b-study/cluster-robustness/cluster_robustness.md),
-[strict JSON audit](paper/e2b-e4b-study/format-audit/format_audit.md),
-[cross-model CSV](paper/e2b-e4b-study/cross_model_screening.csv), and
-[post-hoc direct-fallback replay](paper/e2b-e4b-study/budget-sensitivity/fallback_replay_sensitivity.md).
-
-## Access
-
-Use:
-
-```bash
-curl https://llm.agaii.org/llm/v1/models
-```
-
-OpenAI SDK shape:
+Both are served behind an OpenAI-compatible API. Every request contains exactly
+one `user` message and no system prompt, so results reflect the model, not
+hidden instructions:
 
 ```python
 from openai import OpenAI
 
-client = OpenAI(
-    base_url="https://llm.agaii.org/llm/v1",
-    api_key="EMPTY",
-)
-
+client = OpenAI(base_url="https://llm.agaii.org/llm/v1", api_key="EMPTY")
 response = client.chat.completions.create(
-    model="SubTokenLLM-E2B",  # Use SubTokenLLM for E4B.
+    model="SubTokenLLM-E2B",
     messages=[{"role": "user", "content": "Reply with exactly: online"}],
     max_completion_tokens=16,
     temperature=0,
 )
-print(response.choices[0].message.content)
 ```
 
-Available public model IDs:
+## Headline results (E2B, frozen test split, 9,550 examples)
 
-- `SubTokenLLM`: Gemma 4 E4B.
-- `SubTokenLLM-E2B`: Gemma 4 E2B.
+| Approach | Weights changed? | Calls / question | Accuracy | Avg completion tokens | Mean API time / question |
+|---|---|---:|---:|---:|---:|
+| Ask for the answer directly (`direct_answer`) | No | 1 | 26.39% | 14.7 | 0.585 s |
+| Best universal prompt (`concise_cot_self_rank_k3`) | No | 4 | 35.06% | 681.3 | 11.228 s |
+| CBRR per-task prompt router | No | 1 | **35.41%** | 65.6 | 1.287 s |
 
-Deployment verification on 2026-07-10 found both model services, the router, and
-the public tunnel enabled and active under user systemd with zero restarts. See
-the [deployment snapshot](paper/e2b-e4b-study/deployment-verification-20260710.md).
+How to read this: just asking better questions moves this small model from
+26% to 35% — and the router gets the same accuracy as the best prompt while
+generating one tenth as much text. The gain is statistically solid (McNemar
+p ≈ 1e-132, bootstrap +8.4 to +9.6 points) and concentrated in BBH; BBEH
+barely moves with any prompt. On the larger E4B model the router reaches
+41.6% on the matched validation set.
 
-The gateway dispatches by `model` while forwarding the original request body unchanged.
-It does not inject a system prompt. Direct remote endpoints:
+VOLT and the compute-matched GRPO baseline have also finished the full frozen
+test. They are reported separately below because they use local batched
+inference, different output budgets, and changed weights; their wall times are
+not comparable to the API latency column above. All prompt-only tables
+(per-dataset breakdowns, both models, all 29 arms, robustness checks) are in
+[docs/DETAILED_RESULTS.md](docs/DETAILED_RESULTS.md).
+
+## Current best methods: what to use
+
+There is no single winner for every constraint. CBRR is the strongest
+prompt-only efficiency/accuracy tradeoff when task IDs and labeled calibration
+rows are available. Self-ranking is the strongest universal prompt-only method
+when they are not. VOLT is the strongest trained adapter on the untouched test
+set under both evaluated prompt transfers.
+
+| Goal | Recommended method | Why | What it requires |
+|---|---|---|---|
+| Lowest cost and latency | `direct_answer`; also test `canonical_short` | One short deterministic call | Nothing beyond the model API |
+| Best prompt-only efficiency | **CBRR** | One call, 35.41% frozen-test accuracy, about one tenth of self-ranking's tokens | Stable task ID and 25 labeled calibration rows per task |
+| Best universal prompt-only accuracy | **Self-ranking, k=3** | No task metadata or weight update; 35.06% frozen-test accuracy | Four calls and a much larger token budget |
+| Best tuned-model frozen accuracy | **VOLT LoRA** | 38.62% with `concise_cot`; +1.04 points and 21.6% fewer tokens than GRPO | The matching base checkpoint and LoRA deployment |
+| Scientific RL baseline | **GRPO** | Standard compute-matched comparison for measuring VOLT's contribution | Fixed groups of multiple rollouts during training |
+
+### Keep the two result tracks separate
+
+The prompt-only table above is the registered API pipeline on all 9,550 frozen
+test examples. Its time column is end-to-end request time in that API run, so
+it fairly exposes self-ranking's three generation calls plus one selection
+call. CBRR performs routing offline and still makes only one model call per
+question.
+
+The weight-tuning track used validation probes to select checkpoint 45 for both
+adapters, then evaluated each selected checkpoint exactly once on all 9,550
+frozen rows. The training-matched `concise_cot` condition is primary;
+`direct_answer` measures prompt transfer:
+
+| Model | `concise_cot` correct / accuracy / tokens | `direct_answer` correct / accuracy / tokens |
+|---|---:|---:|
+| Base E2B | 1,823 / **19.09%** / 222.1 | 2,483 / **26.00%** / 14.6 |
+| Compute-matched GRPO LoRA | 3,589 / **37.58%** / 162.1 | 2,821 / **29.54%** / 9.2 |
+| **VOLT LoRA** | **3,688 / 38.62% / 127.0** | **2,920 / 30.58% / 6.9** |
+
+On paired `concise_cot` predictions, VOLT improves over GRPO by 99 answers, or
+1.04 percentage points (678 VOLT-only wins, 579 losses; exact two-sided
+McNemar `p = 0.005686`) while using 21.6% fewer completion tokens. Against the
+base it gains 19.53 points and uses 42.8% fewer tokens. The transfer result is
+consistent: VOLT beats GRPO by 1.04 points under `direct_answer` (270/171
+wins/losses, `p = 2.80e-6`) and uses 24.7% fewer tokens.
+
+For completeness, the checkpoint-selection evidence on the 1,490-example full
+validation split was:
+
+| Model on full validation | Correct | Accuracy | Avg completion tokens | Observed eval wall time |
+|---|---:|---:|---:|---:|
+| Base E2B | 265 / 1,490 | 17.79% | 226.9 | ~633 s (0.425 s/example) |
+| Compute-matched GRPO LoRA | 498 / 1,490 | 33.42% | 163.6 | ~960 s (0.644 s/example) |
+| **VOLT LoRA** | **537 / 1,490** | **36.04%** | **125.6** | **~943 s (0.633 s/example)** |
+
+The final adapter and prompt-only numbers should still not be ranked as if they
+were one experiment: CBRR/self-ranking came from the registered API pipeline,
+whereas the adapters use local BF16 batched inference and different generation
+limits. A direct deployment comparison requires rerunning all methods in one
+serving stack and timing protocol.
+
+The frozen local wall times reinforce that caveat. In `concise_cot`, Base,
+GRPO, and VOLT took about 81.8, 122.6, and 119.2 minutes respectively; in
+`direct_answer`, they took 22.4, 29.0, and 23.6 minutes. VOLT was faster than
+GRPO in both conditions and generated less text, but the unmerged adapter was
+still about 46% slower than the bare base in the primary condition. Merge the
+LoRA into the base weights and benchmark the target serving stack before
+making a production-latency claim.
+
+Training efficiency shows the intended VOLT advantage more directly. Both
+runs generated 21,504 rollouts. GRPO produced only 5,432 rollouts with nonzero
+group-relative advantage, while VOLT retained nonzero signal for all 21,504
+(about 4x as many informative rollouts). VOLT generated 4,655,325 tokens versus
+GRPO's 5,593,771, a 16.8% reduction. Observed active training time was roughly
+4 h 38 min for VOLT and 4 h 49 min for GRPO, but shared-GPU OOM recovery makes
+those wall times descriptive rather than a controlled speed benchmark.
+
+## Corrected comparison with the official Gemma 4 paper
+
+The Gemma 4 report gives E2B **21.9%** on the full 4,520-row BBEH micro
+average, but Table 5 also says its models use native thinking unless explicitly
+stated. The frozen results above intentionally used one user message, no system
+turn, greedy decoding, and short fixed output limits. They answer a valid
+deployment question, but they are **not** a reproduction of the paper number.
+
+The separate `gemma4_public_native_thinking_bbeh_v3` profile fixes that
+comparison without rewriting the original results:
+
+- exact E2B revision `70af34e`, BF16, and BBEH revision `80d12ca`;
+- the task input plus the exact evaluation suffix published in BBEH Appendix C;
+- one user message with `enable_thinking=True`; Gemma's template inserts one
+  leading system `<|think|>` turn—no manual system message is duplicated;
+- the public Gemma defaults: temperature 1.0, top-p 0.95, and top-k 64;
+- an explicitly disclosed 8,192-token ceiling and one seeded sample;
+- `tokenizer.parse_response` separates private `thinking` from final `content`,
+  and only final content is sent to the pinned upstream BBEH scorer;
+- Base runs on all 4,520 rows for the paper comparison; Base/GRPO/VOLT claims
+  use only the 3,370 untouched rows with index 50 or higher.
+
+The full corrected run was launched on August 11, 2026. Provisional batches are
+not promoted into headline results; the sequence writes resumable predictions,
+truncation and parser audits, then automatically produces paired wins/losses,
+McNemar tests, bootstrap intervals, and token deltas when all cells complete.
+The report does not publish its BBEH token ceiling, seed, sample count, or full
+internal harness, so this is labeled a **best-public reproduction**, not an
+exact recreation. See
+[the protocol and live-artifact guide](docs/OFFICIAL_THINKING_EVALUATION.md)
+and the pinned
+[experiment manifest](experiments/rl/official_thinking_e2b_bbeh.json).
+
+### Worked input/output examples
+
+The small logic question below is synthetic. It demonstrates the exact request
+and response shapes; it is not a cherry-picked benchmark prediction and is not
+used in any reported score.
+
+> Every red object is square. Object K is red. Is object K square?
+
+#### 1. Direct answer: cheapest one-call baseline
+
+Input sent to the model:
+
+```text
+Every red object is square. Object K is red. Is object K square?
+
+Return only the final answer. Do not include reasoning, explanation, or extra text.
+```
+
+Expected response shape:
+
+```text
+Yes
+```
+
+`canonical_short` is the safer variant when tasks mix booleans, option labels,
+numbers, and lists: it explicitly tells the model which canonical output shape
+to use. Both approaches are one request and require no calibration.
+
+#### 2. Self-ranking: generate three, then let the model select
+
+Each of three generation calls receives the `concise_cot` form:
+
+```text
+Every red object is square. Object K is red. Is object K square?
+
+Think briefly and solve the problem. Keep the reasoning concise.
+End with exactly one line in this format: The final answer is: <answer>
+```
+
+Illustrative candidate responses:
+
+```text
+Candidate 1: K is red and every red object is square.
+The final answer is: Yes
+
+Candidate 2: The rule does not name K directly.
+The final answer is: No
+
+Candidate 3: Applying red -> square to K gives square(K).
+The final answer is: Yes
+```
+
+A fourth, deterministic call receives the original question and all raw
+candidates:
+
+```text
+Question:
+Every red object is square. Object K is red. Is object K square?
+
+Candidate 1:
+K is red and every red object is square.
+The final answer is: Yes
+
+Candidate 2:
+The rule does not name K directly.
+The final answer is: No
+
+Candidate 3:
+Applying red -> square to K gives square(K).
+The final answer is: Yes
+
+Compare the candidates against the exact question and every decisive constraint.
+Do not vote by wording or length. Select or correct the answer that is best supported.
+Return only the final answer, with no explanation.
+```
+
+Selector response:
+
+```text
+Yes
+```
+
+This is not majority voting: the selector may correct all three candidates.
+That verification-and-format-repair pass explains the accuracy gain, while the
+four calls and 681-token test average explain the latency cost.
+
+#### 3. CBRR: calibrate once, route by task, call once
+
+CBRR's input during calibration is `(task ID, strategy, binary correctness)`
+for each candidate strategy on 25 labeled examples. Its output is a frozen JSON
+policy. This excerpt is from the checked-in E2B policy:
+
+```json
+{
+  "default_strategy": "direct_answer",
+  "task_strategies": {
+    "bbh/boolean_expressions": "concise_cot",
+    "bbh/causal_judgement": "canonical_short"
+  }
+}
+```
+
+At inference, the application supplies a task key and question. For a
+`bbh/boolean_expressions` request such as the synthetic example below, the
+router looks up `concise_cot` and constructs one ordinary model request:
+
+```text
+Is the Boolean expression `True and not False` true?
+
+Think briefly and solve the problem. Keep the reasoning concise.
+End with exactly one line in this format: The final answer is: <answer>
+```
+
+Illustrative model output:
+
+```text
+not False is True, so the conjunction is True.
+The final answer is: True
+```
+
+The task ID controls prompt construction but is not silently inserted into the
+model prompt. There is no per-question search, no answer-dependent routing,
+and no extra model call. Unknown tasks fall back to `direct_answer`.
+
+#### 4. GRPO: the compute-matched RL baseline
+
+**GRPO** means **Group Relative Policy Optimization**. For each training
+prompt it samples a fixed group of responses, scores each response with the
+binary exact-match reward, and normalizes rewards relative to that same group.
+It therefore avoids training a separate value model.
+
+For an illustrative four-rollout group with rewards `[1, 1, 0, 0]`, the mean
+is `0.5`, the standard deviation is `0.5`, and the normalized advantages are
+`[+1, +1, -1, -1]`. Those values train the LoRA. But rewards
+`[1, 1, 1, 1]` or `[0, 0, 0, 0]` produce zero advantage for every response:
+the model spent tokens, yet that group gives no policy-gradient direction.
+The actual baseline uses groups of eight and the same total rollout budget as
+VOLT.
+
+At deployment, GRPO machinery is gone. The input is just the selected prompt
+template and the output is one normal model response from the LoRA adapter.
+
+#### 5. VOLT: history-based baseline and adaptive rollout allocation
+
+VOLT receives the same training examples and binary rewards as GRPO, but its
+state from earlier iterations changes both training outputs:
+
+1. a frozen posterior produces `baseline_i` and an allocation score before
+   any current response is sampled;
+2. a deterministic allocator outputs 1–8 rollouts per selected prompt;
+3. the scorer outputs reward `r` for each completion;
+4. the trainer outputs the advantage `r - baseline_i` and updates only LoRA.
+
+For example, suppose earlier results give this prompt a frozen baseline of
+`0.2` and the allocator buys one rollout:
+
+```text
+training input  -> question + concise_cot instruction
+model output    -> "The final answer is: Yes"
+verifier output -> reward = 1
+VOLT output     -> advantage = 1 - 0.2 = +0.8
+optimizer       -> reinforce the sampled completion in the LoRA weights
+```
+
+If the answer were wrong, its advantage would be `-0.2`. Unlike GRPO, either
+single outcome remains usable because the baseline was fixed from history,
+not estimated from the current group. Prompts near posterior success
+probability `0.5` receive more rollouts; almost-solved and almost-impossible
+prompts receive fewer, with a 15% exploration floor preventing starvation.
+
+Serving the resulting adapter is deliberately ordinary:
+
+```text
+application input -> one user prompt
+base + VOLT LoRA  -> one generated response
+application output -> parsed final answer
+```
+
+There is no posterior tracker, allocator, reward function, or multi-sample vote
+at inference time. VOLT changes how the LoRA is trained, not the serving API.
+
+### Run the methods
+
+Use the common evaluator command in [Reproducing the evaluation](#reproducing-the-evaluation)
+and choose one of these method-specific flag sets:
 
 ```bash
-curl http://127.0.0.1:8888/v1/models
-curl http://127.0.0.1:8889/v1/models
+# Cheapest baseline: one deterministic call
+--prompt-strategy direct_answer --temperature 0
+
+# Universal self-ranking: 3 candidates + 1 selector
+--prompt-strategy concise_cot --self-consistency-k 3 \
+  --response-selection self_rank --temperature 0.7 \
+  --max-tokens 256 --selection-max-tokens 64
+
+# CBRR: one routed call; missing task IDs use the policy's default
+--prompt-policy results/e2b-confirmatory-20260709_231405/selection/cbrr_policy.json \
+  --temperature 0
 ```
 
-The production model servers, router, and public tunnel have tracked user-systemd
-units under `ops/systemd/`. Install and enable them without interrupting a live
-deployment with:
+Train the two adapters and run checkpoint selection/final evaluation with the
+commands in the [VOLT section](#volt-variance-optimal-reinforcement-learning-under-a-rollout-budget).
+
+### Can the LoRA be used outside these datasets?
+
+Yes, technically: the VOLT artifact is a normal PEFT LoRA adapter, not a
+benchmark-only lookup table. It can answer arbitrary application prompts when
+loaded on the **exact compatible E2B base checkpoint and tokenizer**, and it
+can be enabled, disabled, or merged into the base weights. It cannot be
+attached directly to a different architecture or unrelated base revision.
+
+Evidence for transfer is encouraging but limited. Across 16 whole tasks held
+out from RL training (400 validation examples), base E2B scored 22.00%, GRPO
+30.75%, and VOLT 33.25%. VOLT's +2.50-point lead over GRPO was not significant
+on that subset (`p = 0.237`; bootstrap interval `-0.75` to `+6.00`), so this is
+not yet proof of broad chat, coding, or domain-specific improvement. Evaluate
+the adapter on the target application's prompts, safety constraints, output
+format, and latency before deployment.
+
+Prompt methods and weight tuning can also be combined, but a router calibrated
+on the base model may become stale after LoRA tuning. Re-run CBRR calibration
+against the tuned checkpoint instead of assuming the old per-task choices
+remain optimal. For production, a standard PEFT load/merge looks like:
+
+```python
+from peft import PeftModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+base_id = "<the exact E2B base checkpoint used for training>"
+adapter_dir = "<selected-checkpoint>/adapter"
+
+tokenizer = AutoTokenizer.from_pretrained(base_id)
+base = AutoModelForCausalLM.from_pretrained(base_id, device_map="auto")
+model = PeftModel.from_pretrained(base, adapter_dir)
+model = model.merge_and_unload()  # optional; benchmark before/after merging
+```
+
+## The 26 prompt strategies, explained
+
+A prompt strategy is a fixed instruction appended to the benchmark question
+(the question always comes first, then the instruction). Percentages in
+parentheses are overall accuracy on the matched validation split for
+(E2B / E4B) — baseline `direct_answer` is (25.0% / 32.6%). The full per-dataset
+matrix is in [docs/DETAILED_RESULTS.md](docs/DETAILED_RESULTS.md#3-all-29-universal-arms-by-model-and-dataset-matched-validation).
+
+### Baselines
+
+- **`raw`** — sends the dataset question with no instruction at all. The model
+  tends to chat, explain, or hedge, which fails exact-match scoring. This is
+  the floor (2.0% / 2.2%), and it is why every other strategy exists.
+- **`direct_answer`** — "Return only the final answer. Do not include
+  reasoning, explanation, or extra text." Cheap (about 15 tokens per answer)
+  and surprisingly strong (25.0% / 32.6%). The reference point for everything
+  else.
+
+### Controlling the answer format
+
+These change *how* the answer is written, not how the model thinks.
+
+- **`canonical_short`** — spells out normalization rules: one option label for
+  multiple choice, exactly `Yes`/`No` for booleans, digits for numbers, the
+  list alone for lists. Best pure-formatting strategy (27.1% / 33.6%); it beat
+  `direct_answer` on both models just by reducing format mismatches.
+- **`native_format`** — "answer in exactly the format the question requests"
+  (some items ask for `<answer>` tags or a fixed sentence). (22.8% / 31.5%)
+- **`answer_type_router`** — first privately decide the answer *type* (label,
+  boolean, number, phrase, list, tag), then output the most parseable form of
+  that type. (22.0% / 28.1%)
+- **`strict_json`** — answer as a JSON object `{"answer": ...}`. Brittle:
+  wrappers get malformed or truncated, and scoring then fails even when the
+  content is right (8.5% / 12.6%). A cautionary result for structured-output
+  fans; the JSON failure modes are audited in
+  [format_audit.md](paper/e2b-e4b-study/format-audit/format_audit.md).
+
+### Think privately, answer only
+
+These ask the model to reason or verify *silently* and print only the final
+answer, keeping outputs short while (hopefully) improving the decision.
+
+- **`careful_direct`** — "read carefully, including every condition and
+  option label, then answer only." (19.7% / 31.7%)
+- **`private_verify`** — solve, check once privately, then answer. Strongly
+  model-dependent: it *hurt* E2B and *helped* E4B (19.7% / 34.2%), matching
+  the literature finding that small models need external verifiers to
+  self-correct reliably.
+- **`selective_verify`** — keep the first answer unless a targeted check finds
+  a concrete contradiction (missed negation, ignored constraint, arithmetic
+  or label error). Designed to prevent needless self-revision. (22.6% / 31.5%)
+- **`compare_then_commit`** — privately identify the two most plausible
+  answers, compare both against the exact constraints, reject the weaker.
+  Middling as a universal prompt (22.4% / 32.7%) but the single biggest
+  contributor when *routed* to the tasks where it wins (+214 correct answers
+  in the live routed run).
+- **`fast_slow_gate`** — answer directly; only verify if genuinely uncertain.
+  The gating language confused small models badly (8.5% / 19.1%).
+- **`constraint_guard`** — extract the decisive constraints, derive a
+  candidate, test it against each constraint once. (20.9% / 32.9%)
+- **`negation_label_guard`** — pay special attention to NOT/EXCEPT/quantifiers
+  and map content to the option label as a final step. (12.6% / 20.1%)
+- **`draft_verify`** — very short private symbolic draft, then one check.
+  (10.3% / 27.6%)
+- **`option_elimination`** — for multiple choice, eliminate wrong options
+  privately before deciding. (24.0% / 31.3%)
+- **`condition_reconstruction`** — derive a candidate, hide the condition most
+  able to falsify it, reconstruct that condition from the candidate, and
+  compare with the actual text. (20.7% / 30.7%)
+- **`counterexample_guard`** — try one targeted counterexample against the
+  candidate before committing. (22.0% / 32.5%)
+- **`rank_two_paths`** — build two genuinely different solution paths
+  privately, rank them, use the stronger. (21.9% / 32.2%)
+
+### Show brief reasoning, then a delimited answer
+
+These allow visible reasoning but require a final line
+`The final answer is: <answer>` that the scorer can extract.
+
+- **`concise_cot`** — "think briefly," then the delimiter line. Excellent on
+  BBH (35.4% / 46.7% there) but weak overall (17.4% / 24.3%) because on BBEH
+  and USR the model often runs out of tokens or buries the answer.
+- **`chain_of_draft`** — terse scratch notes instead of prose sentences, then
+  the delimiter. Same profile, slightly better (17.7% / 28.7%).
+- **`premise_conclusion`** — list the key premises, derive the conclusion.
+  (16.5% / 23.8%)
+- **`step_back`** — first state the general rule, then apply it. Small models
+  spend the token budget philosophizing (4.1% / 8.9%).
+- **`plan_and_solve`** — write a short plan, then solve. (4.1% / 6.0%)
+- **`plan_and_solve_plus`** — detailed plan plus variable extraction plus
+  verification. The longest template and the worst performer (1.3% / 2.1%):
+  it reliably exhausts the token budget before answering.
+- **`least_to_most`** — decompose into subproblems, solve simplest-to-hardest.
+  (1.8% / 3.8%)
+- **`symbolic_proof`** — translate to compact symbols or a proof sketch, then
+  solve. (1.8% / 2.2%)
+
+The pattern across this family: for small models under exact-match scoring,
+verbose reasoning templates only pay off when a reliable extraction/selection
+step follows. Which leads to:
+
+### Sampling on top of a strategy (arms, not strategies)
+
+Two inference-scaling variants wrap `concise_cot`:
+
+- **Self-consistency (`concise_cot_sc_k3`)** — sample 3 answers at temperature
+  0.7, take the majority-normalized answer. Barely helps (19.3% / 25.3%):
+  majority voting cannot fix formatting failures.
+- **Self-ranking (`concise_cot_self_rank_k3`)** — sample 3 answers, then ask
+  the model to pick the best candidate and output only that answer. The best
+  universal arm (34.0% / 39.1%): the selection pass both verifies and fixes
+  formatting. Cost: about 681 tokens per answer.
+
+## The CBRR prompt router (no weight changes)
+
+Different tasks favor different strategies, so a single universal prompt
+leaves accuracy on the table. CBRR ("conservative Bayesian reward router")
+uses each task's 25 calibration examples to decide, per task, whether any
+strategy beats `direct_answer` there — using a Beta-Bernoulli posterior on
+paired wins/losses, switching only when the evidence is clear — and then
+applies that one fixed strategy to every later example of the task. It never
+selects per example.
+
+Result on the frozen test split: 35.41% vs 26.39% for direct answering, at 66
+tokens per answer (the best universal arm needs 681). Fit it yourself with
+`scripts/calibrate_prompt_policy.py`; the evaluator accepts the resulting
+policy file via `--prompt-policy`, and records the arm used for every
+prediction. Protocol, amendments, and analysis:
+[docs/E2B_CONFIRMATORY_PROTOCOL.md](docs/E2B_CONFIRMATORY_PROTOCOL.md),
+[docs/PROMPT_OPTIMIZATION_RESEARCH.md](docs/PROMPT_OPTIMIZATION_RESEARCH.md).
+
+## VOLT: variance-optimal reinforcement learning under a rollout budget
+
+Prompt routing tops out near 35% because it never changes model weights. The
+`rl/` package instead fine-tunes E2B through LoRA with **VOLT** — **V**ariance-
+**O**ptimal a**L**location of **T**okens — an RL-with-verifiable-rewards (RLVR)
+method designed for little training data, binary correctness rewards, one
+shared GPU, and a fixed generation budget.
+
+### Why fixed GRPO groups waste tokens
+
+GRPO gives every selected prompt a fixed group of sampled solutions and
+computes advantages from that group's reward mean and standard deviation. With
+binary rewards, an eight-answer group that is all correct or all wrong has
+zero advantage everywhere. Its generated tokens cannot update the policy.
+
+That is common in this suite: many BBH prompts are nearly solved, while many
+BBEH prompts are nearly impossible. Only prompts near the model's current
+learning frontier reliably produce mixed groups.
+
+| Property | GRPO | VOLT |
+|---|---|---|
+| Rollouts per selected prompt | Fixed at 8 | Adaptive, 1–8 |
+| Advantage baseline | Current group mean | Frozen historical posterior mean |
+| One-rollout update | Zero or undefined | Valid |
+| All-correct/all-wrong samples | Zero advantage | Usually nonzero advantage |
+| Uses historical difficulty | No | Yes, with task-level pooling |
+| Exploration | Random prompt rotation | 15% least-recently-sampled floor |
+
+### One posterior drives the method
+
+For each training prompt `i`, VOLT tracks its current success probability
+`p_i = P(correct | prompt_i)` with discounted Beta evidence. The prompt borrows
+a prior mean from other examples in the same benchmark task:
+
+```text
+task_mean_i = (task_wins + 1) / (task_wins + task_losses + 2)
+alpha_i     = discounted_prompt_wins   + m * task_mean_i
+beta_i      = discounted_prompt_losses + m * (1 - task_mean_i)
+```
+
+The current configuration uses prior mass `m = 4` and discounts old evidence
+by `gamma = 0.92` every iteration so the tracker follows a changing policy.
+Before generating anything in iteration `k`, VOLT freezes a posterior snapshot.
+That snapshot supplies two active quantities:
+
+```text
+baseline_i = E[p_i] = alpha_i / (alpha_i + beta_i)
+
+score_i    = sqrt(E[p_i(1-p_i)])
+           = sqrt(alpha_i * beta_i /
+                  ((alpha_i + beta_i) * (alpha_i + beta_i + 1)))
+```
+
+The baseline estimates expected correctness. The score estimates where binary
+reward variation—and therefore usable policy-gradient signal—is concentrated.
+It is largest around `p = 0.5` and shrinks toward zero for almost-always-correct
+or almost-always-wrong prompts.
+
+### Variance-optimal rollout allocation
+
+Suppose prompt `i` receives `n_i` rollouts, each costing about `l_i` tokens,
+and its gradient estimator has variance `v_i`. Minimizing total estimator
+variance under a generation budget gives the square-root allocation
+
+```text
+n_i ∝ sqrt(v_i / l_i).
+```
+
+VOLT models policy-score variance as growing roughly linearly with completion
+length, `v_i ≈ kappa * p_i(1-p_i) * l_i`. Under that explicit assumption, the
+length terms cancel:
+
+```text
+n_i ∝ sqrt(p_i(1-p_i)).
+```
+
+The implementation substitutes the posterior expectation, reserves 15% of
+each iteration's budget for the least-recently-sampled prompts, distributes the
+remainder proportionally to `score_i`, caps each prompt at eight rollouts, and
+performs deterministic integer water-filling until the budget is exhausted.
+This keeps stale prompts revisitable while concentrating most compute near the
+learning frontier.
+
+### Predictable baselines make adaptive sampling safe
+
+Let `S_i(y) = grad log pi(y | prompt_i)` be the policy score and let `r` be
+binary correctness. For any baseline fixed before sampling the current answer,
+
+```text
+E[(r - baseline_i) * S_i(y) | past] = grad P(correct | prompt_i).
+```
+
+VOLT therefore uses the simple advantage
+
+```text
+A = r - baseline_i.
+```
+
+The crucial word is **predictable**: both the baseline and rollout allocation
+are functions only of earlier iterations. Conditioned on that history, they
+are constants, so adaptive prompt selection introduces no additional
+within-prompt policy-gradient bias. A single rollout is enough:
+
+- if `baseline = 0.2`, success gets advantage `+0.8` and failure `-0.2`;
+- if `baseline = 0.8`, success gets `+0.2` and failure `-0.8`.
+
+Unexpected outcomes receive the strongest correction. Homogeneous samples no
+longer collapse mechanically to zero, although a nonzero advantage does not
+mean every rollout is equally valuable.
+
+```mermaid
+flowchart LR
+    H["Past rollout outcomes"] --> P["Discounted hierarchical Beta state"]
+    P --> S["Freeze snapshot at iteration start"]
+    S --> B["Predictable baseline"]
+    S --> A["Variance allocation score"]
+    A --> W["Water-fill the rollout budget"]
+    W --> G["Generate and score answers"]
+    B --> V["Advantage = reward - baseline"]
+    G --> V
+    V --> U["One on-policy LoRA update"]
+    G --> Q["Update posterior and length statistics"]
+    Q --> P
+```
+
+### The implemented training step
+
+VOLT broadcasts each sequence-level advantage across the generated completion
+tokens and performs one strictly on-policy REINFORCE update:
+
+```text
+loss = -sum_rollouts(advantage * sum_completion_tokens(log_probability))
+       / (number_of_rollouts * constant_length_normalizer)
+```
+
+There is no current-group standard-deviation division, no per-answer token
+average that overweights short completions, no PPO replay, and no explicit KL
+penalty. Gradient norm is clipped, and only a rank-32 LoRA adapter is updated;
+the base checkpoint remains untouched.
+
+The E2B experiment uses 48 iterations × 448 rollouts, temperature 0.9, up to
+384 new tokens, and a fixed 300-example greedy validation probe every five
+iterations. The training pool contains 1,040 usable calibration prompts, with
+16 whole tasks excluded from training to measure unseen-task transfer.
+
+### Optional length control
+
+VOLT also implements a success-conditioned primal-dual length constraint. It
+can penalize long **correct** answers while never rewarding a wrong answer for
+giving up early. Its multiplier and shaped baseline use frozen historical
+length statistics, preserving predictability. This component is implemented
+but disabled in the current E2B configuration, so the active experiment tests
+the posterior baseline and adaptive allocator cleanly.
+
+### Scientific status and boundaries
+
+- Each rollout is conditionally unbiased for its sampled prompt, but the
+  current loss gives prompts weight proportional to their allocated rollout
+  counts. The implemented update therefore optimizes an adaptive curriculum,
+  not an exactly uniform average over all prompts. Exact uniform weighting
+  would require per-prompt normalization or importance weights.
+- Calling the allocation token-optimal relies on the testable assumption that
+  policy-score variance grows linearly with sequence length. If it does not,
+  the optimal rule should retain an explicit length-cost term.
+- Posterior discounting handles policy drift only approximately, and
+  task-level pooling can mislead when prompts within one task are heterogeneous.
+- Training telemetry shows the intended mechanism—VOLT keeps nonzero
+  advantages where GRPO discards many homogeneous groups—and the frozen test
+  confirms a smaller but statistically detectable advantage over GRPO. This
+  remains evidence on one checkpoint family and benchmark mixture, not a claim
+  of universal superiority.
+
+The full derivations, proofs, related-work positioning, and manuscript are in
+[paper/volt/](paper/volt/). Train and evaluate on the GPU host with:
 
 ```bash
-./ops/install_systemd_services.sh
+# compute-matched baseline and method
+python rl/run_train.py --config experiments/rl/grpo_e2b.json
+python rl/run_train.py --config experiments/rl/volt_e2b.json
+
+# validation selection followed by frozen-test evaluation
+./scripts/run_rl_evals.sh
 ```
 
-The units are started only after any legacy port-owning processes have been stopped.
-User lingering must remain enabled so the deployment starts without an interactive
-login.
+Training uses calibration rows only, checkpoints are selected using validation
+rows, and the frozen test split is reserved for the final selected models.
 
-Tang tunnel endpoint after the shared model router and `ops/tunnel_tang_25570.sh` are running:
+## Reproducing the evaluation
 
-```bash
-curl http://127.0.0.1:25570/v1/models
-```
-
-## Download Datasets
-
-On `benwulab-remote`:
+Download the datasets (every run records the dataset git revisions it used in
+its `run_config.json`; the original study used BBH `9ee07bd`, BBEH `80d12ca`,
+USR `39bc520`):
 
 ```bash
 DATA_ROOT=/data/benwulab/gemma4-eval/datasets ./scripts/download_datasets.sh
 ```
 
-Known downloaded revisions for the first run:
-
-- BBH: `9ee07bd481feebf959a6b59d61ea57bdcf30964d`
-- BBEH: `80d12ca916b7158f22293fcf3144f4d3d854d4be`
-- USR: `39bc520a2f4c243eb04ce1cc27f28c7c61d12e42`
-
-## Unpuzzles And Simple Reasoning
-
-The `usr` benchmark name loads all auto-scorable examples from `google-deepmind/unpuzzles_and_simple_reasoning`:
-
-- `simple_reasoning/*` from `simple_reasoning.json`
-- non-empty `unpuzzles/original` and `unpuzzles/unpuzzle` examples from `unpuzzles.json`
-- non-empty `shifted_unpuzzles/original`, `shifted_unpuzzles/unpuzzle`, and `shifted_unpuzzles/shifted` examples from `shifted_unpuzzles.json`
-
-You can also run only `simple_reasoning`, `unpuzzles`, or `shifted_unpuzzles`.
-
-```bash
-python3 eval_benchmarks.py \
-  --datasets-root /data/benwulab/gemma4-eval/datasets \
-  --base-url http://127.0.0.1:8888/v1 \
-  --model SubTokenLLM \
-  --benchmarks usr \
-  --prompt-strategy direct_answer \
-  --parallel 2 \
-  --output-dir /data/benwulab/gemma4-eval/runs/usr-direct
-```
-
-## Run Eval
-
-Smoke test:
+Smoke test (2 examples per task):
 
 ```bash
 python3 eval_benchmarks.py \
@@ -227,112 +768,32 @@ python3 eval_benchmarks.py \
   --output-dir /data/benwulab/gemma4-eval/runs/smoke
 ```
 
-Full run:
+Useful flags: `--prompt-strategy <name>` (any strategy above),
+`--self-consistency-k N` plus `--response-selection majority_vote|self_rank`,
+`--prompt-policy policy.json` for routed runs, `--benchmarks bbh,bbeh,usr`.
+Every run directory gets `run_config.json`, `predictions.jsonl`, and
+`summary.json`. `scripts/start_full_strategy_matrix.sh` runs the whole
+strategy matrix; `scripts/summarize_strategy_runs.py` aggregates it.
 
-```bash
-python3 eval_benchmarks.py \
-  --datasets-root /data/benwulab/gemma4-eval/datasets \
-  --base-url https://llm.agaii.org/llm/v1 \
-  --model SubTokenLLM \
-  --benchmarks bbh,bbeh \
-  --parallel 2 \
-  --output-dir /data/benwulab/gemma4-eval/runs/full
+## Deployment (ops)
+
+E4B and E2B are served on `benwulab-remote` ports 8888/8889; a body-preserving
+router on 8890 dispatches by model ID; a reverse SSH tunnel plus an Nginx
+rewrite exposes it at `https://llm.agaii.org/llm/v1`. The router never injects
+prompts and forwards request bodies unchanged. Systemd units and configs are
+in [ops/](ops/); install with `./ops/install_systemd_services.sh`.
+
+## Repository map
+
 ```
-
-Use `--prompt-strategy raw` if you want to send the dataset input exactly as stored. The default `direct_answer` strategy appends a user-level instruction asking the model to output only the final answer. `--prompt-mode raw` and `--prompt-mode answer_only` remain as backward-compatible aliases.
-
-Available prompt strategies:
-
-- `direct_answer`: final answer only baseline.
-- `strict_json`: JSON object with one `answer` field.
-- `native_format`: preserve the answer format requested by each item.
-- `canonical_short`: normalize labels, booleans, numbers, and lists.
-- `private_verify`: solve and check once privately, then answer only.
-- `selective_verify`: revise only when a targeted check finds a concrete contradiction.
-- `compare_then_commit`: compare the two strongest candidates privately.
-- `fast_slow_gate`: verify once only when the direct answer is uncertain.
-- `constraint_guard`: replay the decisive constraints before committing.
-- `negation_label_guard`: protect negations, quantifiers, and option-label mapping.
-- `draft_verify`: use a terse private draft followed by one check.
-- `concise_cot`: concise reasoning with a final-answer delimiter.
-- `chain_of_draft`: terse scratch notes with a final-answer delimiter.
-- `plan_and_solve`: short plan, solve, final-answer delimiter.
-- `step_back`: identify the general principle, then solve.
-- `premise_conclusion`: explicit premise-to-conclusion template.
-- `symbolic_proof`: compact symbolic translation or proof sketch, then solve.
-- `plan_and_solve_plus`: detailed plan, variable extraction, solve, and verification.
-- `least_to_most`: solve dependency-ordered subproblems from simplest to hardest.
-- `condition_reconstruction`: reconstruct the decisive condition before correction.
-- `counterexample_guard`: try one targeted counterexample before committing.
-- `rank_two_paths`: privately compare two distinct compact solution paths.
-- `raw`: dataset input only.
-
-Self-consistency is enabled with `--self-consistency-k`. The evaluator records every generation and chooses the majority normalized final answer. It still sends no system message.
-
-## Reward-Routed Prompt Policy
-
-`scripts/calibrate_prompt_policy.py` treats each prompt strategy as a Beta-Bernoulli bandit arm. It selects one fixed arm per benchmark task from the first 25 examples, preserves `direct_answer` on ties, and scores only examples with index 25 or greater. The resulting `policy.json` can be passed directly to the evaluator with `--prompt-policy`; every prediction records the arm that produced it.
-
-```bash
-python3 scripts/calibrate_prompt_policy.py \
-  --runs-root /data/benwulab/gemma4-eval/runs/full-strategy-matrix-20260706_025955 \
-  --runs-root /data/benwulab/gemma4-eval/runs/usr-strategy-matrix-20260707_022230 \
-  --runs-root /data/benwulab/gemma4-eval/runs/full-challenger-winners-20260709_120053 \
-  --strategies direct_answer,strict_json,concise_cot,chain_of_draft,plan_and_solve,step_back,premise_conclusion,symbolic_proof,canonical_short,private_verify \
-  --calibration-size 25 \
-  --datasets-root /data/benwulab/gemma4-eval/datasets \
-  --output-dir /data/benwulab/gemma4-eval/runs/reward-routed-policy/offline
+eval_benchmarks.py       evaluation harness and scorer (single file)
+rl/                      VOLT RL training package (LoRA, allocation, eval)
+scripts/                 strategy matrix, router calibration, RL evals, analysis
+experiments/             frozen protocols, arm manifests, RL run configs
+docs/                    protocol, research notes, detailed result tables
+paper/e2b-e4b-study/     prompt-study manuscript and audits
+paper/volt/              VOLT method, theory (proofs), manuscript draft
+results/                 archived run bundles (predictions, summaries, logs)
+ops/                     serving, router, tunnels, systemd units
+tests/                   unit tests (scorer, router, protocol, RL math)
 ```
-
-Run the complete calibration and online held-out confirmation with:
-
-```bash
-./scripts/run_reward_routed_policy.sh
-```
-
-To fit a conservative policy from a calibration-only strategy sweep and confirm it on the held-out suffix:
-
-```bash
-SAMPLE_ROOT=/data/benwulab/gemma4-eval/runs/research-strategy-sweep-20260709_183952 \
-./scripts/run_sampled_policy_confirmation.sh
-```
-
-The fully live `reward_routed_v2` run scores `4,020/11,040` (36.41%), compared with `3,632/11,040` (32.90%) for direct answer: +388 correct and +3.51 accuracy points with zero request errors. The higher-ceiling v1 archived replay scores `4,738/11,040` (42.92%) and is recorded separately from live confirmation. See [docs/PROMPT_OPTIMIZATION_RESEARCH.md](docs/PROMPT_OPTIMIZATION_RESEARCH.md) for the protocol, research basis, examples, negative results, and RL decision.
-
-## Prompt Strategy Matrix
-
-The full strategy runner executes the prompt strategies from the prompt-strategy table that are meaningful for BBH/BBEH without external tools or custom verifiers. It records one folder per strategy with `run_config.json`, `command.txt`, `stdout.log`, `stderr.log`, `predictions.jsonl`, and `summary.json`.
-
-```bash
-cd /data/benwulab/gemma4-eval/repo
-RUNS_ROOT=/data/benwulab/gemma4-eval/runs/full-strategy-matrix-$(date +%Y%m%d_%H%M%S) \
-PARALLEL=2 \
-BASE_URL=http://127.0.0.1:8888/v1 \
-MODEL=SubTokenLLM \
-./scripts/start_full_strategy_matrix.sh
-```
-
-Monitor the active run:
-
-```bash
-tail -f "$RUNS_ROOT/matrix.log"
-tail -f "$RUNS_ROOT/direct_answer/stdout.log"
-```
-
-After completion, `aggregate_summary.json` contains a compact summary across all strategies.
-
-To automatically upload a completed matrix run back to GitHub:
-
-```bash
-REMOTE_RUN_ROOT=/data/benwulab/gemma4-eval/runs/full-strategy-matrix-YYYYMMDD_HHMMSS \
-REMOTE_PID=<pid> \
-./scripts/wait_collect_push_results.sh
-```
-
-The uploader waits for `aggregate_summary.json`, rsyncs the completed remote run into `results/`, compresses `predictions.jsonl` files, writes `upload_manifest.json`, commits, and pushes to `main`.
-
-## Public HTTPS Route
-
-E4B and E2B run on `benwulab-remote:8888` and `:8889`. The body-preserving router on `:8890` dispatches by model ID. A reverse SSH tunnel exposes the router at `127.0.0.1:25570` on Tang.
-
-Install `ops/nginx_llm_agaii_org.conf` on Tang in the active BT-panel Nginx vhost tree, then reload Nginx. The Nginx route only rewrites `/llm/v1/*` to `/v1/*` and does not alter request bodies or inject prompts.
