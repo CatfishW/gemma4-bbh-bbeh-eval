@@ -29,15 +29,288 @@
 
 ## E2B 冻结测试集结果
 
-| 方法 | 修改权重？ | 准确率 | 每题平均 token |
-|---|---:|---:|---:|
-| 直接回答 `direct_answer` | 否 | 26.39% | 15 |
-| 最佳通用提示 `concise_cot_self_rank_k3` | 否 | 35.06% | 681 |
-| CBRR 按任务提示路由 | 否 | **35.41%** | 66 |
-| VOLT 强化学习微调 | 是，LoRA | 训练/评测进行中 | - |
+| 方法 | 修改权重？ | 每题模型调用数 | 准确率 | 每题平均生成 token | 每题平均 API 时间 |
+|---|---:|---:|---:|---:|---:|
+| 直接回答 `direct_answer` | 否 | 1 | 26.39% | 14.7 | 0.585 秒 |
+| 最佳通用提示 `concise_cot_self_rank_k3` | 否 | 4 | 35.06% | 681.3 | 11.228 秒 |
+| CBRR 按任务提示路由 | 否 | 1 | **35.41%** | 65.6 | 1.287 秒 |
+| VOLT 强化学习微调 | 是，LoRA | 1 | **待完成** | **待完成** | **待完成** |
 
 详细统计、分数据集结果和全部策略矩阵见
 [docs/DETAILED_RESULTS.md](docs/DETAILED_RESULTS.md)。
+
+VOLT 与计算量匹配的 GRPO 基线均已完成训练和完整验证集评测，但二者的
+冻结测试结果仍待完成，因此这里不提前报告测试准确率。
+
+## 当前最佳方法：如何选择
+
+不存在适合所有约束的单一冠军。在已经完成的冻结测试结果中，CBRR 的准确率
+最高，也是已知任务 ID 时最好的效率/准确率折中；没有任务元数据时，自排序是
+最强的通用纯提示方法；在已经训练的适配器中，VOLT 当前的完整验证集准确率最高，
+但仍需等待冻结测试结果确认。
+
+| 目标 | 推荐方法 | 原因 | 前提 |
+|---|---|---|---|
+| 最低成本和延迟 | `direct_answer`，也可测试 `canonical_short` | 一次很短的确定性调用 | 只需要模型 API |
+| 最佳纯提示效率 | **CBRR** | 一次调用，冻结测试 35.41%，token 约为自排序的十分之一 | 稳定的任务 ID；每个任务 25 条带标签校准样本 |
+| 最佳通用纯提示准确率 | **三样本自排序** | 不需要任务元数据或修改权重；冻结测试 35.06% | 四次调用和较大的 token 预算 |
+| 当前最佳微调验证准确率 | **VOLT LoRA** | 完整验证集 36.04%，且比 GRPO 生成更少 token | 完全匹配的基础检查点、训练数据和 LoRA 部署能力 |
+| 科学对照 | **GRPO** | 用于分离并测量 VOLT 方法贡献的计算量匹配 RL 基线 | 训练时为每题固定生成多条 rollout |
+
+### 不要混合两条结果线
+
+上面的纯提示表来自注册的 API 流程，覆盖全部 9,550 条冻结测试样本。时间列是
+该次 API 实验的端到端每题耗时，因此如实包含自排序的三次生成调用和一次选择
+调用。CBRR 在模型调用前离线完成路由，推理时仍然只调用模型一次。
+
+权重微调这条实验线目前完成了 1,490 条完整验证样本的对比。三者使用与训练一致
+的 `concise_cot` 提示，GRPO 和 VOLT 均使用固定验证探针选出的检查点：
+
+| 完整验证集模型 | 正确数 | 准确率 | 平均生成 token | 本次评测墙钟时间 |
+|---|---:|---:|---:|---:|
+| 基础 E2B | 265 / 1,490 | 17.79% | 226.9 | 约 633 秒（0.425 秒/题） |
+| 计算量匹配的 GRPO LoRA | 498 / 1,490 | 33.42% | 163.6 | 约 960 秒（0.644 秒/题） |
+| **VOLT LoRA** | **537 / 1,490** | **36.04%** | **125.6** | **约 943 秒（0.633 秒/题）** |
+
+这些验证集结果只建立了基础模型、GRPO 与 VOLT 三者之间的比较；它们**不能**证明
+VOLT 已经超过 CBRR 或自排序，因为后两者的标题结果来自不同的数据划分和服务流程。
+
+在这些逐题配对的验证预测上，VOLT 比 GRPO 多答对 39 题，即提升 2.62 个百分点；
+VOLT 单独答对 121 题，GRPO 单独答对 82 题，McNemar `p = 0.0075`，按任务分层
+bootstrap 的 95% 区间为 `+0.87` 到 `+4.36` 个百分点。VOLT 的生成 token 比
+GRPO 少 23.2%。与基础模型相比，VOLT 提升 18.26 个百分点，生成 token 少 44.6%。
+
+这里的墙钟时间来自本地批量评测和未合并的 PEFT LoRA，与上表 API 延迟不是同一
+计时协议。本次运行中 VOLT 略快于 GRPO；但尽管回答更短，两种未合并适配器的墙钟
+吞吐仍比裸基础模型慢约 49–52%。生产部署前应先把 LoRA 合并进基础权重，再在目标
+服务栈上重新测量延迟。
+
+训练效率更直接地显示了 VOLT 的机制优势。两个实验都生成了 21,504 条 rollout。
+GRPO 只有 5,432 条 rollout 具有非零组相对优势；VOLT 的 21,504 条全部保留了
+非零信号，相当于约 4 倍的有效 rollout。VOLT 共生成 4,655,325 个 token，GRPO
+为 5,593,771 个，减少 16.8%。观察到的有效训练时间约为 VOLT 4 小时 38 分、
+GRPO 4 小时 49 分；由于共享 GPU 上发生过 OOM 与恢复，这两个墙钟数只作描述，
+不能视为严格受控的速度基准。
+
+### 输入/输出示例
+
+下面使用一道人工构造的小型逻辑题展示准确的请求与响应形态。它不是从结果中挑选
+的有利样本，也没有参与任何准确率计算。为与代码中的真实模板一致，发给模型的
+提示保留英文原文。
+
+> Every red object is square. Object K is red. Is object K square?
+
+#### 1. 直接回答：成本最低的单调用基线
+
+发送给模型的输入：
+
+```text
+Every red object is square. Object K is red. Is object K square?
+
+Return only the final answer. Do not include reasoning, explanation, or extra text.
+```
+
+期望的响应形态：
+
+```text
+Yes
+```
+
+当任务混合了布尔值、选项标签、数字和列表时，`canonical_short` 是更稳妥的变体：
+它明确规定每种答案的规范输出格式。两者都只调用一次，也不需要校准。
+
+#### 2. 自排序：先生成三条，再让模型选择
+
+前三次生成调用都使用 `concise_cot` 形式：
+
+```text
+Every red object is square. Object K is red. Is object K square?
+
+Think briefly and solve the problem. Keep the reasoning concise.
+End with exactly one line in this format: The final answer is: <answer>
+```
+
+示例候选输出：
+
+```text
+Candidate 1: K is red and every red object is square.
+The final answer is: Yes
+
+Candidate 2: The rule does not name K directly.
+The final answer is: No
+
+Candidate 3: Applying red -> square to K gives square(K).
+The final answer is: Yes
+```
+
+第四次确定性调用接收原题和三条未经改写的候选：
+
+```text
+Question:
+Every red object is square. Object K is red. Is object K square?
+
+Candidate 1:
+K is red and every red object is square.
+The final answer is: Yes
+
+Candidate 2:
+The rule does not name K directly.
+The final answer is: No
+
+Candidate 3:
+Applying red -> square to K gives square(K).
+The final answer is: Yes
+
+Compare the candidates against the exact question and every decisive constraint.
+Do not vote by wording or length. Select or correct the answer that is best supported.
+Return only the final answer, with no explanation.
+```
+
+选择器输出：
+
+```text
+Yes
+```
+
+这不是多数投票：即使三个候选都错，选择器也允许修正答案。最后一次验证兼格式修复
+解释了准确率增益，四次调用和冻结测试中平均 681 个 token 则解释了其延迟成本。
+
+#### 3. CBRR：校准一次，按任务路由，只调用一次
+
+CBRR 在校准阶段的输入是每个候选策略在 25 条带标签样本上的
+`（任务 ID，策略，二值正确性）`，输出是一份冻结 JSON 策略。下面是仓库中 E2B
+策略的真实节选：
+
+```json
+{
+  "default_strategy": "direct_answer",
+  "task_strategies": {
+    "bbh/boolean_expressions": "concise_cot",
+    "bbh/causal_judgement": "canonical_short"
+  }
+}
+```
+
+推理时，应用提供任务键和问题。对于下面这条人工构造的
+`bbh/boolean_expressions` 请求，路由器查到 `concise_cot`，然后构造一次普通模型
+调用：
+
+```text
+Is the Boolean expression `True and not False` true?
+
+Think briefly and solve the problem. Keep the reasoning concise.
+End with exactly one line in this format: The final answer is: <answer>
+```
+
+示例模型输出：
+
+```text
+not False is True, so the conjunction is True.
+The final answer is: True
+```
+
+任务 ID 只用于选择并构造提示，不会被暗中插入模型输入。CBRR 不逐题搜索，不根据
+已经生成的答案路由，也不增加模型调用；未知任务回退到 `direct_answer`。
+
+#### 4. GRPO：计算量匹配的强化学习基线
+
+**GRPO** 全称 **Group Relative Policy Optimization（组相对策略优化）**。对每个
+训练提示，它固定采样一组回答，用二值精确匹配奖励给每条回答打分，再相对于当前
+组归一化奖励，因此无需另外训练价值模型。
+
+例如四条 rollout 的奖励为 `[1, 1, 0, 0]` 时，均值为 `0.5`、标准差为 `0.5`，
+归一化优势是 `[+1, +1, -1, -1]`，这些值用于训练 LoRA。但奖励若为
+`[1, 1, 1, 1]` 或 `[0, 0, 0, 0]`，每条回答的优势都为零：模型已经花费生成
+token，这一组却不给出策略梯度方向。实际基线每组固定为八条 rollout，并与 VOLT
+使用相同的总 rollout 预算。
+
+部署时不再需要 GRPO 训练逻辑。输入只是选定的提示模板，输出是加载 LoRA 后模型
+生成的一条普通回答。
+
+#### 5. VOLT：历史基线与自适应 rollout 分配
+
+VOLT 接收与 GRPO 相同的训练样本和二值奖励，但先前轮次积累的状态会决定两类训练
+输出：
+
+1. 在采样本轮回答之前，冻结后验输出 `baseline_i` 和分配分数；
+2. 确定性分配器为每个选中提示输出 1–8 条 rollout；
+3. 评分器为每条完成输出奖励 `r`；
+4. 训练器输出优势 `r - baseline_i`，并且只更新 LoRA。
+
+假设历史结果给某个提示的冻结基线是 `0.2`，分配器只购买一条 rollout：
+
+```text
+训练输入      -> 问题 + concise_cot 指令
+模型输出      -> "The final answer is: Yes"
+验证器输出    -> reward = 1
+VOLT 输出     -> advantage = 1 - 0.2 = +0.8
+优化器        -> 在 LoRA 权重中强化这条采样完成
+```
+
+如果答错，优势就是 `-0.2`。与 GRPO 不同，单个结果仍然可用于学习，因为基线来自
+本轮之前已冻结的历史，而不是从当前组估计。后验正确率接近 `0.5` 的题获得更多
+rollout；几乎总对或总错的题获得更少，同时保留 15% 探索预算防止任何题永久饿死。
+
+部署这个适配器时，流程非常普通：
+
+```text
+应用输入       -> 一条 user 提示
+基础模型+VOLT LoRA -> 一条生成回答
+应用输出       -> 解析后的最终答案
+```
+
+推理阶段没有后验跟踪器、分配器、奖励函数或多样本投票。VOLT 改变的是 LoRA 的
+训练方式，而不是服务 API。
+
+### 运行这些方法
+
+在下文[训练与评测](#训练与评测)中的通用评测命令上，选择一组方法参数：
+
+```bash
+# 最便宜的基线：一次确定性调用
+--prompt-strategy direct_answer --temperature 0
+
+# 通用自排序：3 条候选 + 1 次选择
+--prompt-strategy concise_cot --self-consistency-k 3 \
+  --response-selection self_rank --temperature 0.7 \
+  --max-tokens 256 --selection-max-tokens 64
+
+# CBRR：一次路由后的调用；缺失任务使用策略文件中的默认值
+--prompt-policy results/e2b-confirmatory-20260709_231405/selection/cbrr_policy.json \
+  --temperature 0
+```
+
+GRPO、VOLT 的训练以及检查点选择/最终评测命令见下文 VOLT 章节。
+
+### LoRA 能否用于这些数据集之外的应用？
+
+从技术上可以。VOLT 产物是标准 PEFT LoRA 适配器，不是只会查询基准答案的表。
+只要加载到训练时使用的**完全兼容 E2B 基础检查点和 tokenizer** 上，它就能接收
+任意应用提示，并且可以随时启用、关闭或合并进基础权重。但它不能直接挂载到另一种
+模型架构或不相关的基础版本。
+
+目前的迁移证据积极但有限。在 16 个整体排除于 RL 训练的任务上（400 条验证样本），
+基础 E2B、GRPO、VOLT 分别得到 22.00%、30.75%、33.25%。VOLT 比 GRPO 高 2.50
+个百分点，但该子集上没有统计显著性（`p = 0.237`；bootstrap 区间 `-0.75` 到
+`+6.00`）。因此，现有结果还不能证明它会普遍改善聊天、代码或特定行业应用。
+部署前应在目标应用的真实提示、安全约束、输出格式和延迟条件下重新评测。
+
+纯提示方法也可以与 LoRA 组合，但在基础模型上校准的路由器可能在微调后失效。
+应针对新检查点重新运行 CBRR 校准，而不是假设原有任务策略仍然最优。生产环境中
+可按标准 PEFT 方式加载或合并：
+
+```python
+from peft import PeftModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+base_id = "<训练所用的完全相同 E2B 基础检查点>"
+adapter_dir = "<选定检查点>/adapter"
+
+tokenizer = AutoTokenizer.from_pretrained(base_id)
+base = AutoModelForCausalLM.from_pretrained(base_id, device_map="auto")
+model = PeftModel.from_pretrained(base, adapter_dir)
+model = model.merge_and_unload()  # 可选；合并前后都应实测
+```
 
 ## CBRR：不修改权重的提示路由
 

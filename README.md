@@ -37,8 +37,9 @@ forms like `(A)` vs `A`, numbers, LaTeX) and compared with the reference.
 **The split rule (frozen before any tuning):** inside every task, examples are
 numbered. Numbers 0-24 are *calibration* (may be used for tuning), 25-49 are
 *validation* (may be used for selecting between tuned variants), and 50+ are
-the *test* split (9,550 examples) that nothing is ever tuned on. All headline
-numbers below are from that untouched test split.
+the *test* split (9,550 examples) that nothing is ever tuned on. Prompt-only
+headline numbers below are from that untouched test split; results explicitly
+labeled *validation* are not test claims.
 
 ## The models
 
@@ -63,12 +64,12 @@ response = client.chat.completions.create(
 
 ## Headline results (E2B, frozen test split, 9,550 examples)
 
-| Approach | Weights changed? | Accuracy | Avg tokens per answer |
-|---|---|---:|---:|
-| Ask for the answer directly (`direct_answer`) | No | 26.39% | 15 |
-| Best universal prompt (`concise_cot_self_rank_k3`) | No | 35.06% | 681 |
-| CBRR per-task prompt router | No | **35.41%** | 66 |
-| VOLT RL fine-tuning (this branch) | Yes (LoRA) | *training in progress* | - |
+| Approach | Weights changed? | Calls / question | Accuracy | Avg completion tokens | Mean API time / question |
+|---|---|---:|---:|---:|---:|
+| Ask for the answer directly (`direct_answer`) | No | 1 | 26.39% | 14.7 | 0.585 s |
+| Best universal prompt (`concise_cot_self_rank_k3`) | No | 4 | 35.06% | 681.3 | 11.228 s |
+| CBRR per-task prompt router | No | 1 | **35.41%** | 65.6 | 1.287 s |
+| VOLT RL fine-tuning (this branch) | Yes (LoRA) | 1 | **Pending** | **Pending** | **Pending** |
 
 How to read this: just asking better questions moves this small model from
 26% to 35% — and the router gets the same accuracy as the best prompt while
@@ -77,8 +78,307 @@ p ≈ 1e-132, bootstrap +8.4 to +9.6 points) and concentrated in BBH; BBEH
 barely moves with any prompt. On the larger E4B model the router reaches
 41.6% on the matched validation set.
 
-All other tables (per-dataset breakdowns, both models, all 29 arms, robustness
-checks) are in [docs/DETAILED_RESULTS.md](docs/DETAILED_RESULTS.md).
+VOLT and the compute-matched GRPO baseline have finished training and full
+validation. Their frozen-test results are still pending, so no test accuracy is
+reported for either adapter yet. All other prompt-only tables (per-dataset
+breakdowns, both models, all 29 arms, robustness checks) are in
+[docs/DETAILED_RESULTS.md](docs/DETAILED_RESULTS.md).
+
+## Current best methods: what to use
+
+There is no single winner for every constraint. CBRR is the best completed
+frozen-test result and the strongest efficiency/accuracy tradeoff when task IDs
+are available. Self-ranking is the strongest universal prompt-only method when
+they are not. VOLT is the current full-validation winner among the trained
+adapters, but its untouched-test result remains pending.
+
+| Goal | Recommended method | Why | What it requires |
+|---|---|---|---|
+| Lowest cost and latency | `direct_answer`; also test `canonical_short` | One short deterministic call | Nothing beyond the model API |
+| Best prompt-only efficiency | **CBRR** | One call, 35.41% frozen-test accuracy, about one tenth of self-ranking's tokens | Stable task ID and 25 labeled calibration rows per task |
+| Best universal prompt-only accuracy | **Self-ranking, k=3** | No task metadata or weight update; 35.06% frozen-test accuracy | Four calls and a much larger token budget |
+| Best current tuned-model validation accuracy | **VOLT LoRA** | 36.04% on full validation with fewer generated tokens than GRPO | The matching base checkpoint, training data, and LoRA deployment |
+| Scientific RL baseline | **GRPO** | Standard compute-matched comparison for measuring VOLT's contribution | Fixed groups of multiple rollouts during training |
+
+### Keep the two result tracks separate
+
+The prompt-only table above is the registered API pipeline on all 9,550 frozen
+test examples. Its time column is end-to-end request time in that API run, so
+it fairly exposes self-ranking's three generation calls plus one selection
+call. CBRR performs routing offline and still makes only one model call per
+question.
+
+The weight-tuning track currently has a completed 1,490-example full-validation
+comparison using the training-matched `concise_cot` prompt and probe-selected
+checkpoints:
+
+| Model on full validation | Correct | Accuracy | Avg completion tokens | Observed eval wall time |
+|---|---:|---:|---:|---:|
+| Base E2B | 265 / 1,490 | 17.79% | 226.9 | ~633 s (0.425 s/example) |
+| Compute-matched GRPO LoRA | 498 / 1,490 | 33.42% | 163.6 | ~960 s (0.644 s/example) |
+| **VOLT LoRA** | **537 / 1,490** | **36.04%** | **125.6** | **~943 s (0.633 s/example)** |
+
+These validation rows establish the comparison among base, GRPO, and VOLT;
+they do **not** establish that VOLT beats CBRR or self-ranking, because those
+headline results use a different split and serving pipeline.
+
+On these paired validation predictions, VOLT beats GRPO by 39 answers, or
+2.62 percentage points (121 VOLT-only wins, 82 GRPO-only wins; McNemar
+`p = 0.0075`; task-stratified bootstrap 95% interval `+0.87` to `+4.36`
+points). It uses 23.2% fewer completion tokens than GRPO. Against the base it
+gains 18.26 points and uses 44.6% fewer completion tokens.
+
+The wall-clock values are local, batched, unmerged-PEFT measurements, not the
+same latency protocol as the API table. In this run VOLT was slightly faster
+than GRPO, but the two unmerged adapters were roughly 49–52% slower than the
+bare base in wall-clock throughput despite shorter answers. Merge the LoRA
+into the base weights and benchmark the target serving stack before making a
+production latency claim.
+
+Training efficiency shows the intended VOLT advantage more directly. Both
+runs generated 21,504 rollouts. GRPO produced only 5,432 rollouts with nonzero
+group-relative advantage, while VOLT retained nonzero signal for all 21,504
+(about 4x as many informative rollouts). VOLT generated 4,655,325 tokens versus
+GRPO's 5,593,771, a 16.8% reduction. Observed active training time was roughly
+4 h 38 min for VOLT and 4 h 49 min for GRPO, but shared-GPU OOM recovery makes
+those wall times descriptive rather than a controlled speed benchmark.
+
+### Worked input/output examples
+
+The small logic question below is synthetic. It demonstrates the exact request
+and response shapes; it is not a cherry-picked benchmark prediction and is not
+used in any reported score.
+
+> Every red object is square. Object K is red. Is object K square?
+
+#### 1. Direct answer: cheapest one-call baseline
+
+Input sent to the model:
+
+```text
+Every red object is square. Object K is red. Is object K square?
+
+Return only the final answer. Do not include reasoning, explanation, or extra text.
+```
+
+Expected response shape:
+
+```text
+Yes
+```
+
+`canonical_short` is the safer variant when tasks mix booleans, option labels,
+numbers, and lists: it explicitly tells the model which canonical output shape
+to use. Both approaches are one request and require no calibration.
+
+#### 2. Self-ranking: generate three, then let the model select
+
+Each of three generation calls receives the `concise_cot` form:
+
+```text
+Every red object is square. Object K is red. Is object K square?
+
+Think briefly and solve the problem. Keep the reasoning concise.
+End with exactly one line in this format: The final answer is: <answer>
+```
+
+Illustrative candidate responses:
+
+```text
+Candidate 1: K is red and every red object is square.
+The final answer is: Yes
+
+Candidate 2: The rule does not name K directly.
+The final answer is: No
+
+Candidate 3: Applying red -> square to K gives square(K).
+The final answer is: Yes
+```
+
+A fourth, deterministic call receives the original question and all raw
+candidates:
+
+```text
+Question:
+Every red object is square. Object K is red. Is object K square?
+
+Candidate 1:
+K is red and every red object is square.
+The final answer is: Yes
+
+Candidate 2:
+The rule does not name K directly.
+The final answer is: No
+
+Candidate 3:
+Applying red -> square to K gives square(K).
+The final answer is: Yes
+
+Compare the candidates against the exact question and every decisive constraint.
+Do not vote by wording or length. Select or correct the answer that is best supported.
+Return only the final answer, with no explanation.
+```
+
+Selector response:
+
+```text
+Yes
+```
+
+This is not majority voting: the selector may correct all three candidates.
+That verification-and-format-repair pass explains the accuracy gain, while the
+four calls and 681-token test average explain the latency cost.
+
+#### 3. CBRR: calibrate once, route by task, call once
+
+CBRR's input during calibration is `(task ID, strategy, binary correctness)`
+for each candidate strategy on 25 labeled examples. Its output is a frozen JSON
+policy. This excerpt is from the checked-in E2B policy:
+
+```json
+{
+  "default_strategy": "direct_answer",
+  "task_strategies": {
+    "bbh/boolean_expressions": "concise_cot",
+    "bbh/causal_judgement": "canonical_short"
+  }
+}
+```
+
+At inference, the application supplies a task key and question. For a
+`bbh/boolean_expressions` request such as the synthetic example below, the
+router looks up `concise_cot` and constructs one ordinary model request:
+
+```text
+Is the Boolean expression `True and not False` true?
+
+Think briefly and solve the problem. Keep the reasoning concise.
+End with exactly one line in this format: The final answer is: <answer>
+```
+
+Illustrative model output:
+
+```text
+not False is True, so the conjunction is True.
+The final answer is: True
+```
+
+The task ID controls prompt construction but is not silently inserted into the
+model prompt. There is no per-question search, no answer-dependent routing,
+and no extra model call. Unknown tasks fall back to `direct_answer`.
+
+#### 4. GRPO: the compute-matched RL baseline
+
+**GRPO** means **Group Relative Policy Optimization**. For each training
+prompt it samples a fixed group of responses, scores each response with the
+binary exact-match reward, and normalizes rewards relative to that same group.
+It therefore avoids training a separate value model.
+
+For an illustrative four-rollout group with rewards `[1, 1, 0, 0]`, the mean
+is `0.5`, the standard deviation is `0.5`, and the normalized advantages are
+`[+1, +1, -1, -1]`. Those values train the LoRA. But rewards
+`[1, 1, 1, 1]` or `[0, 0, 0, 0]` produce zero advantage for every response:
+the model spent tokens, yet that group gives no policy-gradient direction.
+The actual baseline uses groups of eight and the same total rollout budget as
+VOLT.
+
+At deployment, GRPO machinery is gone. The input is just the selected prompt
+template and the output is one normal model response from the LoRA adapter.
+
+#### 5. VOLT: history-based baseline and adaptive rollout allocation
+
+VOLT receives the same training examples and binary rewards as GRPO, but its
+state from earlier iterations changes both training outputs:
+
+1. a frozen posterior produces `baseline_i` and an allocation score before
+   any current response is sampled;
+2. a deterministic allocator outputs 1–8 rollouts per selected prompt;
+3. the scorer outputs reward `r` for each completion;
+4. the trainer outputs the advantage `r - baseline_i` and updates only LoRA.
+
+For example, suppose earlier results give this prompt a frozen baseline of
+`0.2` and the allocator buys one rollout:
+
+```text
+training input  -> question + concise_cot instruction
+model output    -> "The final answer is: Yes"
+verifier output -> reward = 1
+VOLT output     -> advantage = 1 - 0.2 = +0.8
+optimizer       -> reinforce the sampled completion in the LoRA weights
+```
+
+If the answer were wrong, its advantage would be `-0.2`. Unlike GRPO, either
+single outcome remains usable because the baseline was fixed from history,
+not estimated from the current group. Prompts near posterior success
+probability `0.5` receive more rollouts; almost-solved and almost-impossible
+prompts receive fewer, with a 15% exploration floor preventing starvation.
+
+Serving the resulting adapter is deliberately ordinary:
+
+```text
+application input -> one user prompt
+base + VOLT LoRA  -> one generated response
+application output -> parsed final answer
+```
+
+There is no posterior tracker, allocator, reward function, or multi-sample vote
+at inference time. VOLT changes how the LoRA is trained, not the serving API.
+
+### Run the methods
+
+Use the common evaluator command in [Reproducing the evaluation](#reproducing-the-evaluation)
+and choose one of these method-specific flag sets:
+
+```bash
+# Cheapest baseline: one deterministic call
+--prompt-strategy direct_answer --temperature 0
+
+# Universal self-ranking: 3 candidates + 1 selector
+--prompt-strategy concise_cot --self-consistency-k 3 \
+  --response-selection self_rank --temperature 0.7 \
+  --max-tokens 256 --selection-max-tokens 64
+
+# CBRR: one routed call; missing task IDs use the policy's default
+--prompt-policy results/e2b-confirmatory-20260709_231405/selection/cbrr_policy.json \
+  --temperature 0
+```
+
+Train the two adapters and run checkpoint selection/final evaluation with the
+commands in the [VOLT section](#volt-variance-optimal-reinforcement-learning-under-a-rollout-budget).
+
+### Can the LoRA be used outside these datasets?
+
+Yes, technically: the VOLT artifact is a normal PEFT LoRA adapter, not a
+benchmark-only lookup table. It can answer arbitrary application prompts when
+loaded on the **exact compatible E2B base checkpoint and tokenizer**, and it
+can be enabled, disabled, or merged into the base weights. It cannot be
+attached directly to a different architecture or unrelated base revision.
+
+Evidence for transfer is encouraging but limited. Across 16 whole tasks held
+out from RL training (400 validation examples), base E2B scored 22.00%, GRPO
+30.75%, and VOLT 33.25%. VOLT's +2.50-point lead over GRPO was not significant
+on that subset (`p = 0.237`; bootstrap interval `-0.75` to `+6.00`), so this is
+not yet proof of broad chat, coding, or domain-specific improvement. Evaluate
+the adapter on the target application's prompts, safety constraints, output
+format, and latency before deployment.
+
+Prompt methods and weight tuning can also be combined, but a router calibrated
+on the base model may become stale after LoRA tuning. Re-run CBRR calibration
+against the tuned checkpoint instead of assuming the old per-task choices
+remain optimal. For production, a standard PEFT load/merge looks like:
+
+```python
+from peft import PeftModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+base_id = "<the exact E2B base checkpoint used for training>"
+adapter_dir = "<selected-checkpoint>/adapter"
+
+tokenizer = AutoTokenizer.from_pretrained(base_id)
+base = AutoModelForCausalLM.from_pretrained(base_id, device_map="auto")
+model = PeftModel.from_pretrained(base, adapter_dir)
+model = model.merge_and_unload()  # optional; benchmark before/after merging
+```
 
 ## The 26 prompt strategies, explained
 
