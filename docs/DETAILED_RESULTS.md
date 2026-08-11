@@ -40,7 +40,62 @@ negative (-0.12 points), and USR improves modestly (+0.88 points). CBRR uses
 about 4.5 times the completion tokens of direct answer, although it slightly
 outperforms self-ranking with about one tenth of the completion tokens.
 
-## 2. Matched validation split by model (675 BBH, 575 BBEH, 240 USR)
+## 2. Frozen RL adapter test (9,550 examples, index >= 50)
+
+The selected Base/GRPO/VOLT cells use local BF16 batched inference. Checkpoint
+45 was chosen independently for each adapter from the fixed validation probe
+before any frozen prediction was generated. The primary prompt is the
+training-matched `concise_cot`; `direct_answer` is a prompt-transfer check.
+Thirty-seven prompts exceed the common prompt cap and are scored incorrect in
+every cell so all denominators remain exactly 9,550.
+
+### Primary `concise_cot` condition
+
+| Model | BBH | BBEH | USR | Overall | Mean completion tokens |
+|---|---:|---:|---:|---:|---:|
+| Base E2B | 1,737/5,161 (33.66%) | 73/3,370 (2.17%) | 13/1,019 (1.28%) | 1,823/9,550 (19.09%) | 222.1 |
+| GRPO LoRA | **3,231/5,161 (62.60%)** | 298/3,370 (8.84%) | 60/1,019 (5.89%) | 3,589/9,550 (37.58%) | 162.1 |
+| **VOLT LoRA** | 3,195/5,161 (61.91%) | **397/3,370 (11.78%)** | **96/1,019 (9.42%)** | **3,688/9,550 (38.62%)** | **127.0** |
+
+VOLT minus GRPO is +99 answers / +1.04 percentage points, with 678 paired
+wins and 579 paired losses (exact two-sided McNemar `p = 0.005686`). VOLT uses
+21.6% fewer completion tokens. The gain comes from BBEH and USR; GRPO is 36
+answers better on BBH. This is why pooled accuracy must be accompanied by the
+per-benchmark breakdown.
+
+Against Base, GRPO gains 18.49 points (1,942/176 paired wins/losses) and VOLT
+gains 19.53 points (2,081/216); both p-values are below ordinary floating-point
+resolution in the direct binomial calculation. VOLT uses 42.8% fewer completion
+tokens than Base.
+
+### `direct_answer` transfer condition
+
+| Model | BBH | BBEH | USR | Overall | Mean completion tokens |
+|---|---:|---:|---:|---:|---:|
+| Base E2B | 2,082/5,161 (40.34%) | 363/3,370 (10.77%) | 38/1,019 (3.73%) | 2,483/9,550 (26.00%) | 14.6 |
+| GRPO LoRA | 2,244/5,161 (43.48%) | 421/3,370 (12.49%) | 156/1,019 (15.31%) | 2,821/9,550 (29.54%) | 9.2 |
+| **VOLT LoRA** | **2,278/5,161 (44.14%)** | **440/3,370 (13.06%)** | **202/1,019 (19.82%)** | **2,920/9,550 (30.58%)** | **6.9** |
+
+VOLT again beats GRPO by 99 answers / 1.04 points, now with 270/171 paired
+wins/losses (`p = 2.80e-6`) and 24.7% fewer completion tokens. This consistency
+supports prompt transfer, but it does not make the local adapter pipeline
+directly rankable against the separate API prompt study.
+
+Observed full-cell wall times were approximately 81.8/122.6/119.2 minutes for
+Base/GRPO/VOLT under `concise_cot` and 22.4/29.0/23.6 minutes under
+`direct_answer`. These are sequential, local, batched, unmerged-PEFT timings on
+a shared GPU—not controlled deployment latency.
+
+## 3. Official native-thinking BBEH extension
+
+The Gemma 4 paper's 21.9% E2B BBEH number used native thinking, whereas Sections
+1–2 use the registered non-thinking protocols. A separate full-base and
+frozen-adapter evaluation is running with the public Gemma sampling defaults,
+the BBEH paper's exact evaluation suffix, channel-aware parsing, and the pinned
+official scorer. No length-sorted provisional batch is treated as a result.
+See [OFFICIAL_THINKING_EVALUATION.md](OFFICIAL_THINKING_EVALUATION.md).
+
+## 4. Matched validation split by model (675 BBH, 575 BBEH, 240 USR)
 
 CBRR is task-conditioned, so its rows are separate from the universal prompt
 matrix. E4B results are exploratory because E4B informed strategy development.
@@ -54,7 +109,7 @@ matrix. E4B results are exploratory because E4B informed strategy development.
 | E4B `concise_cot_self_rank_k3` | 65.93% | 15.30% | 20.83% | 39.13% |
 | E4B `cbrr_policy` | **67.56%** | **16.35%** | **29.17%** | **41.61%** |
 
-## 3. All 29 universal arms by model and dataset (matched validation)
+## 5. All 29 universal arms by model and dataset (matched validation)
 
 | Strategy | E2B BBH | E2B BBEH | E2B USR | E2B all | E4B BBH | E4B BBEH | E4B USR | E4B all |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -88,14 +143,14 @@ matrix. E4B results are exploratory because E4B informed strategy development.
 | `symbolic_proof` | 4.00% | 0.00% | 0.00% | 1.81% | 4.44% | 0.17% | 0.83% | 2.21% |
 | `plan_and_solve_plus` | 2.81% | 0.00% | 0.00% | 1.28% | 4.15% | 0.17% | 0.83% | 2.08% |
 
-## 4. Reward-routed policy (earlier, pre-confirmatory iteration)
+## 6. Reward-routed policy (earlier, pre-confirmatory iteration)
 
 See [PROMPT_OPTIMIZATION_RESEARCH.md](PROMPT_OPTIMIZATION_RESEARCH.md) for the
 v1/v2 routed-policy results on the 11,040-example held-out set
 (`reward_routed_v2`: 36.41% vs 32.90% direct, fully live, zero request
 errors), the research basis, and negative results.
 
-## 5. Related artifacts
+## 7. Related artifacts
 
 - [Confirmatory report](../results/e2b-confirmatory-20260709_231405/analysis/report.md)
 - [Cluster sensitivity](../paper/e2b-e4b-study/cluster-robustness/cluster_robustness.md)
@@ -103,3 +158,4 @@ errors), the research basis, and negative results.
 - [Cross-model CSV](../paper/e2b-e4b-study/cross_model_screening.csv)
 - [Direct-fallback replay](../paper/e2b-e4b-study/budget-sensitivity/fallback_replay_sensitivity.md)
 - [Deployment snapshot](../paper/e2b-e4b-study/deployment-verification-20260710.md)
+- [Native-thinking BBEH protocol](OFFICIAL_THINKING_EVALUATION.md)

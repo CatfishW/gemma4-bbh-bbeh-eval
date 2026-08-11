@@ -19,10 +19,18 @@ The matched exploratory model is `google/gemma-4-E4B-it` at Hub revision
 `cfbd3d2f1cd71bd471c37fe2bf8546d5028d41e5736f64e1ca6c6b8893125503`.
 The same Hub checksum verification and unmodified BF16 serving conditions apply.
 
-Gemma 4 supports system-role messages, but this study does not send one. Every
-benchmark request has exactly one `user` message. The public router forwards the
-original request bytes and chooses a backend from the existing `model` field; it
-does not add messages or prompt text.
+Gemma 4 supports system-role messages, but the registered prompt study and
+greedy RL evaluation do not send one. Every request in those protocols has
+exactly one `user` message. The public router forwards the original request
+bytes and chooses a backend from the existing `model` field; it does not add
+messages or prompt text.
+
+A separate post-hoc BBEH reproduction enables Gemma's native thinking through
+the pinned tokenizer's `enable_thinking=True` option. The template—not the
+caller—then inserts one leading system `<|think|>` turn. That extension uses a
+separate output tree and claim; it does not alter the registered results. Its
+full protocol and limitations are in
+[OFFICIAL_THINKING_EVALUATION.md](OFFICIAL_THINKING_EVALUATION.md).
 
 ## Datasets
 

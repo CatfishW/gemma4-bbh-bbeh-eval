@@ -69,7 +69,6 @@ response = client.chat.completions.create(
 | Ask for the answer directly (`direct_answer`) | No | 1 | 26.39% | 14.7 | 0.585 s |
 | Best universal prompt (`concise_cot_self_rank_k3`) | No | 4 | 35.06% | 681.3 | 11.228 s |
 | CBRR per-task prompt router | No | 1 | **35.41%** | 65.6 | 1.287 s |
-| VOLT RL fine-tuning (this branch) | Yes (LoRA) | 1 | **Pending** | **Pending** | **Pending** |
 
 How to read this: just asking better questions moves this small model from
 26% to 35% — and the router gets the same accuracy as the best prompt while
@@ -78,26 +77,27 @@ p ≈ 1e-132, bootstrap +8.4 to +9.6 points) and concentrated in BBH; BBEH
 barely moves with any prompt. On the larger E4B model the router reaches
 41.6% on the matched validation set.
 
-VOLT and the compute-matched GRPO baseline have finished training and full
-validation. Their frozen-test results are still pending, so no test accuracy is
-reported for either adapter yet. All other prompt-only tables (per-dataset
-breakdowns, both models, all 29 arms, robustness checks) are in
+VOLT and the compute-matched GRPO baseline have also finished the full frozen
+test. They are reported separately below because they use local batched
+inference, different output budgets, and changed weights; their wall times are
+not comparable to the API latency column above. All prompt-only tables
+(per-dataset breakdowns, both models, all 29 arms, robustness checks) are in
 [docs/DETAILED_RESULTS.md](docs/DETAILED_RESULTS.md).
 
 ## Current best methods: what to use
 
-There is no single winner for every constraint. CBRR is the best completed
-frozen-test result and the strongest efficiency/accuracy tradeoff when task IDs
-are available. Self-ranking is the strongest universal prompt-only method when
-they are not. VOLT is the current full-validation winner among the trained
-adapters, but its untouched-test result remains pending.
+There is no single winner for every constraint. CBRR is the strongest
+prompt-only efficiency/accuracy tradeoff when task IDs and labeled calibration
+rows are available. Self-ranking is the strongest universal prompt-only method
+when they are not. VOLT is the strongest trained adapter on the untouched test
+set under both evaluated prompt transfers.
 
 | Goal | Recommended method | Why | What it requires |
 |---|---|---|---|
 | Lowest cost and latency | `direct_answer`; also test `canonical_short` | One short deterministic call | Nothing beyond the model API |
 | Best prompt-only efficiency | **CBRR** | One call, 35.41% frozen-test accuracy, about one tenth of self-ranking's tokens | Stable task ID and 25 labeled calibration rows per task |
 | Best universal prompt-only accuracy | **Self-ranking, k=3** | No task metadata or weight update; 35.06% frozen-test accuracy | Four calls and a much larger token budget |
-| Best current tuned-model validation accuracy | **VOLT LoRA** | 36.04% on full validation with fewer generated tokens than GRPO | The matching base checkpoint, training data, and LoRA deployment |
+| Best tuned-model frozen accuracy | **VOLT LoRA** | 38.62% with `concise_cot`; +1.04 points and 21.6% fewer tokens than GRPO | The matching base checkpoint and LoRA deployment |
 | Scientific RL baseline | **GRPO** | Standard compute-matched comparison for measuring VOLT's contribution | Fixed groups of multiple rollouts during training |
 
 ### Keep the two result tracks separate
@@ -108,9 +108,26 @@ it fairly exposes self-ranking's three generation calls plus one selection
 call. CBRR performs routing offline and still makes only one model call per
 question.
 
-The weight-tuning track currently has a completed 1,490-example full-validation
-comparison using the training-matched `concise_cot` prompt and probe-selected
-checkpoints:
+The weight-tuning track used validation probes to select checkpoint 45 for both
+adapters, then evaluated each selected checkpoint exactly once on all 9,550
+frozen rows. The training-matched `concise_cot` condition is primary;
+`direct_answer` measures prompt transfer:
+
+| Model | `concise_cot` correct / accuracy / tokens | `direct_answer` correct / accuracy / tokens |
+|---|---:|---:|
+| Base E2B | 1,823 / **19.09%** / 222.1 | 2,483 / **26.00%** / 14.6 |
+| Compute-matched GRPO LoRA | 3,589 / **37.58%** / 162.1 | 2,821 / **29.54%** / 9.2 |
+| **VOLT LoRA** | **3,688 / 38.62% / 127.0** | **2,920 / 30.58% / 6.9** |
+
+On paired `concise_cot` predictions, VOLT improves over GRPO by 99 answers, or
+1.04 percentage points (678 VOLT-only wins, 579 losses; exact two-sided
+McNemar `p = 0.005686`) while using 21.6% fewer completion tokens. Against the
+base it gains 19.53 points and uses 42.8% fewer tokens. The transfer result is
+consistent: VOLT beats GRPO by 1.04 points under `direct_answer` (270/171
+wins/losses, `p = 2.80e-6`) and uses 24.7% fewer tokens.
+
+For completeness, the checkpoint-selection evidence on the 1,490-example full
+validation split was:
 
 | Model on full validation | Correct | Accuracy | Avg completion tokens | Observed eval wall time |
 |---|---:|---:|---:|---:|
@@ -118,22 +135,19 @@ checkpoints:
 | Compute-matched GRPO LoRA | 498 / 1,490 | 33.42% | 163.6 | ~960 s (0.644 s/example) |
 | **VOLT LoRA** | **537 / 1,490** | **36.04%** | **125.6** | **~943 s (0.633 s/example)** |
 
-These validation rows establish the comparison among base, GRPO, and VOLT;
-they do **not** establish that VOLT beats CBRR or self-ranking, because those
-headline results use a different split and serving pipeline.
+The final adapter and prompt-only numbers should still not be ranked as if they
+were one experiment: CBRR/self-ranking came from the registered API pipeline,
+whereas the adapters use local BF16 batched inference and different generation
+limits. A direct deployment comparison requires rerunning all methods in one
+serving stack and timing protocol.
 
-On these paired validation predictions, VOLT beats GRPO by 39 answers, or
-2.62 percentage points (121 VOLT-only wins, 82 GRPO-only wins; McNemar
-`p = 0.0075`; task-stratified bootstrap 95% interval `+0.87` to `+4.36`
-points). It uses 23.2% fewer completion tokens than GRPO. Against the base it
-gains 18.26 points and uses 44.6% fewer completion tokens.
-
-The wall-clock values are local, batched, unmerged-PEFT measurements, not the
-same latency protocol as the API table. In this run VOLT was slightly faster
-than GRPO, but the two unmerged adapters were roughly 49–52% slower than the
-bare base in wall-clock throughput despite shorter answers. Merge the LoRA
-into the base weights and benchmark the target serving stack before making a
-production latency claim.
+The frozen local wall times reinforce that caveat. In `concise_cot`, Base,
+GRPO, and VOLT took about 81.8, 122.6, and 119.2 minutes respectively; in
+`direct_answer`, they took 22.4, 29.0, and 23.6 minutes. VOLT was faster than
+GRPO in both conditions and generated less text, but the unmerged adapter was
+still about 46% slower than the bare base in the primary condition. Merge the
+LoRA into the base weights and benchmark the target serving stack before
+making a production-latency claim.
 
 Training efficiency shows the intended VOLT advantage more directly. Both
 runs generated 21,504 rollouts. GRPO produced only 5,432 rollouts with nonzero
@@ -142,6 +156,39 @@ group-relative advantage, while VOLT retained nonzero signal for all 21,504
 GRPO's 5,593,771, a 16.8% reduction. Observed active training time was roughly
 4 h 38 min for VOLT and 4 h 49 min for GRPO, but shared-GPU OOM recovery makes
 those wall times descriptive rather than a controlled speed benchmark.
+
+## Corrected comparison with the official Gemma 4 paper
+
+The Gemma 4 report gives E2B **21.9%** on the full 4,520-row BBEH micro
+average, but Table 5 also says its models use native thinking unless explicitly
+stated. The frozen results above intentionally used one user message, no system
+turn, greedy decoding, and short fixed output limits. They answer a valid
+deployment question, but they are **not** a reproduction of the paper number.
+
+The separate `gemma4_public_native_thinking_bbeh_v3` profile fixes that
+comparison without rewriting the original results:
+
+- exact E2B revision `70af34e`, BF16, and BBEH revision `80d12ca`;
+- the task input plus the exact evaluation suffix published in BBEH Appendix C;
+- one user message with `enable_thinking=True`; Gemma's template inserts one
+  leading system `<|think|>` turn—no manual system message is duplicated;
+- the public Gemma defaults: temperature 1.0, top-p 0.95, and top-k 64;
+- an explicitly disclosed 8,192-token ceiling and one seeded sample;
+- `tokenizer.parse_response` separates private `thinking` from final `content`,
+  and only final content is sent to the pinned upstream BBEH scorer;
+- Base runs on all 4,520 rows for the paper comparison; Base/GRPO/VOLT claims
+  use only the 3,370 untouched rows with index 50 or higher.
+
+The full corrected run was launched on August 11, 2026. Provisional batches are
+not promoted into headline results; the sequence writes resumable predictions,
+truncation and parser audits, then automatically produces paired wins/losses,
+McNemar tests, bootstrap intervals, and token deltas when all cells complete.
+The report does not publish its BBEH token ceiling, seed, sample count, or full
+internal harness, so this is labeled a **best-public reproduction**, not an
+exact recreation. See
+[the protocol and live-artifact guide](docs/OFFICIAL_THINKING_EVALUATION.md)
+and the pinned
+[experiment manifest](experiments/rl/official_thinking_e2b_bbeh.json).
 
 ### Worked input/output examples
 
@@ -678,8 +725,10 @@ the posterior baseline and adaptive allocator cleanly.
 - Posterior discounting handles policy drift only approximately, and
   task-level pooling can mislead when prompts within one task are heterogeneous.
 - Training telemetry shows the intended mechanism—VOLT keeps nonzero
-  advantages where GRPO discards many homogeneous groups—but the frozen-test
-  comparison remains the standard for any final accuracy claim.
+  advantages where GRPO discards many homogeneous groups—and the frozen test
+  confirms a smaller but statistically detectable advantage over GRPO. This
+  remains evidence on one checkpoint family and benchmark mixture, not a claim
+  of universal superiority.
 
 The full derivations, proofs, related-work positioning, and manuscript are in
 [paper/volt/](paper/volt/). Train and evaluate on the GPU host with:
