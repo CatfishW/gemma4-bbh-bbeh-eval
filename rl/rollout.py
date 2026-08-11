@@ -15,6 +15,7 @@ import logging
 import torch
 
 from eval_benchmarks import Example, build_prompt
+from rl.memory import is_cuda_out_of_memory
 
 LOGGER = logging.getLogger(__name__)
 
@@ -138,15 +139,20 @@ def _decode_with_oom_splitting(
 ) -> list[RolloutResult]:
     try:
         return _decode_batch(model, tokenizer, batch, **kwargs)
-    except torch.OutOfMemoryError:
-        torch.cuda.empty_cache()
-        if len(batch) == 1:
+    except Exception as error:
+        if not is_cuda_out_of_memory(error):
             raise
-        middle = len(batch) // 2
-        LOGGER.warning("generation OOM: splitting batch of %d and retrying", len(batch))
-        left = _decode_with_oom_splitting(model, tokenizer, batch[:middle], **kwargs)
-        right = _decode_with_oom_splitting(model, tokenizer, batch[middle:], **kwargs)
-        return left + right
+
+    # Leave the exception scope before emptying the allocator so its traceback
+    # no longer retains tensors from the failed generation call.
+    torch.cuda.empty_cache()
+    if len(batch) == 1:
+        raise RuntimeError("CUDA OOM while generating a single rollout")
+    middle = len(batch) // 2
+    LOGGER.warning("generation OOM: splitting batch of %d and retrying", len(batch))
+    left = _decode_with_oom_splitting(model, tokenizer, batch[:middle], **kwargs)
+    right = _decode_with_oom_splitting(model, tokenizer, batch[middle:], **kwargs)
+    return left + right
 
 
 @torch.no_grad()

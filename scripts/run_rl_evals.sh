@@ -68,12 +68,14 @@ evaluate grpo validation concise_cot "$GRPO_ADAPTER"
 evaluate volt validation concise_cot "$VOLT_ADAPTER"
 evaluate base validation concise_cot ""
 
-# Frozen test (single shot per cell).
-evaluate base test direct_answer ""
+# Frozen test (single shot per cell). Evaluate the training-matched
+# concise-CoT condition first so the primary GRPO/VOLT comparison lands before
+# the prompt-transfer direct-answer checks.
 evaluate base test concise_cot ""
-evaluate grpo test direct_answer "$GRPO_ADAPTER"
 evaluate grpo test concise_cot "$GRPO_ADAPTER"
-evaluate volt test direct_answer "$VOLT_ADAPTER"
 evaluate volt test concise_cot "$VOLT_ADAPTER"
+evaluate base test direct_answer ""
+evaluate grpo test direct_answer "$GRPO_ADAPTER"
+evaluate volt test direct_answer "$VOLT_ADAPTER"
 
 echo "=== ALL EVALS DONE $(date) ==="

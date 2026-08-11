@@ -20,7 +20,9 @@ import torch
 
 from eval_benchmarks import Example
 from rl.configs import TrainConfig
+from rl.memory import is_cuda_out_of_memory
 from rl.modeling import completion_log_probs
+from rl.persistence import truncate_jsonl_at_iteration
 from rl.posterior import (
     DifficultyTracker,
     PosteriorSnapshot,
@@ -315,18 +317,25 @@ class RLTrainer:
         while True:
             try:
                 return self._optimize_once(scored, cap)
-            except torch.OutOfMemoryError:
-                attempts += 1
-                self.optimizer.zero_grad(set_to_none=True)
-                torch.cuda.empty_cache()
-                cap = max(512, cap // 2)
-                if attempts > 3:
+            except Exception as error:
+                if not is_cuda_out_of_memory(error):
                     raise
-                LOGGER.warning(
-                    "optimize OOM: retrying iteration %d with microbatch cap %d",
-                    self.iteration,
-                    cap,
+
+            # Leave the exception scope before clearing cached blocks so the
+            # failed backward traceback cannot retain its CUDA tensors.
+            attempts += 1
+            self.optimizer.zero_grad(set_to_none=True)
+            torch.cuda.empty_cache()
+            cap = max(512, cap // 2)
+            if attempts > 3:
+                raise RuntimeError(
+                    f"CUDA OOM after {attempts} optimization attempts at cap {cap}"
                 )
+            LOGGER.warning(
+                "optimize OOM: retrying iteration %d with microbatch cap %d",
+                self.iteration,
+                cap,
+            )
 
     def _optimize_once(self, scored: list[ScoredRollout], microbatch_token_cap: int) -> dict:
         self.model.train()
@@ -477,7 +486,15 @@ class RLTrainer:
             self.rng.setstate(
                 (rng_state[0], tuple(rng_state[1]), rng_state[2])
             )
-        LOGGER.info("resumed from %s at iteration %d", checkpoint_dir.name, self.iteration)
+        removed_metrics = truncate_jsonl_at_iteration(self.metrics_path, self.iteration)
+        removed_samples = truncate_jsonl_at_iteration(self.samples_path, self.iteration)
+        LOGGER.info(
+            "resumed from %s at iteration %d; pruned %d metric and %d sample rows",
+            checkpoint_dir.name,
+            self.iteration,
+            removed_metrics,
+            removed_samples,
+        )
         return True
 
     def _log_metrics(self, payload: dict) -> None:
