@@ -1,5 +1,10 @@
 # Gemma 4 E2B/E4B Reasoning Evaluation
 
+<p align="center">
+  <a href="./README.md"><img src="https://img.shields.io/badge/Language-English-0969DA?style=for-the-badge" alt="English"></a>
+  <a href="./README.zh-CN.md"><img src="https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-DE2910?style=for-the-badge" alt="简体中文"></a>
+</p>
+
 This repository measures — and then improves — how well two small deployed
 language models (Gemma 4 E2B and E4B) solve hard reasoning benchmarks, without
 ever touching the benchmark's test questions during tuning.
@@ -206,43 +211,190 @@ prediction. Protocol, amendments, and analysis:
 [docs/E2B_CONFIRMATORY_PROTOCOL.md](docs/E2B_CONFIRMATORY_PROTOCOL.md),
 [docs/PROMPT_OPTIMIZATION_RESEARCH.md](docs/PROMPT_OPTIMIZATION_RESEARCH.md).
 
-## VOLT: reinforcement learning under a token budget (this branch)
+## VOLT: variance-optimal reinforcement learning under a rollout budget
 
-Prompt routing tops out near 35% because the weights never change. The `rl/`
-package trains the E2B weights (LoRA adapters, base model untouched on disk)
-with **VOLT** — a new RL algorithm built for exactly this setting: little
-data (the 1,040 usable calibration prompts), one shared GPU, and a hard
-generation budget.
+Prompt routing tops out near 35% because it never changes model weights. The
+`rl/` package instead fine-tunes E2B through LoRA with **VOLT** — **V**ariance-
+**O**ptimal a**L**location of **T**okens — an RL-with-verifiable-rewards (RLVR)
+method designed for little training data, binary correctness rewards, one
+shared GPU, and a fixed generation budget.
 
-The idea in one paragraph: standard group-based RL (GRPO) spends the same
-number of sampled solutions on every prompt, but prompts the model always
-solves — or never solves — provably teach it nothing. VOLT keeps a small
-Bayesian difficulty estimate for every training prompt (pooled across tasks,
-decaying over time) and uses that *one* estimate three ways: to decide how
-many rollouts each prompt deserves (more where the model is 50/50), as the
-baseline that keeps the learning signal unbiased even though the sampling is
-adaptive (the martingale argument GRPO-family methods are missing), and to
-throttle answer length toward a deployment budget. Degenerate all-correct or
-all-wrong sample groups — dead weight in GRPO — still carry signal here.
+### Why fixed GRPO groups waste tokens
 
-Details, proofs, and positioning against 2025-26 work (DAPO, Dr. GRPO, SPO,
-DynaMO, DUET, Knapsack-RL, Reinforce-Ada): [paper/volt/](paper/volt/).
+GRPO gives every selected prompt a fixed group of sampled solutions and
+computes advantages from that group's reward mean and standard deviation. With
+binary rewards, an eight-answer group that is all correct or all wrong has
+zero advantage everywhere. Its generated tokens cannot update the policy.
 
-Train and evaluate (on the GPU host):
+That is common in this suite: many BBH prompts are nearly solved, while many
+BBEH prompts are nearly impossible. Only prompts near the model's current
+learning frontier reliably produce mixed groups.
+
+| Property | GRPO | VOLT |
+|---|---|---|
+| Rollouts per selected prompt | Fixed at 8 | Adaptive, 1–8 |
+| Advantage baseline | Current group mean | Frozen historical posterior mean |
+| One-rollout update | Zero or undefined | Valid |
+| All-correct/all-wrong samples | Zero advantage | Usually nonzero advantage |
+| Uses historical difficulty | No | Yes, with task-level pooling |
+| Exploration | Random prompt rotation | 15% least-recently-sampled floor |
+
+### One posterior drives the method
+
+For each training prompt `i`, VOLT tracks its current success probability
+`p_i = P(correct | prompt_i)` with discounted Beta evidence. The prompt borrows
+a prior mean from other examples in the same benchmark task:
+
+```text
+task_mean_i = (task_wins + 1) / (task_wins + task_losses + 2)
+alpha_i     = discounted_prompt_wins   + m * task_mean_i
+beta_i      = discounted_prompt_losses + m * (1 - task_mean_i)
+```
+
+The current configuration uses prior mass `m = 4` and discounts old evidence
+by `gamma = 0.92` every iteration so the tracker follows a changing policy.
+Before generating anything in iteration `k`, VOLT freezes a posterior snapshot.
+That snapshot supplies two active quantities:
+
+```text
+baseline_i = E[p_i] = alpha_i / (alpha_i + beta_i)
+
+score_i    = sqrt(E[p_i(1-p_i)])
+           = sqrt(alpha_i * beta_i /
+                  ((alpha_i + beta_i) * (alpha_i + beta_i + 1)))
+```
+
+The baseline estimates expected correctness. The score estimates where binary
+reward variation—and therefore usable policy-gradient signal—is concentrated.
+It is largest around `p = 0.5` and shrinks toward zero for almost-always-correct
+or almost-always-wrong prompts.
+
+### Variance-optimal rollout allocation
+
+Suppose prompt `i` receives `n_i` rollouts, each costing about `l_i` tokens,
+and its gradient estimator has variance `v_i`. Minimizing total estimator
+variance under a generation budget gives the square-root allocation
+
+```text
+n_i ∝ sqrt(v_i / l_i).
+```
+
+VOLT models policy-score variance as growing roughly linearly with completion
+length, `v_i ≈ kappa * p_i(1-p_i) * l_i`. Under that explicit assumption, the
+length terms cancel:
+
+```text
+n_i ∝ sqrt(p_i(1-p_i)).
+```
+
+The implementation substitutes the posterior expectation, reserves 15% of
+each iteration's budget for the least-recently-sampled prompts, distributes the
+remainder proportionally to `score_i`, caps each prompt at eight rollouts, and
+performs deterministic integer water-filling until the budget is exhausted.
+This keeps stale prompts revisitable while concentrating most compute near the
+learning frontier.
+
+### Predictable baselines make adaptive sampling safe
+
+Let `S_i(y) = grad log pi(y | prompt_i)` be the policy score and let `r` be
+binary correctness. For any baseline fixed before sampling the current answer,
+
+```text
+E[(r - baseline_i) * S_i(y) | past] = grad P(correct | prompt_i).
+```
+
+VOLT therefore uses the simple advantage
+
+```text
+A = r - baseline_i.
+```
+
+The crucial word is **predictable**: both the baseline and rollout allocation
+are functions only of earlier iterations. Conditioned on that history, they
+are constants, so adaptive prompt selection introduces no additional
+within-prompt policy-gradient bias. A single rollout is enough:
+
+- if `baseline = 0.2`, success gets advantage `+0.8` and failure `-0.2`;
+- if `baseline = 0.8`, success gets `+0.2` and failure `-0.8`.
+
+Unexpected outcomes receive the strongest correction. Homogeneous samples no
+longer collapse mechanically to zero, although a nonzero advantage does not
+mean every rollout is equally valuable.
+
+```mermaid
+flowchart LR
+    H["Past rollout outcomes"] --> P["Discounted hierarchical Beta state"]
+    P --> S["Freeze snapshot at iteration start"]
+    S --> B["Predictable baseline"]
+    S --> A["Variance allocation score"]
+    A --> W["Water-fill the rollout budget"]
+    W --> G["Generate and score answers"]
+    B --> V["Advantage = reward - baseline"]
+    G --> V
+    V --> U["One on-policy LoRA update"]
+    G --> Q["Update posterior and length statistics"]
+    Q --> P
+```
+
+### The implemented training step
+
+VOLT broadcasts each sequence-level advantage across the generated completion
+tokens and performs one strictly on-policy REINFORCE update:
+
+```text
+loss = -sum_rollouts(advantage * sum_completion_tokens(log_probability))
+       / (number_of_rollouts * constant_length_normalizer)
+```
+
+There is no current-group standard-deviation division, no per-answer token
+average that overweights short completions, no PPO replay, and no explicit KL
+penalty. Gradient norm is clipped, and only a rank-32 LoRA adapter is updated;
+the base checkpoint remains untouched.
+
+The E2B experiment uses 48 iterations × 448 rollouts, temperature 0.9, up to
+384 new tokens, and a fixed 300-example greedy validation probe every five
+iterations. The training pool contains 1,040 usable calibration prompts, with
+16 whole tasks excluded from training to measure unseen-task transfer.
+
+### Optional length control
+
+VOLT also implements a success-conditioned primal-dual length constraint. It
+can penalize long **correct** answers while never rewarding a wrong answer for
+giving up early. Its multiplier and shaped baseline use frozen historical
+length statistics, preserving predictability. This component is implemented
+but disabled in the current E2B configuration, so the active experiment tests
+the posterior baseline and adaptive allocator cleanly.
+
+### Scientific status and boundaries
+
+- Each rollout is conditionally unbiased for its sampled prompt, but the
+  current loss gives prompts weight proportional to their allocated rollout
+  counts. The implemented update therefore optimizes an adaptive curriculum,
+  not an exactly uniform average over all prompts. Exact uniform weighting
+  would require per-prompt normalization or importance weights.
+- Calling the allocation token-optimal relies on the testable assumption that
+  policy-score variance grows linearly with sequence length. If it does not,
+  the optimal rule should retain an explicit length-cost term.
+- Posterior discounting handles policy drift only approximately, and
+  task-level pooling can mislead when prompts within one task are heterogeneous.
+- Training telemetry shows the intended mechanism—VOLT keeps nonzero
+  advantages where GRPO discards many homogeneous groups—but the frozen-test
+  comparison remains the standard for any final accuracy claim.
+
+The full derivations, proofs, related-work positioning, and manuscript are in
+[paper/volt/](paper/volt/). Train and evaluate on the GPU host with:
 
 ```bash
-# baseline GRPO and VOLT, same budgets, same protocol
+# compute-matched baseline and method
 python rl/run_train.py --config experiments/rl/grpo_e2b.json
 python rl/run_train.py --config experiments/rl/volt_e2b.json
 
-# frozen-split evaluation of base model and both adapters
+# validation selection followed by frozen-test evaluation
 ./scripts/run_rl_evals.sh
 ```
 
-Training uses only calibration rows (16 of 60 tasks additionally held out to
-measure transfer), checkpoints are selected on validation rows, and the test
-split is touched exactly once per final model. Results will be added to the
-headline table when the runs complete.
+Training uses calibration rows only, checkpoints are selected using validation
+rows, and the frozen test split is reserved for the final selected models.
 
 ## Reproducing the evaluation
 
