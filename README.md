@@ -182,21 +182,41 @@ Implementation references: [`rl/posterior.py`](https://github.com/CatfishW/gemma
 [`rl/rewards.py`](https://github.com/CatfishW/gemma4-bbh-bbeh-eval/blob/rl-volt/rl/rewards.py),
 and [`rl/eval_policy.py`](https://github.com/CatfishW/gemma4-bbh-bbeh-eval/blob/rl-volt/rl/eval_policy.py).
 
-## Prompt-arm validation results
+## Results by split and evaluation track
 
-The universal prompt arms below use the matched validation split (675 BBH,
-575 BBEH, 240 USR). E4B results are exploratory because E4B informed strategy
-development.
+These tables intentionally separate validation selection from final frozen-test
+evaluation. The prompt-only rows use the API serving stack; the RL rows use the
+local BF16 Gemma 4 checkpoint, so cross-track comparisons are directional.
 
-| Prompt arm | E2B BBH | E2B BBEH | E2B USR | E2B overall | E4B overall |
+### Prompt-arm validation (matched split)
+
+The validation split contains 675 BBH, 575 BBEH, and 240 USR examples. These
+results were used to select prompt strategies; they are not the frozen test.
+E4B is exploratory because it informed strategy development.
+
+| Prompt arm | BBH | BBEH | USR | Overall | E4B overall |
 |---|---:|---:|---:|---:|---:|
-| `concise_cot_self_rank_k3` | 59.11% | 11.30% | 17.50% | **33.96%** | **39.13%** |
+| `concise_cot_self_rank_k3` | **59.11%** | 11.30% | **17.50%** | **33.96%** | **39.13%** |
 | `canonical_short` | 45.33% | **11.48%** | 13.33% | 27.11% | 33.56% |
-| `direct_answer` | 40.74% | 10.43% | **15.83%** | 25.03% | 32.55% |
+| `direct_answer` | 40.74% | 10.43% | 15.83% | 25.03% | 32.55% |
 | `option_elimination` | 41.63% | 9.22% | 9.58% | 23.96% | 31.34% |
 | `private_verify` | 29.93% | 10.61% | 12.92% | 19.73% | 34.23% |
 
-## Frozen RL evaluation by dataset
+### Frozen test: prompt-only API track
+
+All rows below use the same 9,550-example E2B frozen test (5,161 BBH,
+3,370 BBEH, 1,019 USR).
+
+| Method | BBH | BBEH | USR | Overall | Calls/example | Mean tokens |
+|---|---:|---:|---:|---:|---:|---:|
+| `direct_answer` | 40.73% | **10.80%** | 5.30% | 26.39% | 1 | 14.68 |
+| `concise_cot_self_rank_k3` | **57.31%** | 10.30% | 4.22% | 35.06% | 4 | 681.26 |
+| **CBRR** | **57.33%** | 10.68% | **6.18%** | **35.41%** | routed | **65.60** |
+
+### Frozen test: learned local adapter track
+
+RL trains with one fixed `concise_cot` prompt and evaluates with one greedy
+generation. These values are directly comparable to one another.
 
 | Model | BBH | BBEH | USR | Overall | Mean tokens |
 |---|---:|---:|---:|---:|---:|
@@ -204,8 +224,10 @@ development.
 | GRPO LoRA | **62.60%** | 8.84% | 5.89% | 37.58% | 162.1 |
 | **VOLT LoRA** | 61.91% | **11.78%** | **9.42%** | **38.62%** | **127.0** |
 
-The direct-answer transfer check is also consistent: Base 26.00%, GRPO 29.54%,
-and VOLT 30.58%.
+On the same frozen test, VOLT's 9.42% USR accuracy is above CBRR (6.18%) and
+self-rank (4.22%). The larger 17.50% and 15.83% USR figures above are matched
+validation results, not the frozen-test scores. The direct-answer transfer
+check is Base 26.00%, GRPO 29.54%, and VOLT 30.58%.
 
 ## Access
 
