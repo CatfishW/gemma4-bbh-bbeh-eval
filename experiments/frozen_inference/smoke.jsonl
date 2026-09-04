@@ -1,0 +1,4 @@
+{"benchmark":"synthetic","task":"boolean","index":0,"input":"not False or False or (False) is"}
+{"benchmark":"synthetic","task":"arithmetic","index":0,"input":"((-3 + 9) * 7) ="}
+{"benchmark":"synthetic","task":"microprogram","index":0,"input":"A crate contains 11 packets of 13 items each. How many items are there?"}
+{"benchmark":"synthetic","task":"unsupported","index":0,"input":"What is the best interpretation of this ambiguous story?"}

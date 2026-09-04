@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "origin": "synthetic-development",
+  "skills": [
+    {
+      "name": "packet_product",
+      "template": "A crate contains {a:int} packets of {b:int} items each. How many items are there?",
+      "formula": "a*b",
+      "positive": [
+        {
+          "input": "A crate contains 3 packets of 7 items each. How many items are there?",
+          "answer": "21"
+        },
+        {
+          "input": "A crate contains 12 packets of 4 items each. How many items are there?",
+          "answer": "48"
+        }
+      ],
+      "negative": [
+        "A crate contains 3 packets of 7 items each. One packet is missing. How many items are there?",
+        "A crate contains -3 packets of 7 items each. How many items are there?"
+      ],
+      "bounds": {
+        "a": [
+          0,
+          999999999999
+        ],
+        "b": [
+          0,
+          999999999999
+        ]
+      }
+    }
+  ]
+}
