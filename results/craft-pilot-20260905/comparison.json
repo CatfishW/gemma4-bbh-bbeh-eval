@@ -1,0 +1,768 @@
+{
+  "evaluation": {
+    "base-always-continue": {
+      "final_answer_truncations": 11,
+      "gate": "always-continue",
+      "heldout": {
+        "correct": 3,
+        "n": 20
+      },
+      "macro_task_accuracy": 0.25,
+      "mean_elapsed_seconds": 5.081469236910754,
+      "mean_generated_tokens": 135.75,
+      "mean_stop_probability": 0.43083276328651854,
+      "micro_accuracy": 0.25,
+      "n": 68,
+      "p95_seconds": 5.971415631007403,
+      "parse_failures": 0,
+      "per_task": {
+        "bbeh/bbeh_causal_understanding": {
+          "correct": 4,
+          "n": 4
+        },
+        "bbeh/bbeh_disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_movie_recommendation": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbeh/bbeh_multistep_arithmetic": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_nycc": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/boolean_expressions": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/causal_judgement": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/date_understanding": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/disambiguation_qa": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/dyck_languages": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/formal_fallacies": {
+          "correct": 2,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/original": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/shifted": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/unpuzzle": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/simple_reasoning/char_ct": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_ev": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_neg": {
+          "correct": 0,
+          "n": 4
+        }
+      },
+      "seen": {
+        "correct": 14,
+        "n": 48
+      },
+      "stop_fraction": 0.0
+    },
+    "base-sample": {
+      "final_answer_truncations": 11,
+      "gate": "sample",
+      "heldout": {
+        "correct": 3,
+        "n": 20
+      },
+      "macro_task_accuracy": 0.22058823529411764,
+      "mean_elapsed_seconds": 3.643288477363325,
+      "mean_generated_tokens": 96.0,
+      "mean_stop_probability": 0.43083276328651854,
+      "micro_accuracy": 0.22058823529411764,
+      "n": 68,
+      "p95_seconds": 6.0326977200456895,
+      "parse_failures": 0,
+      "per_task": {
+        "bbeh/bbeh_causal_understanding": {
+          "correct": 3,
+          "n": 4
+        },
+        "bbeh/bbeh_disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_movie_recommendation": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_multistep_arithmetic": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_nycc": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/boolean_expressions": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/causal_judgement": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/date_understanding": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/disambiguation_qa": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/dyck_languages": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/formal_fallacies": {
+          "correct": 2,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/original": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/shifted": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/unpuzzle": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/simple_reasoning/char_ct": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_ev": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_neg": {
+          "correct": 0,
+          "n": 4
+        }
+      },
+      "seen": {
+        "correct": 12,
+        "n": 48
+      },
+      "stop_fraction": 0.4264705882352941
+    },
+    "full-always-continue": {
+      "final_answer_truncations": 9,
+      "gate": "always-continue",
+      "heldout": {
+        "correct": 3,
+        "n": 20
+      },
+      "macro_task_accuracy": 0.20588235294117646,
+      "mean_elapsed_seconds": 5.0151988679538,
+      "mean_generated_tokens": 134.63235294117646,
+      "mean_stop_probability": 0.618203716098776,
+      "micro_accuracy": 0.20588235294117646,
+      "n": 68,
+      "p95_seconds": 5.937393344996963,
+      "parse_failures": 0,
+      "per_task": {
+        "bbeh/bbeh_causal_understanding": {
+          "correct": 3,
+          "n": 4
+        },
+        "bbeh/bbeh_disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_movie_recommendation": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_multistep_arithmetic": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_nycc": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/boolean_expressions": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/causal_judgement": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/date_understanding": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/disambiguation_qa": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/dyck_languages": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/formal_fallacies": {
+          "correct": 2,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/original": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/shifted": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/unpuzzle": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/simple_reasoning/char_ct": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_ev": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_neg": {
+          "correct": 0,
+          "n": 4
+        }
+      },
+      "seen": {
+        "correct": 11,
+        "n": 48
+      },
+      "stop_fraction": 0.0
+    },
+    "full-sample": {
+      "final_answer_truncations": 9,
+      "gate": "sample",
+      "heldout": {
+        "correct": 3,
+        "n": 20
+      },
+      "macro_task_accuracy": 0.22058823529411764,
+      "mean_elapsed_seconds": 2.83320768334242,
+      "mean_generated_tokens": 75.29411764705883,
+      "mean_stop_probability": 0.618203716098776,
+      "micro_accuracy": 0.22058823529411764,
+      "n": 68,
+      "p95_seconds": 5.963128342991695,
+      "parse_failures": 0,
+      "per_task": {
+        "bbeh/bbeh_causal_understanding": {
+          "correct": 3,
+          "n": 4
+        },
+        "bbeh/bbeh_disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_movie_recommendation": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_multistep_arithmetic": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_nycc": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/boolean_expressions": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/causal_judgement": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/date_understanding": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/dyck_languages": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/formal_fallacies": {
+          "correct": 2,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/original": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/shifted": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/unpuzzle": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/simple_reasoning/char_ct": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_ev": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_neg": {
+          "correct": 0,
+          "n": 4
+        }
+      },
+      "seen": {
+        "correct": 12,
+        "n": 48
+      },
+      "stop_fraction": 0.6323529411764706
+    },
+    "no_crossfit-always-continue": {
+      "final_answer_truncations": 9,
+      "gate": "always-continue",
+      "heldout": {
+        "correct": 3,
+        "n": 20
+      },
+      "macro_task_accuracy": 0.23529411764705882,
+      "mean_elapsed_seconds": 5.0047739066486585,
+      "mean_generated_tokens": 135.10294117647058,
+      "mean_stop_probability": 0.6016237497134379,
+      "micro_accuracy": 0.23529411764705882,
+      "n": 68,
+      "p95_seconds": 5.928795872023329,
+      "parse_failures": 0,
+      "per_task": {
+        "bbeh/bbeh_causal_understanding": {
+          "correct": 4,
+          "n": 4
+        },
+        "bbeh/bbeh_disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_movie_recommendation": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_multistep_arithmetic": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_nycc": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/boolean_expressions": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/causal_judgement": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/date_understanding": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/disambiguation_qa": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/dyck_languages": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/formal_fallacies": {
+          "correct": 2,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/original": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/shifted": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/unpuzzle": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/simple_reasoning/char_ct": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_ev": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_neg": {
+          "correct": 0,
+          "n": 4
+        }
+      },
+      "seen": {
+        "correct": 13,
+        "n": 48
+      },
+      "stop_fraction": 0.0
+    },
+    "no_crossfit-sample": {
+      "final_answer_truncations": 9,
+      "gate": "sample",
+      "heldout": {
+        "correct": 3,
+        "n": 20
+      },
+      "macro_task_accuracy": 0.19117647058823528,
+      "mean_elapsed_seconds": 2.8872454713692766,
+      "mean_generated_tokens": 75.72058823529412,
+      "mean_stop_probability": 0.6016237497134379,
+      "micro_accuracy": 0.19117647058823528,
+      "n": 68,
+      "p95_seconds": 6.040431617991999,
+      "parse_failures": 0,
+      "per_task": {
+        "bbeh/bbeh_causal_understanding": {
+          "correct": 3,
+          "n": 4
+        },
+        "bbeh/bbeh_disambiguation_qa": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbeh/bbeh_movie_recommendation": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_multistep_arithmetic": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbeh/bbeh_nycc": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/boolean_expressions": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/causal_judgement": {
+          "correct": 2,
+          "n": 4
+        },
+        "bbh/date_understanding": {
+          "correct": 1,
+          "n": 4
+        },
+        "bbh/disambiguation_qa": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/dyck_languages": {
+          "correct": 0,
+          "n": 4
+        },
+        "bbh/formal_fallacies": {
+          "correct": 2,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/original": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/shifted": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/shifted_unpuzzles/unpuzzle": {
+          "correct": 1,
+          "n": 4
+        },
+        "usr/simple_reasoning/char_ct": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_ev": {
+          "correct": 0,
+          "n": 4
+        },
+        "usr/simple_reasoning/logic_neg": {
+          "correct": 0,
+          "n": 4
+        }
+      },
+      "seen": {
+        "correct": 10,
+        "n": 48
+      },
+      "stop_fraction": 0.6323529411764706
+    }
+  },
+  "paired_comparisons": {
+    "full-sample vs base-sample": {
+      "accuracy_delta": 0.0,
+      "losses": 1,
+      "mcnemar_p": 1.0,
+      "task_stratified_bootstrap_95": [
+        -0.029411764705882353,
+        0.029411764705882353
+      ],
+      "wins": 1
+    },
+    "full-sample vs full-always-continue": {
+      "accuracy_delta": 0.014705882352941176,
+      "losses": 0,
+      "mcnemar_p": 1.0,
+      "task_stratified_bootstrap_95": [
+        0.0,
+        0.04411764705882353
+      ],
+      "wins": 1
+    },
+    "full-sample vs no_crossfit-sample": {
+      "accuracy_delta": 0.029411764705882353,
+      "losses": 0,
+      "mcnemar_p": 0.5,
+      "task_stratified_bootstrap_95": [
+        0.0,
+        0.07352941176470588
+      ],
+      "wins": 2
+    }
+  },
+  "study": {
+    "calibration_max_question_tokens": {
+      "bbeh/bbeh_boardgame_qa": 2151,
+      "bbeh/bbeh_boolean_expressions": 1411,
+      "bbeh/bbeh_buggy_tables": 5099,
+      "bbeh/bbeh_causal_understanding": 306,
+      "bbeh/bbeh_disambiguation_qa": 196,
+      "bbeh/bbeh_dyck_languages": 1712,
+      "bbeh/bbeh_geometric_shapes": 1131,
+      "bbeh/bbeh_hyperbaton": 1914,
+      "bbeh/bbeh_linguini": 692,
+      "bbeh/bbeh_movie_recommendation": 381,
+      "bbeh/bbeh_multistep_arithmetic": 526,
+      "bbeh/bbeh_nycc": 261,
+      "bbeh/bbeh_object_counting": 3659,
+      "bbeh/bbeh_object_properties": 1551,
+      "bbeh/bbeh_sarc_triples": 556,
+      "bbeh/bbeh_shuffled_objects": 3594,
+      "bbeh/bbeh_spatial_reasoning": 5421,
+      "bbeh/bbeh_sportqa": 573,
+      "bbeh/bbeh_temporal_sequence": 2179,
+      "bbeh/bbeh_time_arithmetic": 553,
+      "bbeh/bbeh_web_of_lies": 912,
+      "bbeh/bbeh_word_sorting": 1579,
+      "bbeh/bbeh_zebra_puzzles": 3865,
+      "bbh/boolean_expressions": 9,
+      "bbh/causal_judgement": 395,
+      "bbh/date_understanding": 145,
+      "bbh/disambiguation_qa": 85,
+      "bbh/dyck_languages": 98,
+      "bbh/formal_fallacies": 166,
+      "bbh/geometric_shapes": 248,
+      "bbh/hyperbaton": 39,
+      "bbh/logical_deduction_five_objects": 169,
+      "bbh/logical_deduction_seven_objects": 221,
+      "bbh/logical_deduction_three_objects": 113,
+      "bbh/movie_recommendation": 70,
+      "bbh/multistep_arithmetic_two": 26,
+      "bbh/navigate": 82,
+      "bbh/object_counting": 53,
+      "bbh/penguins_in_a_table": 271,
+      "bbh/reasoning_about_colored_objects": 156,
+      "bbh/ruin_names": 72,
+      "bbh/salient_translation_error_detection": 318,
+      "bbh/snarks": 72,
+      "bbh/sports_understanding": 23,
+      "bbh/temporal_sequences": 202,
+      "bbh/tracking_shuffled_objects_five_objects": 172,
+      "bbh/tracking_shuffled_objects_seven_objects": 213,
+      "bbh/tracking_shuffled_objects_three_objects": 126,
+      "bbh/web_of_lies": 47,
+      "bbh/word_sorting": 40,
+      "usr/shifted_unpuzzles/original": 156,
+      "usr/shifted_unpuzzles/shifted": 211,
+      "usr/shifted_unpuzzles/unpuzzle": 154,
+      "usr/simple_reasoning/char_ct": 383,
+      "usr/simple_reasoning/logic_ev": 288,
+      "usr/simple_reasoning/logic_neg": 443,
+      "usr/simple_reasoning/mathgap": 125,
+      "usr/simple_reasoning/word_ct": 384,
+      "usr/unpuzzles/original": 251,
+      "usr/unpuzzles/unpuzzle": 173
+    },
+    "claim": "exploratory one-seed pilot; not full benchmark or compute-matched evidence",
+    "dataset_revisions": {
+      "BIG-Bench-Hard": "9ee07bd481feebf959a6b59d61ea57bdcf30964d",
+      "bbeh": "80d12ca916b7158f22293fcf3144f4d3d854d4be",
+      "unpuzzles_and_simple_reasoning": "39bc520a2f4c243eb04ce1cc27f28c7c61d12e42"
+    },
+    "evaluations": {
+      "base": [
+        "sample",
+        "always-continue"
+      ],
+      "full": [
+        "sample",
+        "always-continue"
+      ],
+      "no_crossfit": [
+        "sample",
+        "always-continue"
+      ]
+    },
+    "excluded_tasks": [
+      "bbeh/bbeh_boardgame_qa",
+      "bbeh/bbeh_boolean_expressions",
+      "bbeh/bbeh_buggy_tables",
+      "bbeh/bbeh_dyck_languages",
+      "bbeh/bbeh_geometric_shapes",
+      "bbeh/bbeh_hyperbaton",
+      "bbeh/bbeh_linguini",
+      "bbeh/bbeh_object_counting",
+      "bbeh/bbeh_object_properties",
+      "bbeh/bbeh_sarc_triples",
+      "bbeh/bbeh_shuffled_objects",
+      "bbeh/bbeh_spatial_reasoning",
+      "bbeh/bbeh_sportqa",
+      "bbeh/bbeh_temporal_sequence",
+      "bbeh/bbeh_time_arithmetic",
+      "bbeh/bbeh_web_of_lies",
+      "bbeh/bbeh_word_sorting",
+      "bbeh/bbeh_zebra_puzzles",
+      "bbh/geometric_shapes",
+      "bbh/hyperbaton",
+      "bbh/logical_deduction_five_objects",
+      "bbh/logical_deduction_seven_objects",
+      "bbh/logical_deduction_three_objects",
+      "bbh/movie_recommendation",
+      "bbh/multistep_arithmetic_two",
+      "bbh/navigate",
+      "bbh/object_counting",
+      "bbh/penguins_in_a_table",
+      "bbh/reasoning_about_colored_objects",
+      "bbh/ruin_names",
+      "bbh/salient_translation_error_detection",
+      "bbh/snarks",
+      "bbh/sports_understanding",
+      "bbh/temporal_sequences",
+      "bbh/tracking_shuffled_objects_five_objects",
+      "bbh/tracking_shuffled_objects_seven_objects",
+      "bbh/tracking_shuffled_objects_three_objects",
+      "bbh/web_of_lies",
+      "bbh/word_sorting",
+      "usr/simple_reasoning/mathgap",
+      "usr/simple_reasoning/word_ct",
+      "usr/unpuzzles/original",
+      "usr/unpuzzles/unpuzzle"
+    ],
+    "fixed_accuracy_floor": 0.4,
+    "floor_note": "explicit fixed floor, not calibrated base accuracy",
+    "heldout_tasks": [
+      "bbh/boolean_expressions",
+      "bbh/dyck_languages",
+      "bbeh/bbeh_disambiguation_qa",
+      "usr/shifted_unpuzzles/original",
+      "usr/simple_reasoning/logic_ev"
+    ],
+    "max_question_tokens": 600,
+    "model_path": "/data/models/gemma-4-E2B-it",
+    "seen_tasks": [
+      "bbh/causal_judgement",
+      "bbh/date_understanding",
+      "bbh/disambiguation_qa",
+      "bbh/formal_fallacies",
+      "bbeh/bbeh_causal_understanding",
+      "bbeh/bbeh_movie_recommendation",
+      "bbeh/bbeh_multistep_arithmetic",
+      "bbeh/bbeh_nycc",
+      "usr/shifted_unpuzzles/shifted",
+      "usr/shifted_unpuzzles/unpuzzle",
+      "usr/simple_reasoning/char_ct",
+      "usr/simple_reasoning/logic_neg"
+    ],
+    "selection_rule": "calibration question <= threshold tokens; sorted first 4 seen and first 2 heldout tasks per benchmark",
+    "study_id": "craft-short-context-pilot-20260905",
+    "train_sha256": "261fbe78e7312999baa210ec100749dd1dc0c71a02e0e6cd9caa9e5425bdd831",
+    "training_rows": 300,
+    "validation_indices": [
+      25,
+      26,
+      27,
+      28
+    ],
+    "validation_rows": 68,
+    "validation_sha256": "a8f3595508e0bdbf9a8511354d4dd287991dbf4a85bbf74abcacc15e4239344a"
+  },
+  "training": {
+    "full": {
+      "checkpoint": "../pilot/full/checkpoint-00012",
+      "final_mean_stop_probability": 0.8872564669245565,
+      "iterations": 12,
+      "peak_allocated_bytes": 14808292352,
+      "prefill_tokens": 109471,
+      "sampled_tokens": 12028,
+      "step_wall_seconds": 493.94107385503594
+    },
+    "no_crossfit": {
+      "checkpoint": "../pilot/no_crossfit/checkpoint-00012",
+      "final_mean_stop_probability": 0.7767637702512334,
+      "iterations": 12,
+      "peak_allocated_bytes": 14808292352,
+      "prefill_tokens": 109442,
+      "sampled_tokens": 12031,
+      "step_wall_seconds": 495.10303092590766
+    }
+  }
+}

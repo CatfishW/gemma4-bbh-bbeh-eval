@@ -1,0 +1,51 @@
+{
+  "implementation_commit": "bdb8392e2",
+  "starting_commit": "593fc44559dca59cc3d31994588fe2c5557ae103",
+  "model_identity": {
+    "digest": "44c8641fb29f67594503182afe4e9d96267fc344b60a749170b1af0e5bac1d19",
+    "files": {
+      ".cache/huggingface/trees/70af34e20bd4b7a91f0de6b22675850c43922a03.json": "b3ec306f2dc13f5ebb15f8a284136a510fea6ce0502d49c5bc7cd7871dcb58d6",
+      "config.json": "1b28f3d2c3100f6c594754b81107428bd7b822a7f48272ca681dae9d2ec38330",
+      "generation_config.json": "d4226bbe3117d2d253ba4609720ba82c6c4ce4627a9a6ae05387c78983ac03de",
+      "model.safetensors": "2db5482b20d746879bb3ef79b5203e9075a2e2b98f54ec7c2f281c1477ddc550",
+      "processor_config.json": "32bdf45d2ad4cc29a0822ddd157a182de76644f0419a6228d151495256e9813c",
+      "tokenizer.json": "cc8d3a0ce36466ccc1278bf987df5f71db1719b9ca6b4118264f45cb627bfe0f",
+      "tokenizer_config.json": "90c3a3ba5bf53818383a58e1a776cbcacd2a038d4812eaa373e1522f2d06f3df"
+    }
+  },
+  "code": {
+    "eval_benchmarks.py": "d3565e878c5b4c477b2b9ddb900085afef7bca4442f3ab3d79899d293a3f1cb0",
+    "rl/modeling.py": "7ab4b743b4aea5ef9cc00f33c42cfbad2cf8da32a7d34da855317c9684f7d643",
+    "rl_craft/__init__.py": "63537dcf4ffbec563ac615f0792e64a68aeeb90eb1bd100810df4bda2971ce5d",
+    "rl_craft/__main__.py": "79ee6f134c5c5193377cf9b189cbdcc3e2095e49ba9cec310114441c15a917c4",
+    "rl_craft/cli.py": "ae8b831111f3e8814399a6ad2f57fe7d08333551b5b37ff67ddd8ceac8f52745",
+    "rl_craft/core.py": "a679930bafdcc7ae7a6744231a3a7a6a8bbc1c08724eb764ac118c471ad9afd7",
+    "rl_craft/data.py": "d709e668a8b87279104ac58b6b0c172a927046a755a9318729a64587925eb888",
+    "rl_craft/hf_backend.py": "ea3c220d0c9a16848b002339c07fa80d91225711770bf11b06d18271aa8bd437",
+    "rl_craft/toy.py": "2245517c6e4aeabac0f70c90db44909abe9d9f682b68157824593b47e789cff3",
+    "rl_craft/trainer.py": "3b568c7b38f4ca6b6d6e0230e1f1e85ad51b8ddbbbee3ed4a66d465f4621462f"
+  },
+  "versions": {
+    "peft": "0.20.0",
+    "torch": "2.9.1+cu128",
+    "transformers": "5.5.4"
+  },
+  "hardware": [
+    "0, NVIDIA RTX 6000 Ada Generation, 49140 MiB, 570.207",
+    "1, NVIDIA RTX 6000 Ada Generation, 49140 MiB, 570.207"
+  ],
+  "training": {
+    "full": {
+      "root_episodes": 48,
+      "distinct_questions": 46,
+      "training_and_checkpoint_seconds": 503.2969839759753,
+      "protocol_digest": "afed9cc444ba111a8c56d4d4b2b8233127665fc3273b1889f5d6bf58d482c893"
+    },
+    "no_crossfit": {
+      "root_episodes": 48,
+      "distinct_questions": 46,
+      "training_and_checkpoint_seconds": 504.25379133201204,
+      "protocol_digest": "e41097ca390df08db8312d48f38d9603d8ce36d74884639c73c39ba3db2170dd"
+    }
+  }
+}

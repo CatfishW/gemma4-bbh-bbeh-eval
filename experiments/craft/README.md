@@ -5,6 +5,9 @@ Read [the method, derivation, commands and limitations](../../docs/CRAFT_RL.md).
 The [two-GPU implementation pilot](PILOT_20260905.md) provides a reproducible
 short-context study runner, declared task selection, six validation controls,
 and strict paired result aggregation.
+See the [completed GPU results](../../docs/CRAFT_GPU_RESULTS.md): equal sampled-gate
+accuracy to the untrained model on 68 validation rows, with fewer generated tokens;
+no demonstrated accuracy improvement.
 
 These configurations define the full method and four ablations. They do not
 contain results, target labels, learned weights, or fitted accuracy floors.

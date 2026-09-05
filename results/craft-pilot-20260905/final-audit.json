@@ -1,0 +1,18 @@
+{
+  "full": {
+    "checkpoint_iteration": 12,
+    "verified_integrity": true,
+    "adapter_tensor_count": 410,
+    "changed_adapter_tensors": 410,
+    "completed_run_resume_passed": true,
+    "resume_log": "/data/benwulab/gemma4-rl/craft-20260905/full-resume-audit.log"
+  },
+  "no_crossfit": {
+    "checkpoint_iteration": 12,
+    "verified_integrity": true,
+    "adapter_tensor_count": 410,
+    "changed_adapter_tensors": 410,
+    "completed_run_resume_passed": true,
+    "resume_log": "/data/benwulab/gemma4-rl/craft-20260905/no_crossfit-resume-audit.log"
+  }
+}

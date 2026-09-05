@@ -1,6 +1,7 @@
 # CRAFT: Counterfactual Reasoning Allocation and Forked Training
 
-**Status: research implementation, not a trained Gemma result.** This branch adds
+**Status: real E2B GPU pilot completed; no demonstrated accuracy gain.** See the
+[two-GPU results and limitations](CRAFT_GPU_RESULTS.md). This branch adds
 `rl_craft/` on top of the existing `rl-volt` branch at
 `e0dab8a08af7ab4dc2b95ce790112820b733afab`. It does not replace VOLT, modify its
 training code, overwrite its results, change its scorer, or merge the separate
@@ -204,8 +205,9 @@ Transformers and PEFT environment as `rl-volt`** and the existing local BF16
 checkpoint. This code reuses `rl.modeling`'s multimodal-safe loader and exact
 text-stack LoRA target selection. It makes no architecture name guesses beyond
 that existing integration and performs no checkpoint downloads. The supplied
-implementation was tested here with CPU PyTorch 2.10.0; actual Gemma/PEFT execution
-is not asserted until run on the user's configured model environment.
+implementation was initially tested with CPU PyTorch 2.10.0. The completed GPU
+pilot used PyTorch 2.9.1+cu128, Transformers 5.5.4 and PEFT 0.20.0; details and
+reproducibility artifacts are in [the GPU report](CRAFT_GPU_RESULTS.md).
 
 The dedicated CI workflow installs CPU torch 2.5.1 on Python 3.11 and runs the
 entire new suite, including gradient tests. The existing test workflow is
@@ -367,8 +369,10 @@ sequential microbatch training and a cost proxy. It does not implement learned
 per-token exit depths, adaptive LoRA rank, a verifier, replay, a teacher, full-tree
 KV sharing, or tensor-parallel training. The head is checkpointed to avoid
 retaining sequence-by-vocabulary logits, but the backbone still requires enough
-activation memory for one segment. BF16 execution must be tested on the actual
-48 GB GPU stack; no successful GPU run is claimed by CPU tests.
+activation memory for one segment. BF16 execution succeeded on two 48 GB RTX
+6000 Ada GPUs in the declared short-context pilot, peaking at 14.81 GB per
+process. That run does not establish memory feasibility for the full 4,096-token
+configuration or the longer BBEH tasks.
 
 Prioritize whether (a) early finalization recovers correct answers hidden by long
 or truncated traces, (b) conditional branch credit beats ordinary sampled-action
