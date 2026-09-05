@@ -1,4 +1,5 @@
 import copy
+from collections import UserDict
 from dataclasses import asdict, replace
 import io
 import json
@@ -198,6 +199,12 @@ class TrainingTests(unittest.TestCase):
         ga=torch.autograd.grad(actual,params,retain_graph=True);ge=torch.autograd.grad(expected,params)
         self.assertAlmostEqual(float(actual.detach()),float(expected.detach()),places=4)
         self.assertTrue(all(torch.allclose(x,y,atol=2e-5,rtol=2e-5) for x,y in zip(ga,ge)))
+
+    def test_hf_prompt_accepts_batch_encoding_mapping(self):
+        from rl_craft.hf_backend import HFBackend
+        b=HFBackend.__new__(HFBackend);b.config=self.config()
+        b.tokenizer=SimpleNamespace(apply_chat_template=lambda *a,**kw:UserDict(input_ids=[2,3,4]))
+        self.assertEqual(b.prompt("notes","Question"),(2,3,4))
 
 
 if __name__ == "__main__":

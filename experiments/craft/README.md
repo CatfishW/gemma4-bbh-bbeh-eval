@@ -2,6 +2,10 @@
 
 Read [the method, derivation, commands and limitations](../../docs/CRAFT_RL.md).
 
+The [two-GPU implementation pilot](PILOT_20260905.md) provides a reproducible
+short-context study runner, declared task selection, six validation controls,
+and strict paired result aggregation.
+
 These configurations define the full method and four ablations. They do not
 contain results, target labels, learned weights, or fitted accuracy floors.
 `calibrate-targets` constructs model/data-bound task floors from calibration only.

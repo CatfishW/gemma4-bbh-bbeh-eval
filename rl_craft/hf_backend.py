@@ -7,6 +7,7 @@ full-support temperature as sampling. Head checkpointing limits retained logits.
 from __future__ import annotations
 
 from pathlib import Path
+from collections.abc import Mapping
 import torch
 import torch.nn.functional as F
 from torch.utils.checkpoint import checkpoint
@@ -64,7 +65,7 @@ class HFBackend:
             raise ValueError("unknown protocol stage")
         ids = self.tokenizer.apply_chat_template([{"role": "user", "content": instructions[stage]}],
                                                 tokenize=True, add_generation_prompt=True, enable_thinking=False)
-        if isinstance(ids, dict):
+        if isinstance(ids, Mapping):
             ids = ids["input_ids"]
         result = tuple(ids)
         if not result or any(type(t) is not int for t in result) or len(result) >= self.config.max_context:
@@ -156,9 +157,11 @@ class HFBackend:
             if not torch.allclose(raw, own, atol=0.08, rtol=0.005):
                 raise RuntimeError("model backbone/head mismatch")
             with torch.random.fork_rng(devices=list(range(torch.cuda.device_count()))):
+                generation = self.generation_config(1, self.config.temperature)
+                generation.return_dict_in_generate = True
+                generation.output_scores = True
                 output = self.model.generate(input_ids=ids, attention_mask=mask,
-                                             generation_config=self.generation_config(1, self.config.temperature),
-                                             return_dict_in_generate=True, output_scores=True)
+                                             generation_config=generation)
             sampling = output.scores[0][0].float().log_softmax(-1)
             expected = (own/self.config.temperature).log_softmax(-1)
             if not torch.allclose(sampling, expected, atol=0.08, rtol=0.005):

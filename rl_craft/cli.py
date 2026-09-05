@@ -242,7 +242,10 @@ def evaluate(args) -> dict:
               "per_task":{t:{"n":len(rs),"correct":sum(r["correct"] for r in rs)} for t,rs in by_task.items()},
               "mean_generated_tokens":sum(r["generated_tokens"] for r in records)/len(records),
               "mean_elapsed_seconds":sum(times)/len(times),"p95_seconds":times[math.ceil(.95*len(times))-1],
-              "gate":args.gate,"stop_fraction":sum(r["action"]=="stop" for r in records)/len(records)}
+              "gate":args.gate,"stop_fraction":sum(r["action"]=="stop" for r in records)/len(records),
+              "final_answer_truncations":sum(not r["answer_terminated"] for r in records),
+              "parse_failures":backend.parse_failures,
+              "mean_stop_probability":sum(r["probabilities"][0] for r in records)/len(records)}
     write_json(args.output/"summary.json",report)
     return report
 

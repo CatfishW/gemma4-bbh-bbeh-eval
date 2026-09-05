@@ -125,6 +125,10 @@ class Trainer:
         roots = min(self.cfg.roots_per_step, remaining // self.cfg.worst_tree_tokens)
         if roots == 0:
             raise StopIteration("insufficient token budget for another complete rollout tree")
+        device = getattr(self.backend, "device", None)
+        cuda_device = device is not None and torch.device(device).type == "cuda"
+        if cuda_device:
+            torch.cuda.reset_peak_memory_stats(device)
         started = time.perf_counter()
         snapshot = self.scheduler.state_dict()
         draws = self.scheduler.draw(self.rng, roots)
@@ -165,6 +169,9 @@ class Trainer:
                    "update_seconds": time.perf_counter()-collected_at,
                    "wall_seconds": time.perf_counter()-started,
                    "final_answer_truncations": sum(not b.segments[-1].terminated for f in forks for arm in f.arms for b in arm)}
+        if cuda_device:
+            metrics["peak_allocated_bytes"] = torch.cuda.max_memory_allocated(device)
+            metrics["peak_reserved_bytes"] = torch.cuda.max_memory_reserved(device)
         return metrics, forks
 
     def state_dict(self) -> dict:

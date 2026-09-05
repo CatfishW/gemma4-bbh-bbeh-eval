@@ -6,12 +6,14 @@ on:
       - 'rl_craft/**'
       - 'tests/test_craft_*.py'
       - 'experiments/craft/**'
+      - 'scripts/craft_pilot.py'
       - '.github/workflows/craft-tests.yml'
   pull_request:
     paths:
       - 'rl_craft/**'
       - 'tests/test_craft_*.py'
       - 'experiments/craft/**'
+      - 'scripts/craft_pilot.py'
       - '.github/workflows/craft-tests.yml'
 
 permissions:
@@ -31,7 +33,7 @@ jobs:
       - name: Exhaustive gradient and LoRA tests
         run: python -m unittest discover -s tests -p 'test_craft_*.py' -v
       - name: Compile new Python modules
-        run: python -m compileall -q rl_craft
+        run: python -m compileall -q rl_craft scripts/craft_pilot.py
       - name: CPU optimizer smoke and checkpoint resume
         run: |
           python -m rl_craft smoke --output /tmp/craft-ci --iterations 4
