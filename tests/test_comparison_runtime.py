@@ -114,3 +114,28 @@ class CampaignFailureTests(unittest.TestCase):
             self.assertEqual(run.call_args.kwargs['env']['CUDA_VISIBLE_DEVICES'],'1')
             status=json.loads((root/'status.json').read_text())
             self.assertEqual(status['status'],'failed');self.assertEqual(status['completed'],[])
+
+
+class FinalAnswerTests(unittest.TestCase):
+    def test_later_final_answer_overrides_earlier_box(self):
+        self.assertEqual(cs.final_text(r'Intermediate: \boxed{42}. Final answer: 41'),'41')
+        self.assertEqual(cs.final_text(r'Final answer: \boxed{42}'),'42')
+
+    def test_bbeh_receives_common_final_extraction(self):
+        c=cs.Case('id','bbeh','t','g','q','42','test','test','r1','bbeh_official')
+        scorer=cs.Scorer.__new__(cs.Scorer);scorer.official=lambda pred,target:pred==target
+        self.assertTrue(scorer('Reasoning goes here.\nFinal answer: 42',c))
+        self.assertFalse(scorer('Reasoning goes here.\nFinal answer: 41',c))
+
+
+@unittest.skipIf(__import__('importlib.util',fromlist=['find_spec']).find_spec('math_verify') is None,'requires math-verify')
+class SymbolicScorerTests(unittest.TestCase):
+    def test_math_gold_and_prediction_share_delimiters(self):
+        pairs=[(r'p-q',r'p+q'),(r'3\sqrt{13}',r'3\sqrt{7}'),(r'\pi',r'2\pi'),
+               (r'\left(3,\frac{\pi}{2}\right)',r'(3,-\pi/2)'),(r'\text{Evelyn}',r'\text{Adam}')]
+        for right,wrong in pairs:
+            c=cs.Case('id','math','t','g','q',right,'test','test','r1','math_verify')
+            scorer=cs.Scorer([c])
+            self.assertTrue(scorer(right,c))
+            self.assertTrue(scorer('Final answer: '+right,c))
+            self.assertFalse(scorer('Final answer: '+wrong,c))

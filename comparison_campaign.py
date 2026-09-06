@@ -25,9 +25,10 @@ def atomic_json(path,value):
     temp=Path(str(path)+'.tmp');temp.write_text(json.dumps(value,indent=2)+'\n');os.replace(temp,path)
 
 
-def build(root,model):
+def build(root,model,name='campaign-v1'):
     root,model=Path(root).resolve(),Path(model).resolve();repo=Path(__file__).parent.resolve()
-    campaign=root/'campaign-v1';campaign.mkdir(exist_ok=False)
+    if not name or Path(name).name!=name:raise ValueError('simple campaign directory name required')
+    campaign=root/name;campaign.mkdir(exist_ok=False)
     for name in ['configs','identities','logs','train','eval','comparisons']:(campaign/name).mkdir()
     data=root/'frozen-data-v1';math=data/'math-test.jsonl'
     if not math.exists():write_cases(math,load_cases(data/'gsm8k-test.jsonl')+load_cases(data/'math500-test.jsonl'),{'cohorts':'full GSM8K and MATH-500'})
@@ -36,7 +37,7 @@ def build(root,model):
     identity={'base_model_sha256':model_id,'checkpoint_sha256':model_id,
         'hardware_id':'benwulab-remote/physical-GPU-1/RTX6000-Ada-48GiB',
         'precision':'NF4-double-quant/BF16-compute','serving_stack':'transformers-5.5.4/torch-2.9.1/peft-0.20.0',
-        'study_id':'sota-20260905-gpu1-nf4-v1'}
+        'study_id':'sota-20260905-gpu1-nf4-'+name}
     jobs=[];evals={'math':{},'legacy':{}}
     scorer='/data/benwulab/gemma4-eval/datasets/bbeh/bbeh/evaluate.py'
     def add(name,argv,output,kind):
@@ -156,8 +157,8 @@ def execute(plan_path):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);subs=p.add_subparsers(dest='command',required=True)
-    b=subs.add_parser('build');b.add_argument('--root',required=True);b.add_argument('--model',required=True)
+    b=subs.add_parser('build');b.add_argument('--root',required=True);b.add_argument('--model',required=True);b.add_argument('--name',default='campaign-v1')
     r=subs.add_parser('execute');r.add_argument('--plan',required=True)
     a=p.parse_args()
-    if a.command=='build':build(a.root,a.model)
+    if a.command=='build':build(a.root,a.model,a.name)
     else:raise SystemExit(execute(a.plan))

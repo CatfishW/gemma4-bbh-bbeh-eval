@@ -113,26 +113,23 @@ def validate_cases(rows):
 
 
 def final_text(text: str) -> str:
-    """Deterministic final-answer extraction; never guess the last arbitrary number."""
-    tags = re.findall(r'<answer>\s*(.*?)\s*</answer>', text, re.I | re.S)
-    if tags:
-        return tags[-1].strip()
-    # TeX also permits a single unbraced atom (two official MATH rows).
-    bare = list(re.finditer(r'\\boxed\s+([0-9A-Za-z])(?=[$\s.,;]|$)', text))
-    starts = [m.end() for m in re.finditer(r'\\boxed\{', text)]
-    if bare and (not starts or bare[-1].start()>starts[-1]):
-        return bare[-1].group(1)
-    for start in reversed(starts):
-        depth = 1
-        for i in range(start, len(text)):
-            depth += (text[i] == '{') - (text[i] == '}')
-            if depth == 0:
-                return text[start:i].strip()
-    markers = list(re.finditer(r'####\s*|(?:the\s+)?(?:final\s+)?answer\s*(?:is)?\s*:\s*', text, re.I))
-    if markers:
-        tail=text[markers[-1].end():].strip().splitlines()
-        return tail[0].strip() if tail else ''
-    return text.strip()
+    """Extract the last explicit answer, never an earlier boxed intermediate."""
+    candidates=[]
+    for m in re.finditer(r'<answer>\s*(.*?)\s*</answer>',text,re.I|re.S):
+        candidates.append((m.start(),m.group(1).strip()))
+    # TeX permits a single unbraced atom (two official MATH training rows).
+    for m in re.finditer(r'\\boxed\s+([0-9A-Za-z])(?=[$\s.,;]|$)',text):
+        candidates.append((m.start(),m.group(1)))
+    for m in re.finditer(r'\\boxed\{',text):
+        depth=1
+        for i in range(m.end(),len(text)):
+            depth+=(text[i]=='{')-(text[i]=='}')
+            if depth==0:
+                candidates.append((m.start(),text[m.end():i].strip()));break
+    for m in re.finditer(r'####\s*|(?:the\s+)?(?:final\s+)?answer\s*(?:is)?\s*:\s*',text,re.I):
+        tail=text[m.end():].strip().splitlines()
+        candidates.append((m.start(),tail[0].strip() if tail else ''))
+    return max(candidates,key=lambda item:item[0])[1] if candidates else text.strip()
 
 
 def vote_key(text):
@@ -155,7 +152,8 @@ class Scorer:
     def __init__(self, cases, bbeh_scorer=None):
         self.official = None
         names = sorted({c.scorer for c in cases})
-        self.identity = {'names':names, 'suite_sha256':file_hash(__file__)}
+        self.identity = {'names':names, 'suite_sha256':file_hash(__file__),
+                         'final_extraction':'canonical-final-text-v2'}
         if 'math_verify' in names:
             from math_verify import parse as mp, verify
             self.mp, self.mv = mp, verify
@@ -192,12 +190,17 @@ class Scorer:
             value = final_text(text).strip().rstrip('.').strip('()').strip()
             return value.upper() == case.target if re.fullmatch('[A-Za-z]',value) else False
         if case.scorer == 'math_verify':
-            pred = self.mp(text)
+            # Apply the same explicit math delimiters to prediction and gold.
+            # Parsing bare 'p - q' or '3\\sqrt{13}' can otherwise fail or
+            # extract an unrelated number, despite a correct final expression.
+            final=final_text(text).strip().strip('$')
+            pred = self.mp('$'+final+'$')
+            if not pred:pred=self.mp(text)
             return bool(pred) and bool(self.mv(self.mp('$'+case.target.strip('$')+'$'),pred))
         if case.scorer == 'legacy':
             return bool(self.legacy(text,case.target))
         if case.scorer == 'bbeh_official':
-            return bool(self.official(text,case.target))
+            return bool(self.official(final_text(text),case.target))
         return vote_key(text) == vote_key(case.target)
 
 

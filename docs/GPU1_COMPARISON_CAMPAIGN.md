@@ -115,3 +115,24 @@ must be reported across the three adapters separately from within-test bootstrap
 uncertainty. Shared services make latency observational; the campaign deliberately
 marks load profiles as uncontrolled. A SOTA claim needs completed evidence and
 stronger author-recipe comparisons, not these implementation tests or a partial run.
+
+## Scorer audit and campaign v2
+
+The first launch was superseded before evaluation after an additional gold
+round-trip audit. Version 2 applies common final-answer extraction before BBEH
+scoring, and parses the final MATH prediction with the same math delimiters as
+its reference. This fixes 109/500 MATH-500 bare symbolic gold answers that the
+original asymmetric parsing could reject. A later final-answer marker also
+supersedes an earlier boxed intermediate. Tests include incorrect symbolic
+alternatives, not just matching gold strings.
+
+All 500 MATH-500 gold answers now pass the round-trip check. Eight Linguini
+references fail their own pinned upstream BBEH round-trip because its prediction
+normalizer removes terminal periods while its reference normalizer retains them.
+The primary scorer retains the upstream rule and all eight cases; this limitation
+is recorded in the audit rather than silently rewriting test references.
+
+The active directory is `campaign-v2`, built using `--name campaign-v2`. The
+superseded v1 artifacts remain on the host with an explicit exclusion reason and
+are not used for model comparison. The patch's first CI run passed; the scorer
+correction adds real Math-Verify regression coverage to CI.
