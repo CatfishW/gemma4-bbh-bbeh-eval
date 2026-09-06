@@ -1,0 +1,7 @@
+{
+  "name": "self_rank",
+  "budget": 1536,
+  "k": 3,
+  "temperature": 0.7,
+  "final_budget": 128
+}

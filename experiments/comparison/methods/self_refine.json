@@ -1,0 +1,7 @@
+{
+  "name": "self_refine",
+  "budget": 1536,
+  "temperature": 0.7,
+  "rounds": 1,
+  "final_budget": 128
+}

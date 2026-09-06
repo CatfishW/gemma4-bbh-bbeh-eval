@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "rules": [
+    "Official source split and experiment role are separate fields.",
+    "All evaluation cohorts require an exact expected count.",
+    "No download, license bypass, or automatic test-to-train relabeling.",
+    "No native Game24 verifier is claimed.",
+    "Exact duplicate/group checks are implemented; fuzzy/decontamination auditing remains required."
+  ],
+  "datasets": [
+    {
+      "id": "bbh",
+      "source": "suzgunmirac/BIG-Bench-Hard",
+      "adapter": "legacy exporter",
+      "roles": "evaluation-only",
+      "scorer": "legacy or pinned official",
+      "purpose": "Full known-task transfer; historically exposed. New task-family holdout required for new confirmatory claims."
+    },
+    {
+      "id": "bbeh",
+      "source": "google-deepmind/bbeh",
+      "adapter": "bbeh / legacy exporter",
+      "roles": "evaluation-only",
+      "scorer": "bbeh_official",
+      "purpose": "Hard compositional transfer; preserve all task types and long contexts. Do not score only convenient short tasks."
+    },
+    {
+      "id": "usr",
+      "source": "google-deepmind/unpuzzles_and_simple_reasoning",
+      "adapter": "legacy exporter",
+      "roles": "evaluation-only",
+      "scorer": "legacy",
+      "purpose": "Premise sensitivity and familiar-puzzle bias. Group original/shifted/unpuzzle variants by source puzzle across splits."
+    },
+    {
+      "id": "gsm8k",
+      "source": "openai/grade-school-math",
+      "adapter": "gsm8k",
+      "roles": "train/dev/test",
+      "scorer": "numeric",
+      "purpose": "Official train for quality learning and group-heldout dev; full official test for final evaluation. Verify actual counts, do not infer from headline rounding."
+    },
+    {
+      "id": "math",
+      "source": "hendrycks/math",
+      "adapter": "math",
+      "roles": "train/dev/test",
+      "scorer": "math_verify",
+      "purpose": "Train on declared official training subset, stratify difficulty/types; full test and MATH-500 overlap and cannot be pooled as independent data."
+    },
+    {
+      "id": "math500",
+      "source": "https://huggingface.co/datasets/HuggingFaceH4/MATH-500",
+      "adapter": "math500",
+      "roles": "evaluation-only",
+      "scorer": "math_verify",
+      "purpose": "500-example standard subset as an efficiency benchmark; actual revision/count locked at preparation."
+    },
+    {
+      "id": "svamp",
+      "source": "https://github.com/arkilpatel/SVAMP",
+      "adapter": "svamp",
+      "roles": "evaluation-only",
+      "scorer": "numeric",
+      "purpose": "Arithmetic perturbation stress suite. Source link is historical background, not freshly audited."
+    },
+    {
+      "id": "gsm_hard",
+      "source": "reasoning-machines/pal",
+      "adapter": "canonical",
+      "roles": "evaluation-only",
+      "scorer": "numeric",
+      "purpose": "Larger-number robustness from PAL; preserve paired source-GSM8K groups and disclose whether train/test source questions overlap."
+    },
+    {
+      "id": "game24",
+      "source": "princeton-nlp/tree-of-thought-llm",
+      "adapter": "upstream canonical export required",
+      "roles": "evaluation-only",
+      "scorer": "upstream exact task verifier",
+      "purpose": "Essential overlap task for ToT/BoT/PAL. Verify every input number exactly once and exact 24; numeric-answer-only scoring is invalid. Not an implemented native scorer."
+    },
+    {
+      "id": "mmlu_pro",
+      "source": "TIGER-AI-Lab/MMLU-Pro",
+      "adapter": "mmlu_pro",
+      "roles": "dev/test",
+      "scorer": "choice",
+      "purpose": "Knowledge/reasoning transfer across 14 domains; forbid correctness-conditioned retry_wrong behavior."
+    },
+    {
+      "id": "gpqa_diamond",
+      "source": "idavidrein/gpqa",
+      "adapter": "gpqa",
+      "roles": "evaluation-only",
+      "scorer": "choice",
+      "purpose": "Independent small expert-knowledge stress test. Seed and retain choice mapping. Do not train on dataset fields named train in evaluation-only mirrors."
+    },
+    {
+      "id": "aime_2024_2025",
+      "source": "https://huggingface.co/datasets/AI-MO/aimo-validation-aime",
+      "adapter": "aime",
+      "roles": "evaluation-only",
+      "scorer": "numeric",
+      "purpose": "Small-N contest stress test, not headline significance. Lock exact year/version; prior-contest training corpora require question-level contamination audit."
+    },
+    {
+      "id": "deepscaler",
+      "source": "https://huggingface.co/datasets/agentica-org/DeepScaleR-Preview-Dataset",
+      "adapter": "deepscaler",
+      "roles": "train/dev",
+      "scorer": "math_verify",
+      "purpose": "Thinkless-matched RL data option; audit provenance and exclude evaluation-contest/near-duplicate questions before training. Source path is verified via Thinkless README."
+    },
+    {
+      "id": "numina_math",
+      "source": "https://huggingface.co/datasets/AI-MO/NuminaMath-CoT",
+      "adapter": "canonical or math export",
+      "roles": "train/dev",
+      "scorer": "math_verify",
+      "purpose": "Larger training expansion only after source/teacher licensing and decontamination. Suggested candidate, not newly audited/downloading data here."
+    }
+  ]
+}

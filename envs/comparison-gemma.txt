@@ -1,0 +1,6 @@
+# Existing GPU-pilot versions, not reinstalled or upgraded by this branch.
+# First clone an isolated environment; use the appropriate cu128 PyTorch wheel.
+# Do not pip-install the older baseline requirements into the running serving env.
+torch==2.9.1
+transformers==5.5.4
+peft==0.20.0

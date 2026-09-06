@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from collections.abc import Mapping
+from contextlib import nullcontext, ExitStack
 import torch
 import torch.nn.functional as F
 from torch.utils.checkpoint import checkpoint
@@ -16,14 +17,19 @@ from .core import Config, Segment
 
 
 class HFBackend:
-    def __init__(self, model_path: str, cfg: Config, device: str = "cuda:0", adapter: str | None = None):
+    def __init__(self, model_path: str, cfg: Config, device: str = "cuda:0", adapter: str | None = None,
+                 *, load_in_4bit: bool = False, activation_offload: bool = False,
+                 offload_kv_cache: bool = False, prefill_chunk_size: int = 64):
         from rl.modeling import attach_lora, load_policy_model, load_tokenizer, find_backbone_and_head
         path = Path(model_path).resolve(strict=True)
         if not path.is_dir() or not (path/"config.json").is_file():
             raise ValueError("an existing local checkpoint directory is required")
         self.config, self.device = cfg, torch.device(device)
+        self.activation_offload = activation_offload
+        self.offload_kv_cache = offload_kv_cache
+        self.prefill_chunk_size = prefill_chunk_size
         self.tokenizer = load_tokenizer(str(path))
-        base = load_policy_model(str(path), attn_implementation="sdpa", load_in_4bit=False, device=device)
+        base = load_policy_model(str(path), attn_implementation="sdpa", load_in_4bit=load_in_4bit, device=device)
         if adapter is None:
             self.model = attach_lora(base, cfg.rank, cfg.alpha, 0.0)
         else:
@@ -52,6 +58,9 @@ class HFBackend:
         if len(set(self.gate_ids)) != 2:
             raise ValueError("gate tokens collide")
         self.parse_failures = 0
+        if offload_kv_cache:
+            from .attention import install_long_context_sdpa
+            install_long_context_sdpa()
         self.self_check()
 
     def prompt(self, stage: str, question: str, notes: str = "") -> tuple[int, ...]:
@@ -84,8 +93,34 @@ class HFBackend:
 
     def last_logits(self, context):
         tokens, mask = self._inputs(context)
-        hidden = self.backbone(input_ids=tokens, attention_mask=mask, use_cache=False).last_hidden_state
-        return self._head(hidden[0, -1]).float()
+        if (getattr(self, "offload_kv_cache", False) and not torch.is_grad_enabled()
+                and len(context) > self.prefill_chunk_size):
+            # Request the single next-token distribution after chunked prefill.
+            # The discarded argmax is not a sampled reasoning/answer token.
+            config = self.generation_config(1, 1.)
+            config.do_sample = False
+            config.return_dict_in_generate = True
+            config.output_scores = True
+            return self.model.generate(input_ids=tokens, attention_mask=mask,
+                                       generation_config=config).scores[0][0].float()
+        with self.autograd_context():
+            hidden = self._hidden(tokens, mask)
+            return self._head(hidden[0, -1]).float()
+
+    def _hidden(self, tokens, mask):
+        return self.backbone(input_ids=tokens, attention_mask=mask, use_cache=False).last_hidden_state
+
+    def autograd_context(self):
+        # Restoring CPU saved tensors can compact attention-mask strides, which
+        # breaks the efficient SDPA backward kernel. The math kernel supports
+        # arbitrary mask strides and preserves the same causal attention rule.
+        if getattr(self, "activation_offload", False) and torch.is_grad_enabled():
+            from torch.nn.attention import sdpa_kernel, SDPBackend
+            stack = ExitStack()
+            stack.enter_context(sdpa_kernel(SDPBackend.MATH))
+            stack.enter_context(torch.autograd.graph.save_on_cpu(pin_memory=self.device.type == "cuda"))
+            return stack
+        return nullcontext()
 
     def gate_log_probs(self, context, temperature):
         # Renormalized two-action policy is explicit, and identical at deployment.
@@ -96,7 +131,9 @@ class HFBackend:
         return GenerationConfig(do_sample=True, temperature=temperature, top_k=0, top_p=1.0,
                                 typical_p=1.0, repetition_penalty=1.0,
                                 max_new_tokens=cap, pad_token_id=self.pad,
-                                eos_token_id=self.end_ids, use_cache=True)
+                                eos_token_id=self.end_ids, use_cache=True,
+                                cache_implementation="offloaded" if getattr(self, "offload_kv_cache", False) else None,
+                                prefill_chunk_size=getattr(self, "prefill_chunk_size", 64) if getattr(self, "offload_kv_cache", False) else None)
 
     def sample(self, context, cap, temperature, seed):
         if not context or cap < 1 or len(context)+cap > self.config.max_context:
@@ -129,11 +166,15 @@ class HFBackend:
         return self.tokenizer.decode(list(tokens), skip_special_tokens=True)
 
     def log_prob(self, segment, temperature):
+        with self.autograd_context():
+            return self._log_prob(segment, temperature)
+
+    def _log_prob(self, segment, temperature):
         full = segment.context + segment.tokens
         if len(full) > self.config.max_context:
             raise ValueError("teacher-forcing context cap")
         ids, mask = self._inputs(full)
-        hidden = self.backbone(input_ids=ids, attention_mask=mask, use_cache=False).last_hidden_state
+        hidden = self._hidden(ids, mask)
         start = len(segment.context)-1
         rows = hidden[0, start:start+len(segment.tokens)]
         targets = ids[0, len(segment.context):]

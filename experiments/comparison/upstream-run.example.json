@@ -1,0 +1,16 @@
+{
+  "method": "thinkless",
+  "upstream_commit": "55817cbeedaf4fd862844cc3b471dbaf3aa43227",
+  "implementation": "REPLACE_WITH_EXACT_EXECUTED_SCRIPT_CONFIG_AND_ANY_MODIFICATIONS",
+  "identity": {
+    "base_model_sha256": "REPLACE",
+    "checkpoint_sha256": "REPLACE",
+    "hardware_id": "REPLACE",
+    "precision": "BF16",
+    "serving_stack": "isolated-thinkless-upstream",
+    "load_profile": "REPLACE",
+    "study_id": "comparison-development-v1"
+  },
+  "seed": 7,
+  "all_calls_accounted": false
+}

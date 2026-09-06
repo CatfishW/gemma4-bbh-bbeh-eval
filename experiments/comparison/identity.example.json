@@ -1,0 +1,9 @@
+{
+  "base_model_sha256": "REPLACE_WITH_ACTUAL_64_HEX_DIGEST",
+  "checkpoint_sha256": "REPLACE_WITH_ACTUAL_64_HEX_DIGEST",
+  "hardware_id": "REPLACE_WITH_GPU_HOST_AND_LOAD_CONDITION",
+  "precision": "BF16",
+  "serving_stack": "REPLACE_WITH_PINNED_STACK",
+  "load_profile": "single-process-no-cotenant-or-explicit-shared-profile",
+  "study_id": "comparison-development-v1"
+}

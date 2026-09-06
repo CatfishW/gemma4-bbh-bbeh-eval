@@ -1,0 +1,6 @@
+{
+  "name": "self_consistency",
+  "budget": 1536,
+  "k": 3,
+  "temperature": 0.7
+}

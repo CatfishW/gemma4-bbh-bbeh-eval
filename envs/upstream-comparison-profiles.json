@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "status": "source-observed recipes, not one mutually compatible dependency lock",
+  "profiles": {
+    "thinkless-upstream": {
+      "python": "3.10",
+      "torch": "2.4.0",
+      "lm_eval": "0.4.8",
+      "ray": "2.45.0",
+      "repo": "VainF/Thinkless",
+      "commit": "55817cbeedaf4fd862844cc3b471dbaf3aa43227",
+      "notes": "Use authors vendored verl and separate CUDA libraries; do not overlay Gemma env."
+    },
+    "oat-upstream": {
+      "python": "3.10",
+      "vllm": "0.8.4",
+      "oat-llm": "0.1.3.post1",
+      "repo": "sail-sg/understand-r1-zero",
+      "notes": "Upstream Dr.GRPO recipe; do not assert compatibility with current Gemma."
+    },
+    "thinkprune-upstream": {
+      "python": "3.10",
+      "repo": "UCSB-NLP-Chang/ThinkPrune",
+      "notes": "Own verl/Ray/Slurm setup; pin a reviewed commit and lock resolved deps. Never delete shared /tmp/ray; use an owned runtime directory."
+    },
+    "bot-upstream": {
+      "python": "3.9",
+      "repo": "YangLing0818/buffer-of-thought-llm",
+      "notes": "Record whether original three-task code or later LightRAG math implementation; count embedding and buffer costs."
+    },
+    "program-execution-isolated": {
+      "repos": [
+        "reasoning-machines/pal",
+        "TIGER-AI-Lab/Program-of-Thoughts"
+      ],
+      "notes": "Run generated programs only in a sandbox with no secrets/network and explicit resource limits. No host exec adapter is added here."
+    }
+  }
+}

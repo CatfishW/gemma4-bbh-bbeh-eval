@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "status": "development-plan-not-registered-result",
+  "primary_question": "Does same-prefix counterfactual credit improve the accuracy-cost frontier beyond strong content learning and adaptive reasoning baselines?",
+  "training_seeds": [
+    7,
+    17,
+    27
+  ],
+  "inference_seeds": [
+    7,
+    17,
+    27
+  ],
+  "generation_total_budget_grid": [
+    128,
+    512,
+    2048
+  ],
+  "native_thinking_extra_budget_grid": [
+    8192
+  ],
+  "max_context_grid": [
+    4096,
+    16384
+  ],
+  "precision": "BF16 primary; quantization a separate experiment",
+  "primary_models": [
+    "pinned Gemma E2B",
+    "one independently pinned Qwen small model"
+  ],
+  "primary_baselines": [
+    "cot",
+    "self_consistency",
+    "cod",
+    "self_refine",
+    "native_thinking",
+    "rloo",
+    "grpo_reference",
+    "drgrpo_reference",
+    "thinkless upstream"
+  ],
+  "module_baselines": [
+    "pal",
+    "pot",
+    "bot",
+    "tot on Game24"
+  ],
+  "phase_gates": [
+    "Resolve answer-format/termination failures using train/dev only.",
+    "Establish single-path content-quality gains against base always-continue.",
+    "Warm up quality before cost shaping; preserve failed-answer constant cost.",
+    "Freeze model/prompts/thresholds from dev and declare independent test identities.",
+    "Report same-base accuracy-cost frontiers, group/task uncertainty, training-seed variation and all module costs."
+  ],
+  "targets_not_forecasts": {
+    "accuracy_gain_pp": 5,
+    "speedup_vs_same_quality_baseline": 2,
+    "noninferiority_margin_pp": 1
+  },
+  "prohibited": [
+    "Claim a significant effect from the 68-row pilot.",
+    "Count repeat samples as new independent questions.",
+    "Tune test caps until winning.",
+    "Claim paper reproduction from a generic reworded prompt.",
+    "Present CPU algorithm tests as LLM benchmark results."
+  ]
+}

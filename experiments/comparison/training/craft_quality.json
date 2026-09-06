@@ -1,0 +1,22 @@
+{
+  "algorithm": "craft_quality",
+  "steps": 200,
+  "roots": 4,
+  "k": 4,
+  "max_tokens": 1024,
+  "max_context": 16384,
+  "rank": 32,
+  "alpha": 64,
+  "learning_rate": 2e-05,
+  "temperature": 0.8,
+  "seed": 7,
+  "prompt": "cot",
+  "max_sampled_tokens": 1000000,
+  "cost_weight": 0.1,
+  "quality_warmup": 50,
+  "cost_ramp": 50,
+  "prefix_tokens": 64,
+  "continue_tokens": 256,
+  "answer_tokens": 128,
+  "checkpoint_every": 25
+}
