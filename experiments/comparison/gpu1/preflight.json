@@ -1,0 +1,16 @@
+{
+  "status": "engineering-validation-only",
+  "scientific_performance_claim": false,
+  "unit_tests": {"passed": 184, "skipped": 0, "runtime": "remote isolated CPU test invocation"},
+  "training_smoke": {"steps": 2, "action_tokens": 629, "checkpoint": "checkpoint-000002", "used_in_comparisons": false},
+  "nf4_lora": {"rank": 32, "alpha": 64, "trainable_parameters": 48316416, "load_allocated_gib_approx": 6.21},
+  "backward_probe": {"output_tokens": 1024, "peak_allocated_gib": 6.548337459564209, "gradient_finite": true},
+  "worst_training_prompt_probe": {"context_tokens": 1851, "output_tokens": 1024, "optimizer_update": true, "peak_allocated_gib": 7.434029579162598, "gradient_finite": true},
+  "long_context_gate_probe": {"case_id": "usr/simple_reasoning/logic_neg/309", "context_tokens": 96278, "peak_allocated_gib": 6.512613773345947, "finite": true},
+  "long_context_generation_probe": {"case_id": "usr/simple_reasoning/logic_neg/309", "context_tokens": 96272, "output_tokens": 4, "peak_allocated_gib": 6.505869388580322},
+  "chunk_numerics_probe": {"context_tokens": 402, "next_token_kl_nats": 0.0000004788312313028131, "scope": "one engineering probe, not a general numerical equivalence claim"},
+  "scorer_audit": {"math500_gold_roundtrip": {"correct": 500, "n": 500}, "known_upstream_bbeh_period_roundtrip_failures": 8, "test_cases_removed": 0},
+  "superseded_campaign": {"name": "campaign-v1", "reason": "asymmetric symbolic parsing and incompatible final-answer markers", "used_in_comparisons": false},
+  "active_campaign": {"name": "campaign-v2", "plan_digest": "1fc5aef867a7b7496be37b199ca27bbf3457b0f59af0fa8f2813d5d428d2bf2c", "host": "benwulab-remote", "physical_gpu": 1, "allocator_limit_gib": 8},
+  "service_actions": "No existing jobs or services stopped; only our superseded campaign worker and its training child were terminated."
+}

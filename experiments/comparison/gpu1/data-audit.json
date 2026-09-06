@@ -1,0 +1,205 @@
+{
+  "manifests": {
+    "dev": {
+      "data_digest": "2dbc0c70e51ce5c3bbfd5a1731e16ed8d09f5b95ae25e041ad9867d37176c8b0",
+      "file_sha256": "824f7d537a8e5341128d3d8292997ba40a37bf10a473d35a4e51771b2374b70e",
+      "n": 1497,
+      "provenance": {
+        "excluded_training": [
+          {
+            "id": "number_theory/661",
+            "reason": "empty official boxed gold",
+            "sha256": "66d3a1871c21837c0a0329683af05267227e69884fd1791530025f83cea5ddf8"
+          },
+          {
+            "id": "number_theory/663",
+            "reason": "empty official boxed gold",
+            "sha256": "65443d7c0ee43ac5426f7bde2ad4fc5b8c3590a1df21dd3c8dbaaba6e90ad55e"
+          }
+        ],
+        "revisions": {
+          "gsm8k": "3101c7d5072418e28b9008a6636bde82a006892c",
+          "math": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+          "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+        },
+        "source_hashes": {
+          "gsm8k-test": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "gsm8k-train": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+          "math-train": "d2a033a83b3c2d1d894ce0f46b08e918846cd6b38fbb39eb8cd8cbef9c6fe5a8",
+          "math500-test": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+        },
+        "split": "10% whole question groups; seed 7; no evaluation filtering"
+      }
+    },
+    "gsm8k": {
+      "data_digest": "546c99f58c32d58f42fbd0adf4756b86dc1a4ff45c953ed15984d00d4cb64025",
+      "file_sha256": "c4cc2719181a649a5eb19f2dd7bd9c431d482fabc58541fa229c301ea8c0eb97",
+      "n": 1319,
+      "provenance": {
+        "excluded_training": [
+          {
+            "id": "number_theory/661",
+            "reason": "empty official boxed gold",
+            "sha256": "66d3a1871c21837c0a0329683af05267227e69884fd1791530025f83cea5ddf8"
+          },
+          {
+            "id": "number_theory/663",
+            "reason": "empty official boxed gold",
+            "sha256": "65443d7c0ee43ac5426f7bde2ad4fc5b8c3590a1df21dd3c8dbaaba6e90ad55e"
+          }
+        ],
+        "revisions": {
+          "gsm8k": "3101c7d5072418e28b9008a6636bde82a006892c",
+          "math": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+          "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+        },
+        "source_hashes": {
+          "gsm8k-test": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "gsm8k-train": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+          "math-train": "d2a033a83b3c2d1d894ce0f46b08e918846cd6b38fbb39eb8cd8cbef9c6fe5a8",
+          "math500-test": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+        },
+        "split": "10% whole question groups; seed 7; no evaluation filtering"
+      }
+    },
+    "legacy-test": {
+      "data_digest": "e212190d512ebea01d1dcb4f95a1372e3be6dc4c955c3a64faf082ba5882f74f",
+      "file_sha256": "49e7568bef5fcc5a868afc9e491b73695e16ffd37e1b5fedc25c66ebf03e2719",
+      "n": 9550,
+      "provenance": {
+        "no_filtering": true,
+        "source": "existing frozen repo benchmark splits",
+        "split": "test"
+      }
+    },
+    "legacy-validation": {
+      "data_digest": "3b99e5d946dfbff6e8877889247af1257d3f4e178c926b004a5f5c9f6bf357f5",
+      "file_sha256": "3e425e6e1d2c9ed26a97fa791d4c4bea327ab78549c6f018b6084a1b77021467",
+      "n": 1490,
+      "provenance": {
+        "no_filtering": true,
+        "source": "existing frozen repo benchmark splits",
+        "split": "validation"
+      }
+    },
+    "math500": {
+      "data_digest": "0a150572ecf7d6e55186145c9595c9e94dd0502aa4074a30bed07dc44cf947b7",
+      "file_sha256": "b4ae9cb9b024c3cc810f2ad6207326969cb94026f027c0fd74f87f31e8276d64",
+      "n": 500,
+      "provenance": {
+        "excluded_training": [
+          {
+            "id": "number_theory/661",
+            "reason": "empty official boxed gold",
+            "sha256": "66d3a1871c21837c0a0329683af05267227e69884fd1791530025f83cea5ddf8"
+          },
+          {
+            "id": "number_theory/663",
+            "reason": "empty official boxed gold",
+            "sha256": "65443d7c0ee43ac5426f7bde2ad4fc5b8c3590a1df21dd3c8dbaaba6e90ad55e"
+          }
+        ],
+        "revisions": {
+          "gsm8k": "3101c7d5072418e28b9008a6636bde82a006892c",
+          "math": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+          "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+        },
+        "source_hashes": {
+          "gsm8k-test": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "gsm8k-train": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+          "math-train": "d2a033a83b3c2d1d894ce0f46b08e918846cd6b38fbb39eb8cd8cbef9c6fe5a8",
+          "math500-test": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+        },
+        "split": "10% whole question groups; seed 7; no evaluation filtering"
+      }
+    },
+    "primary-test": {
+      "data_digest": "ebb3d80717ae603ec9ad292e957719fade173c7fa140ad67da28c5136e1926b9",
+      "file_sha256": "334f9754cd5cd6a6263cac9e1639116d87731a89bec0004512ea7c2fb9c6e327",
+      "n": 11369,
+      "provenance": {
+        "excluded_training": [
+          {
+            "id": "number_theory/661",
+            "reason": "empty official boxed gold",
+            "sha256": "66d3a1871c21837c0a0329683af05267227e69884fd1791530025f83cea5ddf8"
+          },
+          {
+            "id": "number_theory/663",
+            "reason": "empty official boxed gold",
+            "sha256": "65443d7c0ee43ac5426f7bde2ad4fc5b8c3590a1df21dd3c8dbaaba6e90ad55e"
+          }
+        ],
+        "revisions": {
+          "gsm8k": "3101c7d5072418e28b9008a6636bde82a006892c",
+          "math": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+          "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+        },
+        "source_hashes": {
+          "gsm8k-test": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "gsm8k-train": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+          "math-train": "d2a033a83b3c2d1d894ce0f46b08e918846cd6b38fbb39eb8cd8cbef9c6fe5a8",
+          "math500-test": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+        },
+        "split": "10% whole question groups; seed 7; no evaluation filtering"
+      }
+    },
+    "train": {
+      "data_digest": "df21647a5268e69bfccb7357a2ef76e529b1a559153378f1294d04c8e0e76384",
+      "file_sha256": "fbbca31827d15269820df6b881ea1d3eabe689f512fd4462a2d3d93eb80d907b",
+      "n": 13474,
+      "provenance": {
+        "excluded_training": [
+          {
+            "id": "number_theory/661",
+            "reason": "empty official boxed gold",
+            "sha256": "66d3a1871c21837c0a0329683af05267227e69884fd1791530025f83cea5ddf8"
+          },
+          {
+            "id": "number_theory/663",
+            "reason": "empty official boxed gold",
+            "sha256": "65443d7c0ee43ac5426f7bde2ad4fc5b8c3590a1df21dd3c8dbaaba6e90ad55e"
+          }
+        ],
+        "revisions": {
+          "gsm8k": "3101c7d5072418e28b9008a6636bde82a006892c",
+          "math": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+          "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+        },
+        "source_hashes": {
+          "gsm8k-test": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "gsm8k-train": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+          "math-train": "d2a033a83b3c2d1d894ce0f46b08e918846cd6b38fbb39eb8cd8cbef9c6fe5a8",
+          "math500-test": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+        },
+        "split": "10% whole question groups; seed 7; no evaluation filtering"
+      }
+    }
+  },
+  "provenance": {
+    "excluded_training": [
+      {
+        "id": "number_theory/661",
+        "reason": "empty official boxed gold",
+        "sha256": "66d3a1871c21837c0a0329683af05267227e69884fd1791530025f83cea5ddf8"
+      },
+      {
+        "id": "number_theory/663",
+        "reason": "empty official boxed gold",
+        "sha256": "65443d7c0ee43ac5426f7bde2ad4fc5b8c3590a1df21dd3c8dbaaba6e90ad55e"
+      }
+    ],
+    "revisions": {
+      "gsm8k": "3101c7d5072418e28b9008a6636bde82a006892c",
+      "math": "21a5633873b6a120296cce3e2df9d5550074f4a3",
+      "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+    },
+    "source_hashes": {
+      "gsm8k-test": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+      "gsm8k-train": "17f347dc51477c50d4efb83959dbb7c56297aba886e5544ee2aaed3024813465",
+      "math-train": "d2a033a83b3c2d1d894ce0f46b08e918846cd6b38fbb39eb8cd8cbef9c6fe5a8",
+      "math500-test": "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+    },
+    "split": "10% whole question groups; seed 7; no evaluation filtering"
+  }
+}

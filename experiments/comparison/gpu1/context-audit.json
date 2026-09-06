@@ -1,0 +1,17 @@
+{
+  "dev": {
+    "above8192": 0,
+    "max_question_tokens": 1047,
+    "n": 1497
+  },
+  "primary-test": {
+    "above8192": 100,
+    "max_question_tokens": 96238,
+    "n": 11369
+  },
+  "train": {
+    "above8192": 0,
+    "max_question_tokens": 1827,
+    "n": 13474
+  }
+}
